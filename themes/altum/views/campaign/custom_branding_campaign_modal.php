@@ -18,14 +18,14 @@
                     <input type="hidden" name="campaign_id" value="" />
 
                     <div class="form-group">
-                        <label for="custom_branding_name"><i class="fa fa-fw fa-sm fa-random text-muted mr-1"></i> <?= language()->custom_branding_campaign_modal->input->name ?></label>
-                        <input id="custom_branding_name" type="text" class="form-control" name="name" value="<?= $data->campaign->branding->name ?? '' ?>" maxlength="128" />
+                        <label><i class="fa fa-fw fa-sm fa-random text-muted mr-1"></i> <?= language()->custom_branding_campaign_modal->input->name ?></label>
+                        <input type="text" class="form-control" name="name" value="<?= $data->campaign->branding->name ?? '' ?>" />
                         <small class="form-text text-muted"><?= language()->custom_branding_campaign_modal->input->name_help ?></small>
                     </div>
 
                     <div class="form-group">
-                        <label for="custom_branding_url"><i class="fa fa-fw fa-sm fa-link text-muted mr-1"></i> <?= language()->custom_branding_campaign_modal->input->url ?></label>
-                        <input id="custom_branding_url" type="url" class="form-control" name="url" value="<?= $data->campaign->branding->url ?? '' ?>" maxlength="2048" />
+                        <label><i class="fa fa-fw fa-sm fa-link text-muted mr-1"></i> <?= language()->custom_branding_campaign_modal->input->url ?></label>
+                        <input type="url" class="form-control" name="url" value="<?= $data->campaign->branding->url ?? '' ?>" />
                     </div>
 
                     <div class="text-center mt-4">

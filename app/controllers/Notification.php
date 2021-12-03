@@ -275,6 +275,10 @@ class Notification extends Controller {
                 break;
         }
 
+        /* Delete Modal */
+        $view = new \Altum\Views\View('notification/notification_delete_modal', (array) $this);
+        \Altum\Event::add_content($view->run(), 'modals');
+
         /* Prepare the View */
         $data = [
             'notification'  => $this->notification,
@@ -351,11 +355,10 @@ class Notification extends Controller {
                 case 'INFORMATIONAL':
 
                     /* Clean some posted variables */
-                    $_POST['title'] = mb_substr(Database::clean_string($_POST['title']), 0, 256);
-                    $_POST['description'] = mb_substr(Database::clean_string($_POST['description']), 0, 512);
-                    $_POST['image'] = mb_substr(Database::clean_string($_POST['image']), 0, 2048);
-                    $_POST['image_alt'] = mb_substr(Database::clean_string($_POST['image_alt']), 0, 100);
-                    $_POST['url'] = mb_substr(Database::clean_string($_POST['url']), 0, 2048);
+                    $_POST['title'] = Database::clean_string($_POST['title']);
+                    $_POST['description'] = Database::clean_string($_POST['description']);
+                    $_POST['image'] = Database::clean_string($_POST['image']);
+                    $_POST['url'] = Database::clean_string($_POST['url']);
                     $_POST['url_new_tab'] = (bool) isset($_POST['url_new_tab']);
                     $_POST['border_radius'] = in_array($_POST['border_radius'], [
                         'straight',
@@ -367,13 +370,12 @@ class Notification extends Controller {
                 case 'COUPON':
 
                     /* Clean some posted variables */
-                    $_POST['title'] = mb_substr(Database::clean_string($_POST['title']), 0, 256);
-                    $_POST['description'] = mb_substr(Database::clean_string($_POST['description']), 0, 512);
-                    $_POST['image'] = mb_substr(Database::clean_string($_POST['image']), 0, 2048);
-                    $_POST['image_alt'] = mb_substr(Database::clean_string($_POST['image_alt']), 0, 100);
-                    $_POST['button_url'] = mb_substr(Database::clean_string($_POST['button_url']), 0, 2048);
-                    $_POST['button_text'] = mb_substr(Database::clean_string($_POST['button_text']), 0, 128);
-                    $_POST['footer_text'] = mb_substr(Database::clean_string($_POST['footer_text']), 0, 256);
+                    $_POST['title'] = Database::clean_string($_POST['title']);
+                    $_POST['description'] = Database::clean_string($_POST['description']);
+                    $_POST['image'] = Database::clean_string($_POST['image']);
+                    $_POST['button_url'] = Database::clean_string($_POST['button_url']);
+                    $_POST['button_text'] = Database::clean_string($_POST['button_text']);
+                    $_POST['footer_text'] = Database::clean_string($_POST['footer_text']);
                     $_POST['border_radius'] = in_array($_POST['border_radius'], [
                         'straight',
                         'rounded',
@@ -383,9 +385,9 @@ class Notification extends Controller {
                 case 'LIVE_COUNTER':
 
                     /* Clean some posted variables */
-                    $_POST['description'] = mb_substr(Database::clean_string($_POST['description']), 0, 512);
+                    $_POST['description'] = Database::clean_string($_POST['description']);
                     $_POST['last_activity'] = (int) $_POST['last_activity'];
-                    $_POST['url'] = mb_substr(Database::clean_string($_POST['url']), 0, 2048);
+                    $_POST['url'] = Database::clean_string($_POST['url']);
                     $_POST['url_new_tab'] = (bool) isset($_POST['url_new_tab']);
                     $_POST['display_minimum_activity'] = (int) $_POST['display_minimum_activity'];
                     $_POST['border_radius'] = in_array($_POST['border_radius'], [
@@ -397,33 +399,32 @@ class Notification extends Controller {
                 case 'EMAIL_COLLECTOR' :
 
                     /* Clean some posted variables */
-                    $_POST['title'] = mb_substr(Database::clean_string($_POST['title']), 0, 256);
-                    $_POST['description'] = mb_substr(Database::clean_string($_POST['description']), 0, 512);
+                    $_POST['title'] = Database::clean_string($_POST['title']);
+                    $_POST['description'] = Database::clean_string($_POST['description']);
                     $_POST['email_placeholder'] = Database::clean_string($_POST['email_placeholder']);
-                    $_POST['button_text'] = mb_substr(Database::clean_string($_POST['button_text']), 0, 128);
+                    $_POST['button_text'] = Database::clean_string($_POST['button_text']);
                     $_POST['show_agreement'] = (bool) isset($_POST['show_agreement']);
-                    $_POST['agreement_text'] = mb_substr(Database::clean_string($_POST['agreement_text']), 0, 256);
-                    $_POST['agreement_url'] = mb_substr(Database::clean_string($_POST['agreement_url']), 0, 2048);
-                    $_POST['thank_you_url'] = mb_substr(Database::clean_string($_POST['thank_you_url']), 0, 2048);
+                    $_POST['agreement_text'] = Database::clean_string($_POST['agreement_text']);
+                    $_POST['agreement_url'] = Database::clean_string($_POST['agreement_url']);
+                    $_POST['thank_you_url'] = Database::clean_string($_POST['thank_you_url']);
                     $_POST['border_radius'] = in_array($_POST['border_radius'], [
                         'straight',
                         'rounded',
                     ]) ? $_POST['border_radius'] : 'rounded';
 
                     $_POST['data_send_is_enabled'] = (bool) isset($_POST['data_send_is_enabled']);
-                    $_POST['data_send_webhook'] = mb_substr(Database::clean_string($_POST['data_send_webhook']), 0, 2048);
-                    $_POST['data_send_email'] = filter_var($_POST['data_send_email'], FILTER_VALIDATE_EMAIL) ? mb_substr(Database::clean_string($_POST['data_send_email']), 0, 320) : '';
+                    $_POST['data_send_webhook'] = Database::clean_string($_POST['data_send_webhook']);
+                    $_POST['data_send_email'] = filter_var($_POST['data_send_email'], FILTER_VALIDATE_EMAIL) ? Database::clean_string($_POST['data_send_email']) : '';
 
                     break;
 
                 case 'LATEST_CONVERSION':
 
                     /* Clean some posted variables */
-                    $_POST['title'] = mb_substr(Database::clean_string($_POST['title']), 0, 256);
-                    $_POST['description'] = mb_substr(Database::clean_string($_POST['description']), 0, 512);
-                    $_POST['image'] = mb_substr(Database::clean_string($_POST['image']), 0, 2048);
-                    $_POST['image_alt'] = mb_substr(Database::clean_string($_POST['image_alt']), 0, 100);
-                    $_POST['url'] = mb_substr(Database::clean_string($_POST['url']), 0, 2048);
+                    $_POST['title'] = Database::clean_string($_POST['title']);
+                    $_POST['description'] = Database::clean_string($_POST['description']);
+                    $_POST['image'] = Database::clean_string($_POST['image']);
+                    $_POST['url'] = Database::clean_string($_POST['url']);
                     $_POST['url_new_tab'] = (bool) isset($_POST['url_new_tab']);
                     $_POST['conversions_count'] = (int) $_POST['conversions_count'] < 1 ? 1 : (int) $_POST['conversions_count'];
                     $_POST['in_between_delay'] = (int) $_POST['in_between_delay'] < 1 ? 0 : (int) $_POST['in_between_delay'];
@@ -439,9 +440,9 @@ class Notification extends Controller {
                 case 'CONVERSIONS_COUNTER':
 
                     /* Clean some posted variables */
-                    $_POST['title'] = mb_substr(Database::clean_string($_POST['title']), 0, 256);
+                    $_POST['title'] = Database::clean_string($_POST['title']);
                     $_POST['last_activity'] = (int) $_POST['last_activity'];
-                    $_POST['url'] = mb_substr(Database::clean_string($_POST['url']), 0, 2048);
+                    $_POST['url'] = Database::clean_string($_POST['url']);
                     $_POST['url_new_tab'] = (bool) isset($_POST['url_new_tab']);
                     $_POST['display_minimum_activity'] = (int) $_POST['display_minimum_activity'];
                     $_POST['border_radius'] = in_array($_POST['border_radius'], [
@@ -456,10 +457,10 @@ class Notification extends Controller {
                 case 'VIDEO':
 
                     /* Clean some posted variables */
-                    $_POST['title'] = mb_substr(Database::clean_string($_POST['title']), 0, 256);
+                    $_POST['title'] = Database::clean_string($_POST['title']);
                     $_POST['video'] = Database::clean_string($_POST['video']);
-                    $_POST['button_url'] = mb_substr(Database::clean_string($_POST['button_url']), 0, 2048);
-                    $_POST['button_text'] = mb_substr(Database::clean_string($_POST['button_text']), 0, 128);
+                    $_POST['button_url'] = Database::clean_string($_POST['button_url']);
+                    $_POST['button_text'] = Database::clean_string($_POST['button_text']);
                     $_POST['border_radius'] = in_array($_POST['border_radius'], [
                         'straight',
                         'rounded',
@@ -477,9 +478,9 @@ class Notification extends Controller {
                 case 'SOCIAL_SHARE':
 
                     /* Clean some posted variables */
-                    $_POST['title'] = mb_substr(Database::clean_string($_POST['title']), 0, 256);
-                    $_POST['description'] = mb_substr(Database::clean_string($_POST['description']), 0, 512);
-                    $_POST['share_url'] = mb_substr(Database::clean_string($_POST['share_url']), 0, 2048);
+                    $_POST['title'] = Database::clean_string($_POST['title']);
+                    $_POST['description'] = Database::clean_string($_POST['description']);
+                    $_POST['share_url'] = Database::clean_string($_POST['share_url']);
                     $_POST['share_facebook'] = (bool) isset($_POST['share_facebook']);
                     $_POST['share_twitter'] = (bool) isset($_POST['share_twitter']);
                     $_POST['share_linkedin'] = (bool) isset($_POST['share_linkedin']);
@@ -493,7 +494,7 @@ class Notification extends Controller {
                 case 'RANDOM_REVIEW':
 
                     /* Clean some posted variables */
-                    $_POST['url'] = mb_substr(Database::clean_string($_POST['url']), 0, 2048);
+                    $_POST['url'] = Database::clean_string($_POST['url']);
                     $_POST['url_new_tab'] = (bool) isset($_POST['url_new_tab']);
                     $_POST['reviews_count'] = (int) $_POST['reviews_count'] < 1 ? 1 : (int) $_POST['reviews_count'];
                     $_POST['in_between_delay'] = (int) $_POST['in_between_delay'] < 1 ? 0 : (int) $_POST['in_between_delay'];
@@ -508,8 +509,7 @@ class Notification extends Controller {
                 case 'EMOJI_FEEDBACK':
 
                     /* Clean some posted variables */
-                    $_POST['title'] = mb_substr(Database::clean_string($_POST['title']), 0, 256);
-                    $_POST['thank_you_url'] = mb_substr(Database::clean_string($_POST['thank_you_url']), 0, 2048);
+                    $_POST['title'] = Database::clean_string($_POST['title']);
                     $_POST['show_angry'] = (bool) isset($_POST['show_angry']);
                     $_POST['show_sad'] = (bool) isset($_POST['show_sad']);
                     $_POST['show_neutral'] = (bool) isset($_POST['show_neutral']);
@@ -525,12 +525,11 @@ class Notification extends Controller {
                 case 'COOKIE_NOTIFICATION':
 
                     /* Clean some posted variables */
-                    $_POST['description'] = mb_substr(Database::clean_string($_POST['description']), 0, 512);
-                    $_POST['image'] = mb_substr(Database::clean_string($_POST['image']), 0, 2048);
-                    $_POST['image_alt'] = mb_substr(Database::clean_string($_POST['image_alt']), 0, 100);
-                    $_POST['url_text'] = mb_substr(Database::clean_string($_POST['url_text']), 0, 256);
-                    $_POST['url'] = mb_substr(Database::clean_string($_POST['url']), 0, 2048);
-                    $_POST['button_text'] = mb_substr(Database::clean_string($_POST['button_text']), 0, 128);
+                    $_POST['description'] = Database::clean_string($_POST['description']);
+                    $_POST['image'] = Database::clean_string($_POST['image']);
+                    $_POST['url_text'] = Database::clean_string($_POST['url_text']);
+                    $_POST['url'] = Database::clean_string($_POST['url']);
+                    $_POST['button_text'] = Database::clean_string($_POST['button_text']);
                     $_POST['border_radius'] = in_array($_POST['border_radius'], [
                         'straight',
                         'rounded',
@@ -541,9 +540,8 @@ class Notification extends Controller {
                 case 'SCORE_FEEDBACK':
 
                     /* Clean some posted variables */
-                    $_POST['title'] = mb_substr(Database::clean_string($_POST['title']), 0, 256);
-                    $_POST['description'] = mb_substr(Database::clean_string($_POST['description']), 0, 512);
-                    $_POST['thank_you_url'] = mb_substr(Database::clean_string($_POST['thank_you_url']), 0, 2048);
+                    $_POST['title'] = Database::clean_string($_POST['title']);
+                    $_POST['description'] = Database::clean_string($_POST['description']);
                     $_POST['border_radius'] = in_array($_POST['border_radius'], [
                         'straight',
                         'rounded',
@@ -554,59 +552,57 @@ class Notification extends Controller {
                 case 'REQUEST_COLLECTOR' :
 
                     /* Clean some posted variables */
-                    $_POST['title'] = mb_substr(Database::clean_string($_POST['title']), 0, 256);
-                    $_POST['description'] = mb_substr(Database::clean_string($_POST['description']), 0, 512);
-                    $_POST['image'] = mb_substr(Database::clean_string($_POST['image']), 0, 2048);
-                    $_POST['image_alt'] = mb_substr(Database::clean_string($_POST['image_alt']), 0, 100);
-                    $_POST['content_title'] = mb_substr(Database::clean_string($_POST['content_title']), 0, 256);
-                    $_POST['content_description'] = mb_substr(Database::clean_string($_POST['content_description']), 0, 512);
-                    $_POST['input_placeholder'] = mb_substr(Database::clean_string($_POST['input_placeholder']), 0, 128);
-                    $_POST['button_text'] = mb_substr(Database::clean_string($_POST['button_text']), 0, 128);
+                    $_POST['title'] = Database::clean_string($_POST['title']);
+                    $_POST['description'] = Database::clean_string($_POST['description']);
+                    $_POST['image'] = Database::clean_string($_POST['image']);
+                    $_POST['content_title'] = Database::clean_string($_POST['content_title']);
+                    $_POST['content_description'] = Database::clean_string($_POST['content_description']);
+                    $_POST['input_placeholder'] = Database::clean_string($_POST['input_placeholder']);
+                    $_POST['button_text'] = Database::clean_string($_POST['button_text']);
                     $_POST['show_agreement'] = (bool) isset($_POST['show_agreement']);
-                    $_POST['agreement_text'] = mb_substr(Database::clean_string($_POST['agreement_text']), 0, 256);
-                    $_POST['agreement_url'] = mb_substr(Database::clean_string($_POST['agreement_url']), 0, 2048);
-                    $_POST['thank_you_url'] = mb_substr(Database::clean_string($_POST['thank_you_url']), 0, 2048);
+                    $_POST['agreement_text'] = Database::clean_string($_POST['agreement_text']);
+                    $_POST['agreement_url'] = Database::clean_string($_POST['agreement_url']);
+                    $_POST['thank_you_url'] = Database::clean_string($_POST['thank_you_url']);
                     $_POST['border_radius'] = in_array($_POST['border_radius'], [
                         'straight',
                         'rounded',
                     ]) ? $_POST['border_radius'] : 'rounded';
                     $_POST['data_send_is_enabled'] = (bool) isset($_POST['data_send_is_enabled']);
-                    $_POST['data_send_webhook'] = mb_substr(Database::clean_string($_POST['data_send_webhook']), 0, 2048);
-                    $_POST['data_send_email'] = filter_var($_POST['data_send_email'], FILTER_VALIDATE_EMAIL) ? mb_substr(Database::clean_string($_POST['data_send_email']), 0, 320) : '';
+                    $_POST['data_send_webhook'] = Database::clean_string($_POST['data_send_webhook']);
+                    $_POST['data_send_email'] = filter_var($_POST['data_send_email'], FILTER_VALIDATE_EMAIL) ? Database::clean_string($_POST['data_send_email']) : '';
 
                     break;
 
                 case 'COUNTDOWN_COLLECTOR' :
 
                     /* Clean some posted variables */
-                    $_POST['title'] = mb_substr(Database::clean_string($_POST['title']), 0, 256);
-                    $_POST['description'] = mb_substr(Database::clean_string($_POST['description']), 0, 512);
-                    $_POST['content_title'] = mb_substr(Database::clean_string($_POST['content_title']), 0, 256);
-                    $_POST['input_placeholder'] = mb_substr(Database::clean_string($_POST['input_placeholder']), 0, 128);
-                    $_POST['button_text'] = mb_substr(Database::clean_string($_POST['button_text']), 0, 128);
+                    $_POST['title'] = Database::clean_string($_POST['title']);
+                    $_POST['description'] = Database::clean_string($_POST['description']);
+                    $_POST['content_title'] = Database::clean_string($_POST['content_title']);
+                    $_POST['input_placeholder'] = Database::clean_string($_POST['input_placeholder']);
+                    $_POST['button_text'] = Database::clean_string($_POST['button_text']);
                     $_POST['end_date'] = (new \DateTime($_POST['end_date'], new \DateTimeZone($this->user->timezone)))->setTimezone(new \DateTimeZone(\Altum\Date::$default_timezone))->format('Y-m-d H:i:s');
                     $_POST['show_agreement'] = (bool) isset($_POST['show_agreement']);
-                    $_POST['agreement_text'] = mb_substr(Database::clean_string($_POST['agreement_text']), 0, 256);
-                    $_POST['agreement_url'] = mb_substr(Database::clean_string($_POST['agreement_url']), 0, 2048);
-                    $_POST['thank_you_url'] = mb_substr(Database::clean_string($_POST['thank_you_url']), 0, 2048);
+                    $_POST['agreement_text'] = Database::clean_string($_POST['agreement_text']);
+                    $_POST['agreement_url'] = Database::clean_string($_POST['agreement_url']);
+                    $_POST['thank_you_url'] = Database::clean_string($_POST['thank_you_url']);
                     $_POST['border_radius'] = in_array($_POST['border_radius'], [
                         'straight',
                         'rounded',
                     ]) ? $_POST['border_radius'] : 'rounded';
                     $_POST['data_send_is_enabled'] = (bool) isset($_POST['data_send_is_enabled']);
-                    $_POST['data_send_webhook'] = mb_substr(Database::clean_string($_POST['data_send_webhook']), 0, 2048);
-                    $_POST['data_send_email'] = filter_var($_POST['data_send_email'], FILTER_VALIDATE_EMAIL) ? mb_substr(Database::clean_string($_POST['data_send_email']), 0, 320) : '';
+                    $_POST['data_send_webhook'] = Database::clean_string($_POST['data_send_webhook']);
+                    $_POST['data_send_email'] = filter_var($_POST['data_send_email'], FILTER_VALIDATE_EMAIL) ? Database::clean_string($_POST['data_send_email']) : '';
 
                     break;
 
                 case 'INFORMATIONAL_BAR':
 
                     /* Clean some posted variables */
-                    $_POST['title'] = mb_substr(Database::clean_string($_POST['title']), 0, 256);
-                    $_POST['description'] = mb_substr(Database::clean_string($_POST['description']), 0, 512);
-                    $_POST['image'] = mb_substr(Database::clean_string($_POST['image']), 0, 2048);
-                    $_POST['image_alt'] = mb_substr(Database::clean_string($_POST['image_alt']), 0, 100);
-                    $_POST['url'] = mb_substr(Database::clean_string($_POST['url']), 0, 2048);
+                    $_POST['title'] = Database::clean_string($_POST['title']);
+                    $_POST['description'] = Database::clean_string($_POST['description']);
+                    $_POST['image'] = Database::clean_string($_POST['image']);
+                    $_POST['url'] = Database::clean_string($_POST['url']);
                     $_POST['url_new_tab'] = (bool) isset($_POST['url_new_tab']);
                     $_POST['border_radius'] = 'straight';
 
@@ -615,11 +611,10 @@ class Notification extends Controller {
                 case 'IMAGE':
 
                     /* Clean some posted variables */
-                    $_POST['title'] = mb_substr(Database::clean_string($_POST['title']), 0, 256);
-                    $_POST['image'] = mb_substr(Database::clean_string($_POST['image']), 0, 2048);
-                    $_POST['image_alt'] = mb_substr(Database::clean_string($_POST['image_alt']), 0, 100);
-                    $_POST['button_url'] = mb_substr(Database::clean_string($_POST['button_url']), 0, 2048);
-                    $_POST['button_text'] = mb_substr(Database::clean_string($_POST['button_text']), 0, 128);
+                    $_POST['title'] = Database::clean_string($_POST['title']);
+                    $_POST['image'] = Database::clean_string($_POST['image']);
+                    $_POST['button_url'] = Database::clean_string($_POST['button_url']);
+                    $_POST['button_text'] = Database::clean_string($_POST['button_text']);
                     $_POST['border_radius'] = in_array($_POST['border_radius'], [
                         'straight',
                         'rounded',
@@ -630,27 +625,27 @@ class Notification extends Controller {
                 case 'COLLECTOR_BAR' :
 
                     /* Clean some posted variables */
-                    $_POST['title'] = mb_substr(Database::clean_string($_POST['title']), 0, 256);
-                    $_POST['input_placeholder'] = mb_substr(Database::clean_string($_POST['input_placeholder']), 0, 128);
-                    $_POST['button_text'] = mb_substr(Database::clean_string($_POST['button_text']), 0, 128);
+                    $_POST['title'] = Database::clean_string($_POST['title']);
+                    $_POST['input_placeholder'] = Database::clean_string($_POST['input_placeholder']);
+                    $_POST['button_text'] = Database::clean_string($_POST['button_text']);
                     $_POST['show_agreement'] = (bool) isset($_POST['show_agreement']);
-                    $_POST['agreement_text'] = mb_substr(Database::clean_string($_POST['agreement_text']), 0, 256);
-                    $_POST['agreement_url'] = mb_substr(Database::clean_string($_POST['agreement_url']), 0, 2048);
-                    $_POST['thank_you_url'] = mb_substr(Database::clean_string($_POST['thank_you_url']), 0, 2048);
+                    $_POST['agreement_text'] = Database::clean_string($_POST['agreement_text']);
+                    $_POST['agreement_url'] = Database::clean_string($_POST['agreement_url']);
+                    $_POST['thank_you_url'] = Database::clean_string($_POST['thank_you_url']);
                     $_POST['border_radius'] = 'straight';
 
                     $_POST['data_send_is_enabled'] = (bool) isset($_POST['data_send_is_enabled']);
-                    $_POST['data_send_webhook'] = mb_substr(Database::clean_string($_POST['data_send_webhook']), 0, 2048);
-                    $_POST['data_send_email'] = filter_var($_POST['data_send_email'], FILTER_VALIDATE_EMAIL) ? mb_substr(Database::clean_string($_POST['data_send_email']), 0, 320) : '';
+                    $_POST['data_send_webhook'] = Database::clean_string($_POST['data_send_webhook']);
+                    $_POST['data_send_email'] = filter_var($_POST['data_send_email'], FILTER_VALIDATE_EMAIL) ? Database::clean_string($_POST['data_send_email']) : '';
 
                     break;
 
                 case 'COUPON_BAR':
 
                     /* Clean some posted variables */
-                    $_POST['title'] = mb_substr(Database::clean_string($_POST['title']), 0, 256);
+                    $_POST['title'] = Database::clean_string($_POST['title']);
                     $_POST['coupon_code'] = Database::clean_string($_POST['coupon_code']);
-                    $_POST['url'] = mb_substr(Database::clean_string($_POST['url']), 0, 2048);
+                    $_POST['url'] = Database::clean_string($_POST['url']);
                     $_POST['url_new_tab'] = (bool) isset($_POST['url_new_tab']);
                     $_POST['border_radius'] = 'straight';
 
@@ -659,9 +654,9 @@ class Notification extends Controller {
                 case 'BUTTON_BAR':
 
                     /* Clean some posted variables */
-                    $_POST['title'] = mb_substr(Database::clean_string($_POST['title']), 0, 256);
-                    $_POST['button_text'] = mb_substr(Database::clean_string($_POST['button_text']), 0, 128);
-                    $_POST['url'] = mb_substr(Database::clean_string($_POST['url']), 0, 2048);
+                    $_POST['title'] = Database::clean_string($_POST['title']);
+                    $_POST['button_text'] = Database::clean_string($_POST['button_text']);
+                    $_POST['url'] = Database::clean_string($_POST['url']);
                     $_POST['url_new_tab'] = (bool) isset($_POST['url_new_tab']);
                     $_POST['border_radius'] = 'straight';
 
@@ -671,33 +666,31 @@ class Notification extends Controller {
                 case 'COLLECTOR_TWO_MODAL' :
 
                     /* Clean some posted variables */
-                    $_POST['title'] = mb_substr(Database::clean_string($_POST['title']), 0, 256);
-                    $_POST['description'] = mb_substr(Database::clean_string($_POST['description']), 0, 512);
-                    $_POST['image'] = mb_substr(Database::clean_string($_POST['image']), 0, 2048);
-                    $_POST['image_alt'] = mb_substr(Database::clean_string($_POST['image_alt']), 0, 100);
-                    $_POST['input_placeholder'] = mb_substr(Database::clean_string($_POST['input_placeholder']), 0, 128);
-                    $_POST['button_text'] = mb_substr(Database::clean_string($_POST['button_text']), 0, 128);
+                    $_POST['title'] = Database::clean_string($_POST['title']);
+                    $_POST['description'] = Database::clean_string($_POST['description']);
+                    $_POST['image'] = Database::clean_string($_POST['image']);
+                    $_POST['input_placeholder'] = Database::clean_string($_POST['input_placeholder']);
+                    $_POST['button_text'] = Database::clean_string($_POST['button_text']);
                     $_POST['show_agreement'] = (bool) isset($_POST['show_agreement']);
-                    $_POST['agreement_text'] = mb_substr(Database::clean_string($_POST['agreement_text']), 0, 256);
-                    $_POST['agreement_url'] = mb_substr(Database::clean_string($_POST['agreement_url']), 0, 2048);
-                    $_POST['thank_you_url'] = mb_substr(Database::clean_string($_POST['thank_you_url']), 0, 2048);
+                    $_POST['agreement_text'] = Database::clean_string($_POST['agreement_text']);
+                    $_POST['agreement_url'] = Database::clean_string($_POST['agreement_url']);
+                    $_POST['thank_you_url'] = Database::clean_string($_POST['thank_you_url']);
                     $_POST['border_radius'] = 'rounded';
 
                     $_POST['data_send_is_enabled'] = (bool) isset($_POST['data_send_is_enabled']);
-                    $_POST['data_send_webhook'] = mb_substr(Database::clean_string($_POST['data_send_webhook']), 0, 2048);
-                    $_POST['data_send_email'] = filter_var($_POST['data_send_email'], FILTER_VALIDATE_EMAIL) ? mb_substr(Database::clean_string($_POST['data_send_email']), 0, 320) : '';
+                    $_POST['data_send_webhook'] = Database::clean_string($_POST['data_send_webhook']);
+                    $_POST['data_send_email'] = filter_var($_POST['data_send_email'], FILTER_VALIDATE_EMAIL) ? Database::clean_string($_POST['data_send_email']) : '';
 
                     break;
 
                 case 'BUTTON_MODAL' :
 
                     /* Clean some posted variables */
-                    $_POST['title'] = mb_substr(Database::clean_string($_POST['title']), 0, 256);
-                    $_POST['description'] = mb_substr(Database::clean_string($_POST['description']), 0, 512);
-                    $_POST['image'] = mb_substr(Database::clean_string($_POST['image']), 0, 2048);
-                    $_POST['image_alt'] = mb_substr(Database::clean_string($_POST['image_alt']), 0, 100);
-                    $_POST['button_text'] = mb_substr(Database::clean_string($_POST['button_text']), 0, 128);
-                    $_POST['button_url'] = mb_substr(Database::clean_string($_POST['button_url']), 0, 2048);
+                    $_POST['title'] = Database::clean_string($_POST['title']);
+                    $_POST['description'] = Database::clean_string($_POST['description']);
+                    $_POST['image'] = Database::clean_string($_POST['image']);
+                    $_POST['button_text'] = Database::clean_string($_POST['button_text']);
+                    $_POST['button_url'] = Database::clean_string($_POST['button_url']);
                     $_POST['border_radius'] = 'rounded';
 
                     break;
@@ -705,36 +698,35 @@ class Notification extends Controller {
                 case 'TEXT_FEEDBACK' :
 
                     /* Clean some posted variables */
-                    $_POST['title'] = mb_substr(Database::clean_string($_POST['title']), 0, 256);
-                    $_POST['description'] = mb_substr(Database::clean_string($_POST['description']), 0, 512);
-                    $_POST['input_placeholder'] = mb_substr(Database::clean_string($_POST['input_placeholder']), 0, 128);
-                    $_POST['button_text'] = mb_substr(Database::clean_string($_POST['button_text']), 0, 128);
-                    $_POST['thank_you_url'] = mb_substr(Database::clean_string($_POST['thank_you_url']), 0, 2048);
+                    $_POST['title'] = Database::clean_string($_POST['title']);
+                    $_POST['description'] = Database::clean_string($_POST['description']);
+                    $_POST['input_placeholder'] = Database::clean_string($_POST['input_placeholder']);
+                    $_POST['button_text'] = Database::clean_string($_POST['button_text']);
                     $_POST['border_radius'] = in_array($_POST['border_radius'], [
                         'straight',
                         'rounded',
                     ]) ? $_POST['border_radius'] : 'rounded';
 
                     $_POST['data_send_is_enabled'] = (bool) isset($_POST['data_send_is_enabled']);
-                    $_POST['data_send_webhook'] = mb_substr(Database::clean_string($_POST['data_send_webhook']), 0, 2048);
-                    $_POST['data_send_email'] = filter_var($_POST['data_send_email'], FILTER_VALIDATE_EMAIL) ? mb_substr(Database::clean_string($_POST['data_send_email']), 0, 320) : '';
+                    $_POST['data_send_webhook'] = Database::clean_string($_POST['data_send_webhook']);
+                    $_POST['data_send_email'] = filter_var($_POST['data_send_email'], FILTER_VALIDATE_EMAIL) ? Database::clean_string($_POST['data_send_email']) : '';
 
                     break;
 
                 case 'ENGAGEMENT_LINKS' :
 
                     /* Clean some posted variables */
-                    $_POST['title'] = mb_substr(Database::clean_string($_POST['title']), 0, 256);
+                    $_POST['title'] = Database::clean_string($_POST['title']);
 
                     $_POST['categories'] = $_POST['categories'] ? array_map(function($category) {
-                        $category['title'] = mb_substr(Database::clean_string($category['title']), 0, 256);
-                        $category['description'] = mb_substr(Database::clean_string($category['description']), 0, 512);
+                        $category['title'] = Database::clean_string($category['title']);
+                        $category['description'] = Database::clean_string($category['description']);
 
                         $category['links'] = array_map(function($category_link) {
-                            $category_link['title'] = mb_substr(Database::clean_string($category_link['title']), 0, 256);
-                            $category_link['description'] = mb_substr(Database::clean_string($category_link['description']), 0, 512);
-                            $category_link['image'] = mb_substr(Database::clean_string($category_link['image']), 0, 2048);
-                            $category_link['url'] = mb_substr(Database::clean_string($category_link['url']), 0, 2048);
+                            $category_link['title'] = Database::clean_string($category_link['title']);
+                            $category_link['description'] = Database::clean_string($category_link['description']);
+                            $category_link['image'] = Database::clean_string($category_link['image']);
+                            $category_link['url'] = Database::clean_string($category_link['url']);
 
                             return $category_link;
                         }, $category['links']);
@@ -833,7 +825,6 @@ class Notification extends Controller {
                                 'title' => $_POST['title'],
                                 'description' => $_POST['description'],
                                 'image' => $_POST['image'],
-                                'image_alt' => $_POST['image_alt'],
                                 'url' => $_POST['url'],
                                 'url_new_tab' => $_POST['url_new_tab'],
 
@@ -853,7 +844,6 @@ class Notification extends Controller {
                                 'title' => $_POST['title'],
                                 'description' => $_POST['description'],
                                 'image' => $_POST['image'],
-                                'image_alt' => $_POST['image_alt'],
                                 'coupon_code' => $_POST['coupon_code'],
                                 'button_url' => $_POST['button_url'],
                                 'button_text' => $_POST['button_text'],
@@ -946,7 +936,6 @@ class Notification extends Controller {
                                 'title' => $_POST['title'],
                                 'description' => $_POST['description'],
                                 'image' => $_POST['image'],
-                                'image_alt' => $_POST['image_alt'],
                                 'url' => $_POST['url'],
                                 'url_new_tab' => $_POST['url_new_tab'],
                                 'conversions_count' => $_POST['conversions_count'],
@@ -1074,7 +1063,6 @@ class Notification extends Controller {
                             $new_notification_settings,
                             [
                                 'title' => $_POST['title'],
-                                'thank_you_url' => $_POST['thank_you_url'],
 
                                 'show_angry' => $_POST['show_angry'],
                                 'show_sad' => $_POST['show_sad'],
@@ -1096,7 +1084,6 @@ class Notification extends Controller {
                             [
                                 'description' => $_POST['description'],
                                 'image' => $_POST['image'],
-                                'image_alt' => $_POST['image_alt'],
                                 'url_text' => $_POST['url_text'],
                                 'url' => $_POST['url'],
                                 'button_text' => $_POST['button_text'],
@@ -1117,7 +1104,6 @@ class Notification extends Controller {
                             [
                                 'title' => $_POST['title'],
                                 'description' => $_POST['description'],
-                                'thank_you_url' => $_POST['thank_you_url'],
 
                                 'title_color' => $_POST['title_color'],
                                 'description_color' => $_POST['description_color'],
@@ -1137,7 +1123,6 @@ class Notification extends Controller {
                                 'title' => $_POST['title'],
                                 'description' => $_POST['description'],
                                 'image' => $_POST['image'],
-                                'image_alt' => $_POST['image_alt'],
                                 'content_title' => $_POST['content_title'],
                                 'content_description' => $_POST['content_description'],
                                 'input_placeholder' => $_POST['input_placeholder'],
@@ -1204,7 +1189,6 @@ class Notification extends Controller {
                                 'title' => $_POST['title'],
                                 'description' => $_POST['description'],
                                 'image' => $_POST['image'],
-                                'image_alt' => $_POST['image_alt'],
                                 'url' => $_POST['url'],
                                 'url_new_tab' => $_POST['url_new_tab'],
 
@@ -1223,7 +1207,6 @@ class Notification extends Controller {
                             [
                                 'title' => $_POST['title'],
                                 'image' => $_POST['image'],
-                                'image_alt' => $_POST['image_alt'],
                                 'button_url' => $_POST['button_url'],
                                 'button_text' => $_POST['button_text'],
 
@@ -1312,7 +1295,6 @@ class Notification extends Controller {
                                 'title' => $_POST['title'],
                                 'description' => $_POST['description'],
                                 'image' => $_POST['image'],
-                                'image_alt' => $_POST['image_alt'],
                                 'input_placeholder' => $_POST['input_placeholder'],
                                 'button_text' => $_POST['button_text'],
                                 'show_agreement' => $_POST['show_agreement'],
@@ -1342,7 +1324,6 @@ class Notification extends Controller {
                                 'title' => $_POST['title'],
                                 'description' => $_POST['description'],
                                 'image' => $_POST['image'],
-                                'image_alt' => $_POST['image_alt'],
                                 'button_text' => $_POST['button_text'],
                                 'button_url' => $_POST['button_url'],
 
@@ -1365,7 +1346,6 @@ class Notification extends Controller {
                                 'description' => $_POST['description'],
                                 'input_placeholder' => $_POST['input_placeholder'],
                                 'button_text' => $_POST['button_text'],
-                                'thank_you_url' => $_POST['thank_you_url'],
 
                                 'title_color' => $_POST['title_color'],
                                 'description_color' => $_POST['description_color'],
@@ -1420,57 +1400,6 @@ class Notification extends Controller {
             }
         }
 
-    }
-
-    public function duplicate() {
-
-        Authentication::guard();
-
-        if(empty($_POST)) {
-            die();
-        }
-
-        $notification_id = (int) Database::clean_string($_POST['notification_id']);
-
-        //ALTUMCODE.DEMO: if(DEMO) if($this->user->user_id == 1) Alerts::add_error('Please create an account on the demo to test out this function.');
-
-        if(!Csrf::check()) {
-            Alerts::add_error(language()->global->error_message->invalid_csrf_token);
-            redirect('dashboard');
-        }
-
-        /* Make sure the notification is created by the logged in user */
-        if(!$notification = db()->where('notification_id', $notification_id)->where('user_id', $this->user->user_id)->getOne('notifications')) {
-            redirect('dashboard');
-        }
-
-        if(!Alerts::has_field_errors() && !Alerts::has_errors()) {
-
-            /* Determine the default settings */
-            $notification_key = md5($this->user->user_id . $notification->notification_id . $notification->campaign_id . time());
-            $name = language()->notification_create->default_name;
-
-            /* Insert to database */
-            $notification_id = db()->insert('notifications', [
-                'user_id' => $this->user->user_id,
-                'campaign_id' => $notification->campaign_id,
-                'name' => $name,
-                'type' => $notification->type,
-                'settings' => $notification->settings,
-                'notification_key' => $notification_key,
-                'is_enabled' => 0,
-                'datetime' => \Altum\Date::$date,
-            ]);
-
-            /* Set a nice success message */
-            Alerts::add_success(sprintf(language()->global->success_message->create1, '<strong>' . htmlspecialchars($name) . '</strong>'));
-
-            /* Redirect */
-            redirect('notification/' . $notification_id);
-
-        }
-
-        die();
     }
 
     public function delete() {

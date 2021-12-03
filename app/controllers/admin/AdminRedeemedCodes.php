@@ -17,8 +17,7 @@ class AdminRedeemedCodes extends Controller {
     public function index() {
 
         /* Prepare the filtering system */
-        $filters = (new \Altum\Filters(['user_id'], [], ['datetime']));
-        $filters->set_default_order_by('id', 'DESC');
+        $filters = (new \Altum\Filters(['user_id'], [], ['date']));
 
         /* Prepare the paginator */
         $total_rows = database()->query("SELECT COUNT(*) AS `total` FROM `redeemed_codes` WHERE 1 = 1 {$filters->get_sql_where()}")->fetch_object()->total ?? 0;
@@ -49,8 +48,8 @@ class AdminRedeemedCodes extends Controller {
         }
 
         /* Export handler */
-        process_export_json($redeemed_codes, 'include', ['user_id', 'code_id', 'datetime']);
-        process_export_csv($redeemed_codes, 'include', ['user_id', 'code_id', 'datetime']);
+        process_export_json($redeemed_codes, 'include', ['user_id', 'code_id', 'date']);
+        process_export_csv($redeemed_codes, 'include', ['user_id', 'code_id', 'date']);
 
         /* Prepare the pagination view */
         $pagination = (new \Altum\Views\View('partials/pagination', (array) $this))->run(['paginator' => $paginator]);

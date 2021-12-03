@@ -30,7 +30,7 @@ class ApiPayments extends Controller {
                     $this->get_all();
                 }
 
-                break;
+            break;
         }
 
         $this->return_404();
@@ -40,7 +40,6 @@ class ApiPayments extends Controller {
 
         /* Prepare the filtering system */
         $filters = (new \Altum\Filters([], [], []));
-        $filters->set_default_order_by('id', 'DESC');
 
         /* Prepare the paginator */
         $total_rows = database()->query("SELECT COUNT(*) AS `total` FROM `payments` WHERE `user_id` = {$this->api_user->user_id}")->fetch_object()->total ?? 0;
@@ -74,7 +73,7 @@ class ApiPayments extends Controller {
                 'total_amount' => $row->total_amount,
                 'currency' => $row->currency,
                 'status' => (bool) (int) $row->status,
-                'datetime' => $row->datetime,
+                'date' => $row->date,
             ];
 
             $data[] = $row;
@@ -127,7 +126,7 @@ class ApiPayments extends Controller {
             'total_amount' => $payment->total_amount,
             'currency' => $payment->currency,
             'status' => (bool) (int) $payment->status,
-            'datetime' => $payment->datetime,
+            'date' => $payment->date,
         ];
 
         Response::jsonapi_success($data);

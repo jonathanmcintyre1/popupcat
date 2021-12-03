@@ -26,6 +26,10 @@ class AdminTaxUpdate extends Controller {
         $tax->countries = json_decode($tax->countries);
 
         if(!empty($_POST)) {
+            /* Filter some the variables */
+            $_POST['internal_name'] = Database::clean_string($_POST['internal_name']);
+            $_POST['name'] = Database::clean_string($_POST['name']);
+            $_POST['description'] = Database::clean_string($_POST['description']);
 
             //ALTUMCODE:DEMO if(DEMO) Alerts::add_error('This command is blocked on the demo.');
 
@@ -35,11 +39,15 @@ class AdminTaxUpdate extends Controller {
 
             if(!Alerts::has_field_errors() && !Alerts::has_errors()) {
 
-//                /* Database query */
-//                db()->where('tax_id', $tax_id)->update('taxes', []);
-//
-//                /* Set a nice success message */
-//                Alerts::add_success(sprintf(language()->global->success_message->update1, '<strong>' . htmlspecialchars($_POST['name']) . '</strong>'));
+                /* Database query */
+                db()->where('tax_id', $tax_id)->update('taxes', [
+                    'internal_name' => $_POST['internal_name'],
+                    'name' => $_POST['name'],
+                    'description' => $_POST['description']
+                ]);
+
+                /* Set a nice success message */
+                Alerts::add_success(sprintf(language()->global->success_message->update1, '<strong>' . htmlspecialchars($_POST['name']) . '</strong>'));
 
                 /* Refresh the page */
                 redirect('admin/tax-update/' . $tax_id);

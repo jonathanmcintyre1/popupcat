@@ -25,12 +25,12 @@ class Refer extends Controller {
         $referral_key = isset($this->params[0]) ? Database::clean_string($this->params[0]) : null;
 
         /* Get the owner user of the referral key */
-        if(!$user = db()->where('referral_key', $referral_key)->getOne('users', ['user_id', 'plan_settings', 'status', 'referral_key'])) {
+        if(!$user = db()->where('referral_key', $referral_key)->getOne('users', ['user_id', 'plan_settings', 'active', 'referral_key'])) {
             redirect();
         }
 
         /* Make sure the user is still active */
-        if($user->status != 1) {
+        if($user->active != 1) {
             redirect();
         }
 

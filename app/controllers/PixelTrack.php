@@ -30,34 +30,31 @@ class PixelTrack extends Controller {
             die();
         }
 
-        /* Get the Payload of the Post */
-        $payload = @file_get_contents('php://input');
-        $post = json_decode($payload);
-
-        if(!$post) {
-            die();
-        }
-
         /* Allowed types of requests to this endpoint */
         $allowed_types = ['track', 'notification', 'auto_capture', 'collector'];
         $date = \Altum\Date::$date;
         $domain = Database::clean_string(parse_url(trim(Database::clean_string($_SERVER['HTTP_REFERER'])))['host']);
-        $pixel_key = isset($this->params[0]) ? Database::clean_string($this->params[0]) : false;
+        $pixel_key = Database::clean_string($_GET['pixel_key']);
 
-        if(!isset($post->type) || isset($post->type) && !in_array($post->type, $allowed_types)) {
+        if(!isset($_GET['type']) || isset($_GET['type']) && !in_array($_GET['type'], $allowed_types)) {
             die();
         }
 
+        /* Flatten everything recursively */
+        $_GET = array_flatten($_GET);
+
         /* Clean all the received variables */
-        foreach($post as $key => $value) {
+        foreach($_GET as $key => $value) {
 
             /* Whitelist */
             if(in_array($key, ['location'])) {
                 continue;
             }
 
-            $post->{$key} = Database::clean_string($value);
+            $_GET[$key] = Database::clean_string($value);
         }
+
+        $_GET['url'] = urldecode($_GET['url']);
 
         /* Get the details of the campaign from the database */
         $campaign = (new \Altum\Models\Campaign())->get_campaign_by_pixel_key($pixel_key);
@@ -82,7 +79,7 @@ class PixelTrack extends Controller {
             die();
         }
 
-        if($user->status != 1) {
+        if(!$user->active) {
             die();
         }
 
@@ -94,14 +91,14 @@ class PixelTrack extends Controller {
             die();
         }
 
-        switch($post->type) {
+        switch($_GET['type']) {
 
             /* Tracking the notifications states, impressions, hovers..etc */
             case 'notification':
 
-                $post->notification_id = (int) $post->notification_id;
-                $post->subtype = in_array(
-                    $post->subtype,
+                $_GET['notification_id'] = (int) $_GET['notification_id'];
+                $_GET['subtype'] = in_array(
+                    $_GET['subtype'],
                     [
                         'hover',
                         'impression',
@@ -117,15 +114,15 @@ class PixelTrack extends Controller {
                         'feedback_score_4',
                         'feedback_score_5'
                     ]
-                ) ? $post->subtype : false;
+                ) ? $_GET['subtype'] : false;
 
                 /* Make sure the type of notification is the correct one */
-                if(!$post->subtype) {
+                if(!$_GET['subtype']) {
                     die();
                 }
 
                 /* Make sure the notification provided is a child of the campaign, exists and is enabled */
-                if(!$notification = db()->where('notification_id', $post->notification_id)->where('campaign_id', $campaign->campaign_id)->where('is_enabled', 1)->getOne('notifications', ['campaign_id', 'notification_id'])) {
+                if(!$notification = db()->where('notification_id', $_GET['notification_id'])->where('campaign_id', $campaign->campaign_id)->where('is_enabled', 1)->getOne('notifications', ['campaign_id', 'notification_id'])) {
                     die();
                 }
 
@@ -133,13 +130,13 @@ class PixelTrack extends Controller {
                 db()->insert('track_notifications', [
                     'notification_id' => $notification->notification_id,
                     'campaign_id' => $notification->campaign_id,
-                    'type' => $post->subtype,
-                    'url' => $post->url,
+                    'type' => $_GET['subtype'],
+                    'url' => $_GET['url'],
                     'datetime' => $date,
                 ]);
 
                 /* Count it in the users account if its an impression */
-                if($post->subtype == 'impression') {
+                if($_GET['subtype'] == 'impression') {
                     $stmt = database()->prepare("UPDATE `users` SET `current_month_notifications_impressions` = `current_month_notifications_impressions` + 1, `total_notifications_impressions` = `total_notifications_impressions` + 1 WHERE `user_id` = ?");
                     $stmt->bind_param('s', $campaign->user_id);
                     $stmt->execute();
@@ -166,7 +163,7 @@ class PixelTrack extends Controller {
                     'sssss',
                     $campaign->user_id,
                     $domain,
-                    $post->url,
+                    $_GET['url'],
                     $ip_binary,
                     $date
                 );
@@ -178,21 +175,21 @@ class PixelTrack extends Controller {
             /* Getting the data from the email collector form */
             case 'collector':
 
-                $post->notification_id = (int) $post->notification_id;
+                $_GET['notification_id'] = (int) $_GET['notification_id'];
 
                 /* Determine if we have email or input keys */
                 $collector_key = false;
 
-                if(isset($post->email) && !empty($post->email)) {
+                if(isset($_GET['email']) && !empty($_GET['email'])) {
                     $collector_key = 'email';
 
                     /* Make sure that what we got is an actual email */
-                    if(!filter_var($post->email, FILTER_VALIDATE_EMAIL)) {
+                    if(!filter_var($_GET['email'], FILTER_VALIDATE_EMAIL)) {
                         die();
                     }
                 }
 
-                if(isset($post->input) && !empty($post->input)) {
+                if(isset($_GET['input']) && !empty($_GET['input'])) {
                     $collector_key = 'input';
                 }
 
@@ -201,7 +198,7 @@ class PixelTrack extends Controller {
                 }
 
                 /* Make sure that the data is not already submitted and exists for this notification */
-                $result = database()->query("SELECT `id` FROM `track_conversions` WHERE `notification_id` = {$post->notification_id} AND JSON_EXTRACT(`data`, '$.{$collector_key}') = '{$_GET[$collector_key]}'");
+                $result = database()->query("SELECT `id` FROM `track_conversions` WHERE `notification_id` = {$_GET['notification_id']} AND JSON_EXTRACT(`data`, '$.{$collector_key}') = '{$_GET[$collector_key]}'");
 
                 if($result->num_rows) {
                     die();
@@ -238,10 +235,10 @@ class PixelTrack extends Controller {
                 ");
                 $stmt->bind_param(
                     'ssssss',
-                    $post->notification_id,
-                    $post->type,
+                    $_GET['notification_id'],
+                    $_GET['type'],
                     $data,
-                    $post->url,
+                    $_GET['url'],
                     $location_data,
                     $date
                 );
@@ -261,17 +258,17 @@ class PixelTrack extends Controller {
                 ");
                 $stmt->bind_param(
                     'sssss',
-                    $post->notification_id,
+                    $_GET['notification_id'],
                     $campaign->campaign_id,
                     $type,
-                    $post->url,
+                    $_GET['url'],
                     $date
                 );
                 $stmt->execute();
                 $stmt->close();
 
                 /* Make sure to send the webhook of the conversion */
-                $notification = database()->query("SELECT `notifications`.`name`, `notifications`.`settings`, `campaigns`.`name` AS `campaign_name` FROM `notifications` LEFT JOIN `campaigns` ON `campaigns`.`campaign_id` = `notifications`.`campaign_id`  WHERE `notification_id` = {$post->notification_id}")->fetch_object();
+                $notification = database()->query("SELECT `notifications`.`name`, `notifications`.`settings`, `campaigns`.`name` AS `campaign_name` FROM `notifications` LEFT JOIN `campaigns` ON `campaigns`.`campaign_id` = `notifications`.`campaign_id`  WHERE `notification_id` = {$_GET['notification_id']}")->fetch_object();
                 $notification->settings = json_decode($notification->settings);
 
                 /* Only send if we need to */
@@ -291,7 +288,7 @@ class PixelTrack extends Controller {
 
                         /* Prepare the html for the email body */
                         $email_body = '<ul>';
-                        foreach(array_merge(json_decode($location_data, true), json_decode($data, true), ['ip' => get_ip(), 'url' => $post->url]) as $key => $value) {
+                        foreach(array_merge(json_decode($location_data, true), json_decode($data, true), ['ip' => get_ip(), 'url' => $_GET['url']]) as $key => $value) {
                             $email_body .= '<li><strong>' . $key . ':</strong>' . ' ' . $value;
                         }
                         $email_body .= '</ul>';
@@ -321,7 +318,7 @@ class PixelTrack extends Controller {
             /* Auto Capturing data from forms */
             case 'auto_capture':
 
-                $post->notification_id = (int) $post->notification_id;
+                $_GET['notification_id'] = (int) $_GET['notification_id'];
 
                 /* Make sure to get only the needed data from the submission */
                 $data = [];
@@ -362,10 +359,10 @@ class PixelTrack extends Controller {
                 ");
                 $stmt->bind_param(
                     'ssssss',
-                    $post->notification_id,
-                    $post->type,
+                    $_GET['notification_id'],
+                    $_GET['type'],
                     $data,
-                    $post->url,
+                    $_GET['url'],
                     $location_data,
                     $date
                 );
@@ -385,10 +382,10 @@ class PixelTrack extends Controller {
                 ");
                 $stmt->bind_param(
                     'sssss',
-                    $post->notification_id,
+                    $_GET['notification_id'],
                     $campaign->campaign_id,
                     $type,
-                    $post->url,
+                    $_GET['url'],
                     $date
                 );
                 $stmt->execute();
@@ -399,7 +396,7 @@ class PixelTrack extends Controller {
                 $stmt->bind_param(
                     'ss',
                     $date,
-                    $post->notification_id
+                    $_GET['notification_id']
                 );
                 $stmt->execute();
                 $stmt->close();

@@ -12,39 +12,33 @@ $javascript = '';
 <?php ob_start() ?>
     <div class="form-group">
         <label for="settings_name"><?= language()->notification->settings->name ?></label>
-        <input type="text" id="settings_name" name="name" class="form-control" value="<?= $data->notification->name ?>" maxlength="256" required="required" />
+        <input type="text" id="settings_name" name="name" class="form-control" value="<?= $data->notification->name ?>" required="required" />
     </div>
 
     <div class="form-group">
         <label for="settings_title"><?= language()->notification->settings->title ?></label>
-        <input type="text" id="settings_title" name="title" class="form-control" value="<?= $data->notification->settings->title ?>" maxlength="256" />
+        <input type="text" id="settings_title" name="title" class="form-control" value="<?= $data->notification->settings->title ?>" />
     </div>
 
     <div class="form-group">
         <label for="settings_description"><?= language()->notification->settings->description ?></label>
-        <input type="text" id="settings_description" name="description" class="form-control" value="<?= $data->notification->settings->description ?>" maxlength="512" />
+        <input type="text" id="settings_description" name="description" class="form-control" value="<?= $data->notification->settings->description ?>" />
     </div>
 
     <div class="form-group">
         <label for="settings_image"><?= language()->notification->settings->image ?></label>
-        <input type="url" id="settings_image" name="image" class="form-control" value="<?= $data->notification->settings->image ?>" maxlength="2048" />
+        <input type="url" id="settings_image" name="image" class="form-control" value="<?= $data->notification->settings->image ?>" />
         <small class="form-text text-muted"><?= language()->notification->settings->image_help ?></small>
     </div>
 
     <div class="form-group">
-        <label for="settings_image_alt"><?= language()->notification->settings->image_alt ?></label>
-        <input type="text" id="settings_image_alt" name="image_alt" class="form-control" value="<?= $data->notification->settings->image_alt ?>" maxlength="100" />
-        <small class="form-text text-muted"><?= language()->notification->settings->image_alt_help ?></small>
-    </div>
-
-    <div class="form-group">
         <label for="settings_button_text"><?= language()->notification->settings->button_text ?></label>
-        <input type="text" id="settings_button_text" name="button_text" class="form-control" value="<?= $data->notification->settings->button_text ?>" maxlength="128" />
+        <input type="text" id="settings_button_text" name="button_text" class="form-control" value="<?= $data->notification->settings->button_text ?>" />
     </div>
 
     <div class="form-group">
         <label for="settings_button_url"><?= language()->notification->settings->button_url ?></label>
-        <input type="url" id="settings_button_url" name="button_url" class="form-control" value="<?= $data->notification->settings->button_url ?>" maxlength="2048" />
+        <input type="url" id="settings_button_url" name="button_url" class="form-control" value="<?= $data->notification->settings->button_url ?>" />
     </div>
 <?php $html['basic'] = ob_get_clean() ?>
 

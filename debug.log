@@ -1,1 +1,0 @@
-[23-Nov-2021 16:22:32 UTC] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user ''@'localhost' (using password: NO) in /var/www/vhosts/boxy.link/proofpop.boxy.link/httpdocs/app/core/Database.php on line 23

@@ -1,6 +1,6 @@
 <?php defined('ALTUMCODE') || die() ?>
 
-<?php if(count($data->codes)): ?>
+<?php if($data->codes_result->num_rows): ?>
 
     <div class="d-flex flex-column flex-md-row justify-content-between mb-4">
         <h1 class="h3"><i class="fa fa-fw fa-xs fa-tags text-primary-900 mr-2"></i> <?= language()->admin_codes->header ?></h1>
@@ -18,6 +18,7 @@
             <tr>
                 <th><?= language()->admin_codes->table->code ?></th>
                 <th><?= language()->admin_codes->table->type ?></th>
+                <th><?= language()->admin_codes->table->plan_id ?></th>
                 <th><?= language()->admin_codes->table->discount ?></th>
                 <th><?= language()->admin_codes->table->quantity ?></th>
                 <th><?= language()->admin_codes->table->redeemed_codes ?></th>
@@ -25,23 +26,23 @@
             </tr>
             </thead>
             <tbody>
-            <?php foreach($data->codes as $row): ?>
+            <?php while($row = $data->codes_result->fetch_object()): ?>
 
                 <tr data-code-id="<?= $row->code_id ?>">
+                    <td><a href="<?= url('admin/code-update/' . $row->code_id) ?>"><?= $row->code ?></a></td>
+                    <td><?= $row->type == 'discount' ? '<span class="badge badge-pill badge-success">' . $row->type . '</span>' : '<span class="badge badge-pill badge-primary">' . $row->type . '</span>' ?></td>
                     <td>
-                        <div class="d-flex flex-column">
-                            <a href="<?= url('admin/code-update/' . $row->code_id) ?>"><?= $row->name ?></a>
-                            <span><code><?= $row->code ?></code></span>
-                        </div>
+                    <span class="badge badge-pill badge-light">
+                        <?= $row->plan_name ?: language()->admin_codes->table->plan_id_null ?>
+                    </span>
                     </td>
-                    <td><?= $row->type ?></td>
                     <td><?= $row->discount . '%' ?></td>
                     <td><?= $row->quantity ?></td>
-                    <td><?= nr($row->redeemed) ?></td>
+                    <td><i class="fa fa-fw fa-users text-muted"></i> <?= $row->redeemed ?></td>
                     <td><?= include_view(THEME_PATH . 'views/admin/codes/admin_code_dropdown_button.php', ['id' => $row->code_id]) ?></td>
                 </tr>
 
-            <?php endforeach ?>
+            <?php endwhile ?>
             </tbody>
         </table>
     </div>

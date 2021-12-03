@@ -9,7 +9,7 @@
     window.altum.monthly_price = $('input[name="monthly_price"]').val();
     window.altum.annual_price = $('input[name="annual_price"]').val();
     window.altum.lifetime_price = $('input[name="lifetime_price"]').val();
-    window.altum.code = null;
+    window.altum.discount = null;
 
     window.altum.payment_type_one_time_enabled = <?= json_encode((bool) in_array(settings()->payment->type, ['one_time', 'both'])) ?>;
     window.altum.payment_type_recurring_enabled = <?= json_encode((bool) in_array(settings()->payment->type, ['recurring', 'both'])) ?>;
@@ -22,12 +22,14 @@
     <?= \Altum\Alerts::output_alerts() ?>
 
     <nav aria-label="breadcrumb">
-        <ol class="custom-breadcrumbs small">
-            <li><a href="<?= url() ?>"><?= language()->index->breadcrumb ?></a> <i class="fa fa-fw fa-angle-right"></i></li>
-            <li><a href="<?= url('plan') ?>"><?= language()->plan->breadcrumb ?></a> <i class="fa fa-fw fa-angle-right"></i></li>
-            <li><a href="<?= url('pay-billing/' . $data->plan_id) ?>"><?= language()->pay_billing->breadcrumb ?></a> <i class="fa fa-fw fa-angle-right"></i></li>
-            <li class="active" aria-current="page"><?= sprintf(language()->pay->breadcrumb, $data->plan->name) ?></li>
-        </ol>
+        <small>
+            <ol class="custom-breadcrumbs">
+                <li><a href="<?= url() ?>"><?= language()->index->breadcrumb ?></a> <i class="fa fa-fw fa-angle-right"></i></li>
+                <li><a href="<?= url('plan') ?>"><?= language()->plan->breadcrumb ?></a> <i class="fa fa-fw fa-angle-right"></i></li>
+                <li><a href="<?= url('pay-billing/' . $data->plan_id) ?>"><?= language()->pay_billing->breadcrumb ?></a> <i class="fa fa-fw fa-angle-right"></i></li>
+                <li class="active" aria-current="page"><?= sprintf(language()->pay->breadcrumb, $data->plan->name) ?></li>
+            </ol>
+        </small>
     </nav>
 
     <?php if($data->plan->trial_days && !$this->user->plan_trial_done): ?>
@@ -263,8 +265,8 @@
 
                                 <div class="form-group mt-4">
                                     <label><?= language()->pay->custom_plan->offline_payment_proof ?></label>
-                                    <input id="offline_payment_proof" type="file" name="offline_payment_proof" accept="<?= \Altum\Uploads::get_whitelisted_file_extensions_accept('offline_payment_proofs') ?>" class="form-control" />
-                                    <div class="mt-2"><span class="text-muted"><?= sprintf(language()->global->accessibility->whitelisted_file_extensions, \Altum\Uploads::get_whitelisted_file_extensions_accept('offline_payment_proofs')) ?></span></div>
+                                    <input type="file" name="offline_payment_proof" accept=".png, .jpg, .jpeg" class="form-control" />
+                                    <div class="mt-2"><span class="text-muted"><?= language()->pay->custom_plan->offline_payment_proof_help ?></span></div>
                                 </div>
                             </div>
                         </div>
@@ -439,7 +441,7 @@
                                         </div>
                                     </div>
 
-                                    <div id="summary_discount" class="d-none">
+                                    <div id="summary_discount" style="display: none;">
                                         <div class="d-flex justify-content-between mb-3">
                                             <span class="text-muted">
                                                 <?= language()->pay->custom_plan->summary->discount ?>
@@ -453,23 +455,22 @@
                                         </div>
                                     </div>
 
-                                    <div id="summary_taxes">
-                                        <?php if($data->plan_taxes): ?>
-                                            <?php foreach($data->plan_taxes as $row): ?>
+                                    <?php if($data->plan_taxes): ?>
+                                        <?php foreach($data->plan_taxes as $row): ?>
 
-                                                <div id="summary_tax_id_<?= $row->tax_id ?>" class="d-flex justify-content-between mb-3">
-                                                    <div class="d-flex flex-column">
+                                            <div id="summary_tax_id_<?= $row->tax_id ?>" class="d-flex justify-content-between mb-3">
+                                                <div class="d-flex flex-column">
                                                     <span class="text-muted">
                                                         <?= $row->name ?>
 
                                                         <span data-toggle="tooltip" title="<?= $row->description ?>"><i class="fa fa-fw fa-sm fa-question-circle"></i></span>
                                                     </span>
-                                                        <small class="text-muted">
-                                                            <?= language()->pay->custom_plan->summary->{$row->type == 'inclusive' ? 'tax_inclusive' : 'tax_exclusive'} ?>
-                                                        </small>
-                                                    </div>
+                                                    <small class="text-muted">
+                                                        <?= language()->pay->custom_plan->summary->{$row->type == 'inclusive' ? 'tax_inclusive' : 'tax_exclusive'} ?>
+                                                    </small>
+                                                </div>
 
-                                                    <span>
+                                                <span>
                                                     <?php if($row->value_type == 'percentage'): ?>
 
                                                         <span class="tax-value"></span>
@@ -483,11 +484,10 @@
 
                                                     <?php endif ?>
                                                 </span>
-                                                </div>
+                                            </div>
 
-                                            <?php endforeach ?>
-                                        <?php endif ?>
-                                    </div>
+                                        <?php endforeach ?>
+                                    <?php endif ?>
                                 </div>
 
                                 <?php if(settings()->payment->codes_is_enabled): ?>
@@ -496,14 +496,15 @@
 
                                         <div style="display: none;" id="code_block">
                                             <div class="form-group">
-                                                <label for="code"><i class="fa fa-fw fa-sm fa-tags mr-1"></i> <?= language()->pay->custom_plan->code ?></label>
-                                                <input id="code" type="text" name="code" class="form-control" />
-                                                <div id="code_help"></div>
+                                                <label><i class="fa fa-fw fa-sm fa-tags mr-1"></i> <?= language()->pay->custom_plan->code ?></label>
+                                                <input type="text" name="code" class="form-control" />
                                             </div>
+
+                                            <div class="mt-2"><span id="code_help" class="text-muted"></span></div>
                                         </div>
                                     </div>
 
-                                <?php ob_start() ?>
+                                    <?php ob_start() ?>
                                     <script>
                                         'use strict';
 
@@ -517,19 +518,12 @@
                                         /* Function to check the discount code */
                                         let check_code = () => {
                                             let code = document.querySelector('input[name="code"]').value;
+                                            let is_valid = false;
 
-                                            /* Reset */
                                             if(code.trim() == '') {
                                                 document.querySelector('input[name="code"]').classList.remove('is-invalid');
                                                 document.querySelector('input[name="code"]').classList.remove('is-valid');
-                                                altum.code = null;
-
-                                                /* Change submit text */
-                                                document.querySelector('#submit_default_text').classList.remove('d-none');
-                                                document.querySelector('#submit_text').classList.add('d-none');
-
                                                 calculate_prices();
-
                                                 return;
                                             }
 
@@ -546,43 +540,38 @@
                                                     return response.ok ? response.json() : Promise.reject(response);
                                                 })
                                                 .then(data => {
-                                                    document.querySelector('#code_help').innerHTML = data.message;
 
                                                     if(data.status == 'success') {
+                                                        is_valid = true;
+
+                                                        /* Set the new discounted price */
+                                                        altum.discount = parseInt(data.details.discount);
+
+                                                    } else {
+                                                        altum.discount = null;
+
+                                                    }
+
+                                                    document.querySelector('#code_help').innerHTML = data.message;
+
+                                                    if(is_valid) {
                                                         document.querySelector('input[name="code"]').classList.add('is-valid');
                                                         document.querySelector('input[name="code"]').classList.remove('is-invalid');
-                                                        document.querySelector('#code_help').classList.add('valid-feedback');
-                                                        document.querySelector('#code_help').classList.remove('invalid-feedback');
-
-                                                        /* Set the code variable */
-                                                        altum.code = data.details.code;
-
-                                                        /* Change submit text */
-                                                        document.querySelector('#submit_default_text').classList.add('d-none');
-                                                        document.querySelector('#submit_text').classList.remove('d-none');
-                                                        document.querySelector('#submit_text').innerText = data.details.submit_text;
-
                                                     } else {
                                                         document.querySelector('input[name="code"]').classList.add('is-invalid');
                                                         document.querySelector('input[name="code"]').classList.remove('is-valid');
-                                                        document.querySelector('#code_help').classList.add('invalid-feedback');
-                                                        document.querySelector('#code_help').classList.remove('valid-feedback');
-
-                                                        /* Set the code variable */
-                                                        altum.code = null;
-
-                                                        /* Change submit text */
-                                                        document.querySelector('#submit_default_text').classList.remove('d-none');
-                                                        document.querySelector('#submit_text').classList.add('d-none');
                                                     }
 
                                                     calculate_prices();
+
                                                 })
-                                                .catch(error => {});
+                                                .catch(error => {
+                                                    /* :) */
+                                                });
 
                                         };
 
-                                        /* Writing handler on the input */
+                                        /* Writing hanlder on the input */
                                         let timer = null;
                                         let timer_function = () => {
                                             clearTimeout(timer);
@@ -634,10 +623,7 @@
                 <div class="col-12">
 
                     <div class="mt-5">
-                        <button type="submit" name="submit" class="btn btn-lg btn-block btn-primary">
-                            <span id="submit_default_text"><?= language()->pay->custom_plan->pay ?></span>
-                            <span id="submit_text" class="d-none"><?= language()->pay->custom_plan->pay ?></span>
-                        </button>
+                        <button type="submit" name="submit" class="btn btn-lg btn-block btn-primary"><?= language()->pay->custom_plan->pay ?></button>
                     </div>
 
                     <div class="mt-3 text-muted text-center">
@@ -852,47 +838,47 @@
 
         switch(payment_frequency) {
             case 'monthly':
+
                 full_price = altum.monthly_price;
+
                 break;
 
             case 'annual':
+
                 full_price = altum.annual_price;
+
                 break;
 
             case 'lifetime':
+
                 full_price = altum.lifetime_price;
+
                 break;
         }
 
         let price = parseFloat(full_price);
 
         /* Display the price */
-        document.querySelector('#summary_plan_price').innerHTML = price;
-
-        /* Display taxes by default */
-        document.querySelector('#summary_taxes').classList.remove('d-none');
+        $('#summary_plan_price').html(price);
 
         /* Check for potential discounts */
-        if(altum.code) {
-            altum.code.discount = parseInt(altum.code.discount);
-            let discount_value = parseFloat((price * altum.code.discount / 100).toFixed(2));
+        if(altum.discount) {
+
+            let discount_value = parseFloat((price * altum.discount / 100).toFixed(2));
 
             price = price - discount_value;
 
             /* Show it on the summary */
-            document.querySelector('#summary_discount').classList.remove('d-none');
-            document.querySelector('#summary_discount .discount-value').innerHTML = nr(-discount_value, 2);
+            $('#summary_discount').show();
 
-            /* Check for redeemable code */
-            if(altum.code.type == 'redeemable') {
-                document.querySelector('#summary_taxes').classList.add('d-none');
-            }
+            $('#summary_discount .discount-value').html(nr(-discount_value, 2));
+
         } else {
-            document.querySelector('#summary_discount').classList.add('d-none');
+            $('#summary_discount').hide();
         }
 
         /* Calculate with taxes, if any */
-        if(altum.taxes && altum.code?.type != 'redeemable') {
+        if(altum.taxes) {
 
             /* Check for the inclusives */
             let inclusive_taxes_total_percentage = 0;
@@ -954,3 +940,4 @@
     $('[name="payment_type"]').filter(':visible:first').click();
 </script>
 <?php \Altum\Event::add_content(ob_get_clean(), 'javascript') ?>
+

@@ -112,7 +112,7 @@ class App {
                 \Altum\Cache::$adapter->deleteItemsByTag('user_id=' .  Authentication::$user_id);
 
                 /* Make sure to redirect the person to the payment page and only let the person access the following pages */
-                if(!in_array(Router::$controller_key, ['plan', 'pay', 'pay-billing', 'account', 'account-plan', 'account-payments', 'account-logs', 'logout', 'register']) && Router::$path != 'admin') {
+                if(!in_array(Router::$controller_key, ['plan', 'pay', 'pay-billing', 'account', 'account-plan', 'account-payments', 'account-logs', 'logout']) && Router::$path != 'admin') {
                     redirect('plan/new');
                 }
             }

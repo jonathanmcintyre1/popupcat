@@ -9,7 +9,6 @@
 
 namespace Altum\Controllers;
 
-use Abraham\TwitterOAuth\TwitterOAuth;
 use Altum\Alerts;
 use Altum\Captcha;
 use Altum\Database\Database;
@@ -49,13 +48,13 @@ class Login extends Controller {
             }
 
             /* Try to get the user from the database */
-            $user = db()->where('one_time_login_code', $one_time_login_code)->getOne('users', ['user_id', 'name', 'status']);
+            $user = db()->where('one_time_login_code', $one_time_login_code)->getOne('users', ['user_id', 'name', 'active']);
 
             if(!$user) {
                 redirect('login');
             }
 
-            if($user->status != 1) {
+            if($user->active != 1) {
                 Alerts::add_error(language()->login->error_message->user_not_active);
                 redirect('login');
             }
@@ -230,13 +229,13 @@ class Login extends Controller {
             }
 
             /* Try to get the user from the database */
-            $user = db()->where('email', $_POST['email'])->getOne('users', ['user_id', 'email', 'name', 'status', 'password', 'token_code', 'twofa_secret']);
+            $user = db()->where('email', $_POST['email'])->getOne('users', ['user_id', 'email', 'name', 'active', 'password', 'token_code', 'twofa_secret']);
 
             if(!$user) {
                 Alerts::add_error(language()->login->error_message->wrong_login_credentials);
             } else {
 
-                if($user->status != 1) {
+                if($user->active != 1) {
                     Alerts::add_error(language()->login->error_message->user_not_active);
                 } else
 
@@ -346,6 +345,7 @@ class Login extends Controller {
                     1,
                     null,
                     $lost_password_code,
+                    null,
                     $plan_id,
                     $plan_settings,
                     $plan_expiration_date,

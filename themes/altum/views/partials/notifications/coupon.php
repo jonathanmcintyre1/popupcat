@@ -5,14 +5,14 @@
 <div class="altumcode-wrapper altumcode-wrapper-<?= $notification->settings->border_radius ?> <?= $notification->settings->shadow ? 'altumcode-wrapper-shadow' : null ?> altumcode-coupon-wrapper" style='background-color: <?= $notification->settings->background_color ?>;border-width: <?= $notification->settings->border_width ?>px;border-color: <?= $notification->settings->border_color ?>;<?= $notification->settings->background_pattern_svg ? 'background-image: url("' . $notification->settings->background_pattern_svg . '")' : null ?>;'>
     <div class="altumcode-coupon-content">
         <?php if(!empty($notification->settings->image)): ?>
-        <img src="<?= $notification->settings->image ?>" class="altumcode-coupon-image" alt="<?= $notification->settings->image_alt ?>" loading="lazy" />
+        <img src="<?= $notification->settings->image ?>" class="altumcode-coupon-image" loading="lazy" />
         <?php endif ?>
 
         <div>
             <div class="altumcode-coupon-header">
                 <p class="altumcode-coupon-title" style="color: <?= $notification->settings->title_color ?>"><?= $notification->settings->title ?></p>
 
-                <button class="altumcode-close"></button>
+                <span class="altumcode-close"></span>
             </div>
             <p class="altumcode-coupon-description" style="color: <?= $notification->settings->description_color ?>"><?= $notification->settings->description ?></p>
 
@@ -73,6 +73,7 @@ new AltumCodeManager({
             let notification_id = main_element.getAttribute('data-notification-id');
 
             send_tracking_data({
+                ...user,
                 notification_id: notification_id,
                 type: 'notification',
                 subtype: 'click'

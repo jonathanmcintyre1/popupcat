@@ -40,7 +40,6 @@ class ApiNotifications extends Controller {
 
         /* Prepare the filtering system */
         $filters = (new \Altum\Filters([], [], []));
-        $filters->set_default_order_by('notification_id', 'DESC');
 
         /* Prepare the paginator */
         $total_rows = database()->query("SELECT COUNT(*) AS `total` FROM `notifications` WHERE `user_id` = {$this->api_user->user_id}")->fetch_object()->total ?? 0;

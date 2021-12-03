@@ -79,8 +79,7 @@
 			"toggle_navigation"			: "Toggle navigation",
 			"logo_alt"					: "Website Logo",
 			"captcha_alt"				: "Captcha",
-			"captcha_input"				: "Captcha Field",
-			"whitelisted_file_extensions": "%s allowed."
+			"captcha_input"				: "Captcha Field"
 		},
 
 		"pagination": {
@@ -362,13 +361,14 @@
 			"lifetime"					: "Lifetime deal",
 			"lifetime_help"				: "One time payment",
 
-			"code_button"				: "I have a discount/redeemable code",
-			"code" 						: "Code",
+			"code_button"				: "I have a discount code",
+			"code" 						: "Discount code",
 
 			"payment_processor"			: "Payment method",
 			"no_processor"				: "There are no payment processors available at the moment.",
 			"offline_payment_instructions": "Payment instructions",
 			"offline_payment_proof"		: "Proof of payment",
+			"offline_payment_proof_help": "Upload the proof of payment (jpg, jpeg, png or pdf).",
 
 			"payment_type"				: "Type of payment",
 			"one_time_type"				: "One Time Payment",
@@ -404,20 +404,19 @@
 				"total"					: "Total"
 			},
 
-			"pay"						: "Checkout",
-			"code_redeemable"			: "Redeem %s days for free."
+			"pay"						: "Checkout"
 		},
 
 		"success_message": {
-			"code"						: "Applied code for %s."
+			"code"						: "Applied discount code for %s."
 		},
 
 		"error_message": {
-			"code_invalid"				: "This code is invalid..",
-			"code_used"					: "You have already used this code..",
+			"code_invalid"				: "This discount code is invalid..",
+			"code_used"					: "You have already used this discount code..",
 			"canceled_payment"			: "It seems you've canceled the payment for some reason.",
-			"failed_payment"			: "Something didn't work quite right, please try again and if this persists contact the site admin.",
-			"offline_payment_proof_missing"	: "You must upload a payment proof before submitting the payment order."
+			"failed_payment"			: "Something didn't work quite right, please try again if this persists contact the site admin.",
+			"offline_payment_proof_missing": "You must upload a payment proof before submitting the payment order."
 		}
 	},
 
@@ -426,10 +425,9 @@
 		"header"						: "Thank you!",
 		"button"						: "Go to my dashboard",
 
-		"plan_trial_start"				: "Your %s day trial period just started!",
-		"plan_redeemed"					: "You redeemed %s days!",
-		"plan_custom_will_start" 		: "Your payment was sent and your new membership will be activated!",
-		"plan_custom_pending"			: "Your payment order was sent and your new membership will be activated if the proof will be accepted!"
+		"plan_trial_start"			: "Your trial period just started!",
+		"plan_custom_will_start" 	: "Your payment was sent and your new membership will be activated!",
+		"plan_custom_pending"		: "Your payment order was sent and your new membership will be activated if the proof will be accepted!"
 	},
 
 	"account": {
@@ -536,20 +534,35 @@
 		"header"						: "Account Plan",
 
 		"plan":{
-			"renews"					: "Plan will renew on %s via %s (%s %s)",
+			"renews"					: "Plan will renew on %s",
 			"expires"					: "Plan ends on %s"
 		},
 
 		"cancel": {
 			"header"					: "Cancel Subscription",
-			"subheader"					: "By cancelling your subscription no further payments will be made. You will still have access to your features that you paid for until the expiration date.",
+			"subheader"					: "By cancelling your subscription no further payments will be made. <br /> You will still have access to your features that you paid for until the expiration date.",
 			"cancel"					: "Cancel Subscription",
 			"confirm_message"			: "Are you sure you want to cancel your subscription?",
 			"reason"					: "Cancelled from %s"
 		},
 
+		"code": {
+			"header"					: "Redeem",
+			"subheader"					: "Redeeming a code will cancel your current plan and automatically switch you to the new plan associated with the code.",
+
+			"input"						: "Redemption code",
+			"submit"					: "Activate"
+		},
+
 		"success_message": {
+			"code_redeemed"				: "Code has been successfully redeemed!",
+			"code"						: "Redeemable code is available: %s for %s days.",
 			"subscription_canceled"     : "Your recurring subscription was canceled!"
+		},
+
+		"error_message": {
+			"code_invalid"				: "This redeemable code is invalid..",
+			"code_used"					: "You have already used this redeemable code.."
 		}
 	},
 
@@ -565,7 +578,7 @@
 			"date"						: "Date",
 			"name"						: "Full Name",
 			"total_amount"				: "Total Amount",
-			"plan_id"					: "Plan",
+			"plan_id"				: "Plan",
 			"invoice"					: "Invoice",
 			"status_pending"			: "Pending approval",
 			"status_approved"			: "Approved",
@@ -578,7 +591,6 @@
 			"processor_paypal"				: "PayPal",
 			"processor_stripe"				: "Stripe",
 			"processor_offline_payment"		: "Offline payment",
-			"processor_coinbase"			: "Coinbase",
 
 			"type"							: "Type",
 			"type_one_time"					: "One time",
@@ -668,7 +680,6 @@
 
 		"vendor"						: "Vendor",
 		"customer"						: "Customer",
-		"notes"							: "Additional notes",
 
 		"name"							: "Name",
 		"address"						: "Address",
@@ -949,7 +960,6 @@
 	"notification": {
 		"breadcrumb"						: "Notification",
 		"title"								: "%s Notification",
-		"duplicate"							: "Duplicate",
 
 		"preview": {
 			"header"                        : "Preview",
@@ -981,15 +991,13 @@
 			"conversions_count"				: "How many conversions to show?",
 			"conversions_count_help"		: "",
 			"in_between_delay"				: "In between delay",
-			"in_between_delay_help"			: "Written in seconds",
+			"in_between_delay_help"		: "Written in seconds",
 			"reviews_count"					: "How many reviews to show?",
 			"reviews_count_help"			: "",
 			"input_placeholder"				: "Input Placeholder",
 			"email_placeholder"				: "Email Placeholder",
 			"image"							: "Image URL",
 			"image_help"					: "Leave empty for no image. Hint: icons8.com has a good library of small icons that you can use.",
-			"image_alt"						: "Image Alt",
-			"image_alt_help"				: "Image description for accessibility and SEO purposes.",
 			"url"							: "Notification URL",
 			"url_help"						: "The URL you want to user to go to after clicking the notification. Leave empty for no link.",
 			"url_new_tab"					: "On click open on new tab",
@@ -1229,7 +1237,8 @@
 				"title"						: "Name",
 				"description"				: "Text",
 				"stars"						: "Stars",
-				"stars_help"				: "Leave empty to not show any stars in the review."
+				"stars_help"				: "Leave empty to not show any stars in the review.",
+				"image"						: "Image URL"
 			}
 		},
 
@@ -1240,6 +1249,7 @@
 		"error_message": {
 			"notifications_limit"			: "You have exceeded the limit of notifications on your plan."
 		},
+
 
 		"informational": {
 			"name"                              : "Informational",
@@ -1561,11 +1571,6 @@
 	"notification_delete_modal": {
 		"header"						: "Delete notification",
 		"subheader"						: "By deleting the notification, all the data associated with the notification will be lost. This action cannot be undone."
-	},
-
-
-	"notification_duplicate_modal": {
-		"header"						: "Duplicate notification"
 	},
 
 	"notification_create": {

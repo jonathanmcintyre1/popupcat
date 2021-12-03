@@ -16,7 +16,7 @@
             </div>
 
             <div class="altumcode-conversions-counter-close">
-                <button class="altumcode-close"></button>
+                <span class="altumcode-close"></span>
             </div>
         </div>
 

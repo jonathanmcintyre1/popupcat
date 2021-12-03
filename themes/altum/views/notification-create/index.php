@@ -3,15 +3,17 @@
 <header class="header">
     <div class="container">
         <nav aria-label="breadcrumb">
-            <ol class="custom-breadcrumbs small">
-                <li>
-                    <a href="<?= url('dashboard') ?>"><?= language()->dashboard->breadcrumb ?></a><i class="fa fa-fw fa-angle-right"></i>
-                </li>
-                <li>
-                    <a href="<?= url('campaign/' . $data->campaign->campaign_id) ?>"><?= language()->campaign->breadcrumb ?></a><i class="fa fa-fw fa-angle-right"></i>
-                </li>
-                <li class="active" aria-current="page"><?= language()->notification_create->breadcrumb ?></li>
-            </ol>
+            <small>
+                <ol class="custom-breadcrumbs">
+                    <li>
+                        <a href="<?= url('dashboard') ?>"><?= language()->dashboard->breadcrumb ?></a><i class="fa fa-fw fa-angle-right"></i>
+                    </li>
+                    <li>
+                        <a href="<?= url('campaign/' . $data->campaign->campaign_id) ?>"><?= language()->campaign->breadcrumb ?></a><i class="fa fa-fw fa-angle-right"></i>
+                    </li>
+                    <li class="active" aria-current="page"><?= language()->notification_create->breadcrumb ?></li>
+                </ol>
+            </small>
         </nav>
 
         <h1 class="h2 mr-3"><?= language()->notification_create->header ?></h1>

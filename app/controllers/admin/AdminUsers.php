@@ -21,8 +21,7 @@ class AdminUsers extends Controller {
     public function index() {
 
         /* Prepare the filtering system */
-        $filters = (new \Altum\Filters(['status', 'plan_id', 'country', 'type'], ['name', 'email'], ['email', 'datetime', 'last_activity', 'name', 'total_logins']));
-        $filters->set_default_order_by('user_id', 'DESC');
+        $filters = (new \Altum\Filters(['active', 'plan_id', 'country'], ['name', 'email'], ['email', 'date', 'last_activity', 'name', 'total_logins']));
 
         /* Prepare the paginator */
         $total_rows = database()->query("SELECT COUNT(*) AS `total` FROM `users` WHERE 1 = 1 {$filters->get_sql_where()}")->fetch_object()->total ?? 0;
@@ -47,8 +46,8 @@ class AdminUsers extends Controller {
         }
 
         /* Export handler */
-        process_export_json($users, 'include', ['user_id', 'email', 'name', 'billing', 'plan_id', 'plan_settings', 'plan_expiration_date', 'plan_trial_done', 'status', 'language', 'timezone', 'country', 'datetime', 'last_activity', 'total_logins']);
-        process_export_csv($users, 'include', ['user_id', 'email', 'name', 'plan_id', 'plan_expiration_date', 'plan_trial_done', 'status', 'language', 'timezone', 'country', 'datetime', 'last_activity', 'total_logins']);
+        process_export_json($users, 'include', ['user_id', 'email', 'name', 'facebook_id', 'billing', 'plan_id', 'plan_settings', 'plan_expiration_date', 'plan_trial_done', 'active', 'language', 'timezone', 'country', 'date', 'last_activity', 'total_logins']);
+        process_export_csv($users, 'include', ['user_id', 'email', 'name', 'facebook_id', 'plan_id', 'plan_expiration_date', 'plan_trial_done', 'active', 'language', 'timezone', 'country', 'date', 'last_activity', 'total_logins']);
 
         /* Requested plan details */
         $plans = [];

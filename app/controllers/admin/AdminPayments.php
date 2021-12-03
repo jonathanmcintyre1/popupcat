@@ -19,8 +19,7 @@ class AdminPayments extends Controller {
     public function index() {
 
         /* Prepare the filtering system */
-        $filters = (new \Altum\Filters(['status', 'plan_id', 'user_id', 'type', 'processor', 'frequency'], ['id'], ['total_amount', 'email', 'datetime', 'name']));
-        $filters->set_default_order_by('id', 'DESC');
+        $filters = (new \Altum\Filters(['status', 'plan_id', 'user_id', 'type', 'processor', 'frequency'], ['name', 'email'], ['total_amount', 'email', 'date', 'name']));
 
         /* Prepare the paginator */
         $total_rows = database()->query("SELECT COUNT(*) AS `total` FROM `payments` WHERE 1 = 1 {$filters->get_sql_where()}")->fetch_object()->total ?? 0;
@@ -47,8 +46,8 @@ class AdminPayments extends Controller {
         }
 
         /* Export handler */
-        process_export_json($payments, 'include', ['id', 'user_id', 'plan_id', 'payment_id', 'email', 'name', 'processor', 'type', 'frequency', 'billing', 'taxes_ids', 'base_amount', 'code', 'discount_amount', 'total_amount', 'currency', 'status', 'datetime']);
-        process_export_csv($payments, 'include', ['id', 'user_id', 'plan_id', 'payment_id', 'email', 'name', 'processor', 'type', 'frequency', 'base_amount', 'code', 'discount_amount', 'total_amount', 'currency', 'status', 'datetime']);
+        process_export_json($payments, 'include', ['id', 'user_id', 'plan_id', 'payment_id', 'subscription_id', 'payer_id', 'email', 'name', 'processor', 'type', 'frequency', 'billing', 'taxes_ids', 'base_amount', 'code', 'discount_amount', 'total_amount', 'currency', 'status', 'date']);
+        process_export_csv($payments, 'include', ['id', 'user_id', 'plan_id', 'payment_id', 'subscription_id', 'payer_id', 'email', 'name', 'processor', 'type', 'frequency', 'base_amount', 'code', 'discount_amount', 'total_amount', 'currency', 'status', 'date']);
 
         /* Requested plan details */
         $plans = [];
@@ -135,7 +134,7 @@ class AdminPayments extends Controller {
         if(!Alerts::has_field_errors() && !Alerts::has_errors()) {
 
             /* details about the payment */
-            $payment = db()->where('id', $payment_id)->getOne('payments');
+            $payment = db()->where('id', $payment_id)->getOne('payments', ['plan_id', 'user_id', 'frequency', 'email', 'code', 'payment_proof', 'payer_id', 'total_amount']);
 
             /* details about the user who paid */
             $user = db()->where('user_id', $payment->user_id)->getOne('users');
@@ -157,7 +156,7 @@ class AdminPayments extends Controller {
                     db()->insert('redeemed_codes', [
                         'code_id'   => $codes_code->code_id,
                         'user_id'   => $user->user_id,
-                        'datetime'  => \Altum\Date::$date
+                        'date'      => \Altum\Date::$date
                     ]);
                 }
             }
@@ -184,9 +183,6 @@ class AdminPayments extends Controller {
                 'plan_settings' => json_encode($plan->settings),
                 'plan_expiration_date' => $plan_expiration_date,
                 'plan_expiry_reminder' => 0,
-                'payment_processor' => 'offline_payment',
-                'payment_total_amount' => $payment->total_amount,
-                'payment_currency' => $payment->currency,
             ]);
 
             /* Clear the cache */

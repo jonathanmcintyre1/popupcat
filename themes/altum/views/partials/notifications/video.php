@@ -7,7 +7,7 @@
         <div class="altumcode-video-header">
             <p class="altumcode-video-title" style="color: <?= $notification->settings->title_color ?>"><?= $notification->settings->title ?></p>
 
-            <button class="altumcode-close"></button>
+            <span class="altumcode-close"></span>
         </div>
 
         <?php if(!empty($notification->settings->video)): ?>
@@ -47,7 +47,7 @@ new AltumCodeManager({
     trigger_all_pages: <?= json_encode($notification->settings->trigger_all_pages) ?>,
     triggers: <?= json_encode($notification->settings->triggers) ?>,
     on_animation: <?= json_encode($notification->settings->on_animation) ?>,
-    off_animation: <?= json_encode($notification->settings->off_animation) ?>,
+off_animation: <?= json_encode($notification->settings->off_animation) ?>,
 
     notification_id: <?= $notification->notification_id ?>
 }).initiate({
@@ -59,6 +59,7 @@ new AltumCodeManager({
             let notification_id = main_element.getAttribute('data-notification-id');
 
             send_tracking_data({
+                ...user,
                 notification_id: notification_id,
                 type: 'notification',
                 subtype: 'click'

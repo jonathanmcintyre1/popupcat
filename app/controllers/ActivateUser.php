@@ -44,7 +44,7 @@ class ActivateUser extends Controller {
 
                 /* Activate the account and reset the email_activation_code */
                 db()->where('user_id', $user->user_id)->update('users', [
-                    'status' => 1,
+                    'active' => 1,
                     'email_activation_code' => null,
                     'last_user_agent' => $last_user_agent,
                     'total_logins' => db()->inc()

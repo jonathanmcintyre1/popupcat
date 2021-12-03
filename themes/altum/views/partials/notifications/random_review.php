@@ -5,7 +5,7 @@
 <div class="altumcode-wrapper altumcode-wrapper-<?= $notification->settings->border_radius ?> <?= $notification->settings->shadow ? 'altumcode-wrapper-shadow' : null ?> altumcode-random-review-wrapper" style='background-color: <?= $notification->settings->background_color ?>;border-width: <?= $notification->settings->border_width ?>px;border-color: <?= $notification->settings->border_color ?>;<?= $notification->settings->background_pattern_svg ? 'background-image: url("' . $notification->settings->background_pattern_svg . '")' : null ?>;'>
     <div class="altumcode-random-review-content">
         <?php if(!empty($notification->settings->image)): ?>
-        <img src="<?= $notification->settings->image ?>" class="altumcode-random-review-image" alt="<?= $notification->settings->image_alt ?>" loading="lazy" />
+        <img src="<?= $notification->settings->image ?>" class="altumcode-random-review-image" loading="lazy" />
         <?php endif ?>
 
         <div>
@@ -18,7 +18,7 @@
                     <?php endfor ?>
                 </div>
 
-                <button class="altumcode-close"></button>
+                <span class="altumcode-close"></span>
             </div>
             <p class="altumcode-random-review-description" style="color: <?= $notification->settings->description_color ?>">"<?= $notification->settings->description ?>"</p>
 

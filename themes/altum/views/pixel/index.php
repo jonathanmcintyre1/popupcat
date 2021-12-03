@@ -15,10 +15,11 @@
     link.onload = function() { pixel_css_loaded = true };
     document.getElementsByTagName('head')[0].appendChild(link);
 
-    /* Pixel header including all the needed code */
-    <?php require_once ASSETS_PATH . 'js/pixel/pixel-header.js' ?>
+    /* Pixel header including all the needed libraries */
+    <?php require_once ASSETS_PATH . 'js/pixel-header.js' ?>
 
     <?php
+
     foreach($data->notifications as $notification) {
 
         echo \Altum\Notification::get($notification->type, $notification, $data->user)->javascript;
@@ -26,6 +27,5 @@
     }
     ?>
 
-    /* Send basic tracking data */
-    send_tracking_data({type: 'track'});
+    <?php require_once ASSETS_PATH . 'js/pixel-footer.js' ?>
 })();

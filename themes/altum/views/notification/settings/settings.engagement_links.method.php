@@ -12,12 +12,12 @@ $javascript = '';
 <?php ob_start() ?>
     <div class="form-group">
         <label for="settings_name"><?= language()->notification->settings->name ?></label>
-        <input type="text" id="settings_name" name="name" class="form-control" value="<?= $data->notification->name ?>" maxlength="256" required="required" />
+        <input type="text" id="settings_name" name="name" class="form-control" value="<?= $data->notification->name ?>" required="required" />
     </div>
 
     <div class="form-group">
         <label for="settings_title"><?= language()->notification->settings->title ?></label>
-        <input type="text" id="settings_title" name="title" class="form-control" value="<?= $data->notification->settings->title ?>" maxlength="256" />
+        <input type="text" id="settings_title" name="title" class="form-control" value="<?= $data->notification->settings->title ?>" />
     </div>
 
     <div class="d-flex justify-content-between">
@@ -33,12 +33,12 @@ $javascript = '';
         <div class="category">
             <div class="form-group">
                 <label><?= language()->notification->settings->title ?></label>
-                <input type="text" name="categories[category_index][title]" class="form-control" value="" maxlength="256" required="required" />
+                <input type="text" name="categories[category_index][title]" class="form-control" value="" required="required" />
             </div>
 
             <div class="form-group">
                 <label><?= language()->notification->settings->description ?></label>
-                <input type="text" name="categories[category_index][description]" class="form-control" value="" maxlength="512" />
+                <input type="text" name="categories[category_index][description]" class="form-control" value="" />
             </div>
 
             <div class="d-flex justify-content-between">
@@ -63,28 +63,28 @@ $javascript = '';
                 <div class="col-12 col-md-6">
                     <div class="form-group">
                         <label><?= language()->notification->settings->title ?></label>
-                        <input type="text" name="categories[category_index][links][category_link_index][title]" class="form-control" value="" maxlength="256" required="required" />
+                        <input type="text" name="categories[category_index][links][category_link_index][title]" class="form-control" value="" required="required" />
                     </div>
                 </div>
 
                 <div class="col-12 col-md-6">
                     <div class="form-group">
                         <label><?= language()->notification->settings->description ?></label>
-                        <input type="text" name="categories[category_index][links][category_link_index][description]" class="form-control" value="" maxlength="512" />
+                        <input type="text" name="categories[category_index][links][category_link_index][description]" class="form-control" value="" />
                     </div>
                 </div>
 
                 <div class="col-12 col-md-6">
                     <div class="form-group">
                         <label><?= language()->notification->settings->image ?></label>
-                        <input type="text" name="categories[category_index][links][category_link_index][image]" class="form-control" value="" maxlength="2048" />
+                        <input type="text" name="categories[category_index][links][category_link_index][image]" class="form-control" value="" />
                     </div>
                 </div>
 
                 <div class="col-12 col-md-6">
                     <div class="form-group">
                         <label><?= language()->notification->settings->url ?></label>
-                        <input type="text" name="categories[category_index][links][category_link_index][url]" class="form-control" value="" maxlength="2048" required="required" />
+                        <input type="text" name="categories[category_index][links][category_link_index][url]" class="form-control" value="" required="required" />
                     </div>
                 </div>
             </div>

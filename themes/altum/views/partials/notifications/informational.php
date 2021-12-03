@@ -5,14 +5,14 @@
 <div class="altumcode-wrapper altumcode-wrapper-<?= $notification->settings->border_radius ?> <?= $notification->settings->shadow ? 'altumcode-wrapper-shadow' : null ?> altumcode-informational-wrapper" style='background-color: <?= $notification->settings->background_color ?>;border-width: <?= $notification->settings->border_width ?>px;border-color: <?= $notification->settings->border_color ?>;<?= $notification->settings->background_pattern_svg ? 'background-image: url("' . $notification->settings->background_pattern_svg . '")' : null ?>;'>
     <div class="altumcode-informational-content">
         <?php if(!empty($notification->settings->image)): ?>
-        <img src="<?= $notification->settings->image ?>" class="altumcode-informational-image" alt="<?= $notification->settings->image_alt ?>" loading="lazy" />
+        <img src="<?= $notification->settings->image ?>" class="altumcode-informational-image" loading="lazy" />
         <?php endif ?>
 
         <div>
             <div class="altumcode-informational-header">
                 <p class="altumcode-informational-title" style="color: <?= $notification->settings->title_color ?>"><?= $notification->settings->title ?></p>
 
-                <button class="altumcode-close"></button>
+                <span class="altumcode-close"></span>
             </div>
             <p class="altumcode-informational-description" style="color: <?= $notification->settings->description_color ?>"><?= $notification->settings->description ?></p>
 

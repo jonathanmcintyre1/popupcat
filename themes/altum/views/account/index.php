@@ -22,13 +22,13 @@
             <div class="col">
                 <div class="form-group">
                     <label for="name"><?= language()->account->settings->name ?></label>
-                    <input type="text" id="name" name="name" class="form-control <?= \Altum\Alerts::has_field_errors('name') ? 'is-invalid' : null ?>" value="<?= $this->user->name ?>" maxlength="32" />
+                    <input type="text" id="name" name="name" class="form-control <?= \Altum\Alerts::has_field_errors('name') ? 'is-invalid' : null ?>" value="<?= $this->user->name ?>" />
                     <?= \Altum\Alerts::output_field_error('name') ?>
                 </div>
 
                 <div class="form-group">
                     <label for="email"><?= language()->account->settings->email ?></label>
-                    <input type="text" id="email" name="email" class="form-control <?= \Altum\Alerts::has_field_errors('email') ? 'is-invalid' : null ?>" value="<?= $this->user->email ?>" maxlength="128" />
+                    <input type="text" id="email" name="email" class="form-control <?= \Altum\Alerts::has_field_errors('email') ? 'is-invalid' : null ?>" value="<?= $this->user->email ?>" />
                     <?= \Altum\Alerts::output_field_error('email') ?>
                 </div>
 
@@ -58,8 +58,8 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="form-group">
-                            <label for="billing_type"><?= language()->account->billing->type ?></label>
-                            <select id="billing_type" name="billing_type" class="form-control">
+                            <label><?= language()->account->billing->type ?></label>
+                            <select name="billing_type" class="form-control">
                                 <option value="personal" <?= $this->user->billing->type == 'personal' ? 'selected="selected"' : null ?>><?= language()->account->billing->type_personal ?></option>
                                 <option value="business" <?= $this->user->billing->type == 'business' ? 'selected="selected"' : null ?>><?= language()->account->billing->type_business ?></option>
                             </select>
@@ -68,29 +68,29 @@
 
                     <div class="col-12">
                         <div class="form-group">
-                            <label for="billing_name"><?= language()->account->billing->name ?></label>
-                            <input id="billing_name" type="text" name="billing_name" class="form-control" value="<?= $this->user->billing->name ?>" />
+                            <label><?= language()->account->billing->name ?></label>
+                            <input type="text" name="billing_name" class="form-control" value="<?= $this->user->billing->name ?>" />
                         </div>
                     </div>
 
                     <div class="col-12">
                         <div class="form-group">
-                            <label for="billing_address"><?= language()->account->billing->address ?></label>
-                            <input id="billing_address" type="text" name="billing_address" class="form-control" value="<?= $this->user->billing->address ?>" />
+                            <label><?= language()->account->billing->address ?></label>
+                            <input type="text" name="billing_address" class="form-control" value="<?= $this->user->billing->address ?>" />
                         </div>
                     </div>
 
                     <div class="col-12 col-lg-6">
                         <div class="form-group">
-                            <label for="billing_city"><?= language()->account->billing->city ?></label>
-                            <input id="billing_city" type="text" name="billing_city" class="form-control" value="<?= $this->user->billing->city ?>" />
+                            <label><?= language()->account->billing->city ?></label>
+                            <input type="text" name="billing_city" class="form-control" value="<?= $this->user->billing->city ?>" />
                         </div>
                     </div>
 
                     <div class="col-12 col-lg-4">
                         <div class="form-group">
-                            <label for="billing_county"><?= language()->account->billing->county ?></label>
-                            <input id="billing_county" type="text" name="billing_county" class="form-control" value="<?= $this->user->billing->county ?>" />
+                            <label><?= language()->account->billing->county ?></label>
+                            <input type="text" name="billing_county" class="form-control" value="<?= $this->user->billing->county ?>" />
                         </div>
                     </div>
 
@@ -103,8 +103,8 @@
 
                     <div class="col-12">
                         <div class="form-group">
-                            <label for="billing_country"><?= language()->account->billing->country ?></label>
-                            <select id="billing_country" name="billing_country" class="form-control">
+                            <label><?= language()->account->billing->country ?></label>
+                            <select name="billing_country" class="form-control">
                                 <?php foreach(get_countries_array() as $key => $value): ?>
                                     <option value="<?= $key ?>" <?= $this->user->billing->country == $key ? 'selected="selected"' : null ?>><?= $value ?></option>
                                 <?php endforeach ?>
@@ -114,15 +114,15 @@
 
                     <div class="col-12">
                         <div class="form-group">
-                            <label for="billing_phone"><?= language()->account->billing->phone ?></label>
-                            <input id="billing_phone" type="text" name="billing_phone" class="form-control" value="<?= $this->user->billing->phone ?>" />
+                            <label><?= language()->account->billing->phone ?></label>
+                            <input type="text" name="billing_phone" class="form-control" value="<?= $this->user->billing->phone ?>" />
                         </div>
                     </div>
 
                     <div class="col-12" id="billing_tax_id_container">
                         <div class="form-group">
-                            <label for="billing_tax_id"><?= !empty(settings()->business->tax_type) ? settings()->business->tax_type : language()->account->billing->tax_id ?></label>
-                            <input id="billing_tax_id" type="text" name="billing_tax_id" class="form-control" value="<?= $this->user->billing->tax_id ?>" />
+                            <label><?= !empty(settings()->business->tax_type) ? settings()->business->tax_type : language()->account->billing->tax_id ?></label>
+                            <input type="text" name="billing_tax_id" class="form-control" value="<?= $this->user->billing->tax_id ?>" />
                         </div>
                     </div>
                 </div>
@@ -165,7 +165,8 @@
 
             <div class="col">
                 <div class="form-group">
-                    <label for="twofa_is_enabled"><?= language()->account->twofa->is_enabled ?></label>
+                    <label><?= language()->account->twofa->is_enabled ?></label>
+
                     <select id="twofa_is_enabled" name="twofa_is_enabled" class="form-control <?= \Altum\Alerts::has_field_errors('twofa_token') ? 'is-invalid' : null ?>">
                         <option value="1" <?= $this->user->twofa_secret ? 'selected="selected"' : null ?>><?= language()->global->yes ?></option>
                         <option value="0" <?= !$this->user->twofa_secret ? 'selected="selected"' : null ?>><?= language()->global->no ?></option>

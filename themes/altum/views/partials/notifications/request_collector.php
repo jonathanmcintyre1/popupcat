@@ -13,7 +13,7 @@
             </div>
 
             <div class="altumcode-request-collector-close">
-                <button class="altumcode-close"></button>
+                <span class="altumcode-close"></span>
             </div>
         </div>
 
@@ -85,6 +85,7 @@ new AltumCodeManager({
 
                 /* Data collection from the form */
                 send_tracking_data({
+                    ...user,
                     notification_id: notification_id,
                     type: 'collector',
                     input

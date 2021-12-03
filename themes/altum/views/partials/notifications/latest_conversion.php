@@ -6,14 +6,14 @@
     <div class="altumcode-latest-conversion-content">
         <?php $notification->image = isset($notification->image) && $notification->image ? $notification->image : $notification->settings->image; ?>
         <?php if(!empty($notification->image)): ?>
-            <img src="<?= $notification->image ?>" class="altumcode-latest-conversion-image" alt="<?= $notification->image_alt ?? null ?>" loading="lazy" />
+        <img src="<?= $notification->image ?>" class="altumcode-latest-conversion-image" loading="lazy" />
         <?php endif ?>
 
         <div>
             <div class="altumcode-latest-conversion-header">
                 <p class="altumcode-latest-conversion-title" style="color: <?= $notification->settings->title_color ?>"><?= isset($notification->title) && $notification->title ? html_entity_decode($notification->title) : $notification->settings->title ?></p>
 
-                <button class="altumcode-close"></button>
+                <span class="altumcode-close"></span>
             </div>
             <p class="altumcode-latest-conversion-description" style="color: <?= $notification->settings->description_color ?>"><?= isset($notification->description) && $notification->description ? $notification->description : $notification->settings->description ?></p>
 

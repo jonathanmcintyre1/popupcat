@@ -4,15 +4,17 @@
     <div class="container">
 
         <nav aria-label="breadcrumb">
-            <ol class="custom-breadcrumbs small">
-                <li>
-                    <a href="<?= url('dashboard') ?>"><?= language()->dashboard->breadcrumb ?></a><i class="fa fa-fw fa-angle-right"></i>
-                </li>
-                <li>
-                    <a href="<?= url('campaign/' . $data->notification->campaign_id) ?>"><?= language()->campaign->breadcrumb ?></a><i class="fa fa-fw fa-angle-right"></i>
-                </li>
-                <li class="active" aria-current="page"><?= language()->notification->breadcrumb ?></li>
-            </ol>
+            <small>
+                <ol class="custom-breadcrumbs">
+                    <li>
+                        <a href="<?= url('dashboard') ?>"><?= language()->dashboard->breadcrumb ?></a><i class="fa fa-fw fa-angle-right"></i>
+                    </li>
+                    <li>
+                        <a href="<?= url('campaign/' . $data->notification->campaign_id) ?>"><?= language()->campaign->breadcrumb ?></a><i class="fa fa-fw fa-angle-right"></i>
+                    </li>
+                    <li class="active" aria-current="page"><?= language()->notification->breadcrumb ?></li>
+                </ol>
+            </small>
         </nav>
 
         <div class="d-flex align-items-center">
@@ -31,14 +33,13 @@
             </div>
 
             <div class="dropdown">
-                <button type="button" class="btn btn-link text-secondary dropdown-toggle dropdown-toggle-simple" data-toggle="dropdown" data-boundary="viewport">
+                <button type="button" class="btn btn-link text-secondary dropdown-toggle dropdown-toggle-simple" data-toggle="dropdown">
                     <i class="fa fa-fw fa-ellipsis-v"></i>
                 </button>
 
                 <div class="dropdown-menu dropdown-menu-right">
                     <a href="<?= url('notification/' . $data->notification->notification_id) ?>" class="dropdown-item"><i class="fa fa-fw fa-sm fa-pencil-alt mr-1"></i> <?= language()->global->edit ?></a>
                     <a href="<?= url('notification/' . $data->notification->notification_id . '/statistics') ?>" class="dropdown-item"><i class="fa fa-fw fa-sm fa-chart-bar mr-1"></i> <?= language()->notification->statistics->link ?></a>
-                    <a href="#" data-toggle="modal" data-target="#notification_duplicate_modal" data-notification-id="<?= $data->notification->notification_id ?>" class="dropdown-item"><i class="fa fa-fw fa-sm fa-copy mr-1"></i> <?= language()->notification->duplicate ?></a>
                     <a href="#" data-toggle="modal" data-target="#notification_delete_modal" data-notification-id="<?= $data->notification->notification_id ?>" class="dropdown-item"><i class="fa fa-fw fa-sm fa-times mr-1"></i> <?= language()->global->delete ?></a>
                 </div>
             </div>
@@ -91,6 +92,3 @@
     });
 </script>
 <?php \Altum\Event::add_content(ob_get_clean(), 'javascript') ?>
-
-<?php \Altum\Event::add_content(include_view(THEME_PATH . 'views/notification/notification_delete_modal.php'), 'modals'); ?>
-<?php \Altum\Event::add_content(include_view(THEME_PATH . 'views/notification/notification_duplicate_modal.php'), 'modals'); ?>

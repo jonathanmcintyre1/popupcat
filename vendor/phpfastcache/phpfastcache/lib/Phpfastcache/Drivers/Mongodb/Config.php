@@ -53,7 +53,7 @@ class Config extends ConfigurationOption
     /**
      * @var string
      */
-    protected $collectionName = 'phpfastcache';
+    protected $collectionName = 'Cache';
 
     /**
      * @var string

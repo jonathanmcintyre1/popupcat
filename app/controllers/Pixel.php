@@ -60,7 +60,7 @@ class Pixel extends Controller {
             die();
         }
 
-        if($user->status != 1) {
+        if(!$user->active) {
             die();
         }
 
@@ -141,7 +141,6 @@ class Pixel extends Controller {
                             $notification->title = $notification->settings->title;
                             $notification->description = $notification->settings->description;
                             $notification->image = $notification->settings->image;
-                            $notification->image_alt = $notification->settings->image_alt;
                             $notification->url = $notification->settings->url;
 
                             /* Decode the conversion data */

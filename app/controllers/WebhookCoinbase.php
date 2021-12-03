@@ -93,6 +93,7 @@ class WebhookCoinbase extends Controller {
             /* Payment payer details */
             $payer_email = $user->email;
             $payer_name = $user->name;
+            $payer_id = $user->user_id;
 
             /* Add a log into the database */
             $payment_id = db()->insert('payments', [
@@ -101,19 +102,19 @@ class WebhookCoinbase extends Controller {
                 'processor' => 'coinbase',
                 'type' => $payment_type,
                 'frequency' => $payment_frequency,
-                'code' => $code->code,
+                'code' => $code,
                 'discount_amount' => $discount_amount,
                 'base_amount' => $base_amount,
                 'email' => $payer_email,
                 'payment_id' => $payment_id,
+                'subscription_id' => '',
+                'payer_id' => $payer_id,
                 'name' => $payer_name,
-                'plan' => json_encode(db()->where('plan_id', $plan_id)->getOne('plans', ['plan_id', 'name'])),
                 'billing' => settings()->payment->taxes_and_billing_is_enabled && $user->billing ? $user->billing : null,
-                'business' => json_encode(settings()->business),
                 'taxes_ids' => !empty($taxes_ids) ? $taxes_ids : null,
                 'total_amount' => $payment_total,
                 'currency' => $payment_currency,
-                'datetime' => \Altum\Date::$date
+                'date' => \Altum\Date::$date
             ]);
 
             /* Update the user with the new plan */
@@ -138,10 +139,7 @@ class WebhookCoinbase extends Controller {
                 'plan_settings' => $plan->settings,
                 'plan_expiration_date' => $plan_expiration_date,
                 'plan_expiry_reminder' => 0,
-                'payment_subscription_id' => '',
-                'payment_processor' => 'coinbase',
-                'payment_total_amount' => $payment_total,
-                'payment_currency' => $payment_currency,
+                'payment_subscription_id' => ''
             ]);
 
             /* Clear the cache */

@@ -1,13 +1,5 @@
-<?php defined('ALTUMCODE') || die() ?>
 
-<nav aria-label="breadcrumb">
-    <ol class="custom-breadcrumbs small">
-        <li>
-            <a href="<?= url('admin/pages') ?>"><?= language()->admin_pages->breadcrumb ?></a><i class="fa fa-fw fa-angle-right"></i>
-        </li>
-        <li class="active" aria-current="page"><?= language()->admin_page_update->breadcrumb ?></li>
-    </ol>
-</nav>
+<?php defined('ALTUMCODE') || die() ?>
 
 <div class="d-flex justify-content-between mb-4">
     <div class="d-flex align-items-center">
@@ -104,13 +96,13 @@
             </div>
 
             <div class="form-group">
-                <label for="datetime"><?= language()->admin_pages->input->datetime ?></label>
-                <input id="datetime" type="text" name="datetime" class="form-control form-control-lg" value="<?= \Altum\Date::get($data->page->datetime, 1) ?>" readonly="readonly" />
+                <label for="date"><?= language()->admin_pages->input->date ?></label>
+                <input id="date" type="text" name="date" class="form-control form-control-lg" value="<?= \Altum\Date::get($data->page->date, 1) ?>" readonly="readonly" />
             </div>
 
             <div class="form-group">
-                <label for="last_datetime"><?= language()->admin_pages->input->last_datetime ?></label>
-                <input id="last_datetime" type="text" name="last_datetime" class="form-control form-control-lg" value="<?= \Altum\Date::get($data->page->last_datetime, 1) ?>" readonly="readonly" />
+                <label for="last_date"><?= language()->admin_pages->input->last_date ?></label>
+                <input id="last_date" type="text" name="last_date" class="form-control form-control-lg" value="<?= \Altum\Date::get($data->page->last_date, 1) ?>" readonly="readonly" />
             </div>
 
             <button type="submit" name="submit" class="btn btn-lg btn-block btn-primary mt-4"><?= language()->global->update ?></button>

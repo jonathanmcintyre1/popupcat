@@ -15,7 +15,7 @@
             </div>
 
             <div class="altumcode-live-counter-close">
-                <button class="altumcode-close"></button>
+                <span class="altumcode-close"></span>
             </div>
         </div>
 

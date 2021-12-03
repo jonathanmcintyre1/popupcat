@@ -1,6 +1,5 @@
-'use strict';
-
 const display_notifications = (messages, type, selector) => {
+
     let html = '';
     type = type == 'error' ? 'danger' : type;
 
@@ -14,7 +13,8 @@ const display_notifications = (messages, type, selector) => {
 
     }
 
-    selector.innerHTML = html;
+    $(selector).html(html);
+
 };
 
 const redirect = (path, is_full_url = false) => {

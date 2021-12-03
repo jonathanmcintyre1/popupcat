@@ -12,49 +12,43 @@ $javascript = '';
 <?php ob_start() ?>
     <div class="form-group">
         <label for="settings_name"><?= language()->notification->settings->name ?></label>
-        <input type="text" id="settings_name" name="name" class="form-control" value="<?= $data->notification->name ?>" maxlength="256" required="required" />
+        <input type="text" id="settings_name" name="name" class="form-control" value="<?= $data->notification->name ?>" required="required" />
     </div>
 
     <div class="form-group">
         <label for="settings_title"><?= language()->notification->settings->title ?></label>
-        <input type="text" id="settings_title" name="title" class="form-control" value="<?= $data->notification->settings->title ?>" maxlength="256" />
+        <input type="text" id="settings_title" name="title" class="form-control" value="<?= $data->notification->settings->title ?>" />
     </div>
 
     <div class="form-group">
         <label for="settings_description"><?= language()->notification->settings->description ?></label>
-        <input type="text" id="settings_description" name="description" class="form-control" value="<?= $data->notification->settings->description ?>" maxlength="512" />
+        <input type="text" id="settings_description" name="description" class="form-control" value="<?= $data->notification->settings->description ?>" />
     </div>
 
     <div class="form-group">
         <label for="settings_image"><?= language()->notification->settings->image ?></label>
-        <input type="url" id="settings_image" name="image" class="form-control" value="<?= $data->notification->settings->image ?>" maxlength="2048" />
+        <input type="url" id="settings_image" name="image" class="form-control" value="<?= $data->notification->settings->image ?>" />
         <small class="form-text text-muted"><?= language()->notification->settings->image_help ?></small>
     </div>
 
     <div class="form-group">
-        <label for="settings_image_alt"><?= language()->notification->settings->image_alt ?></label>
-        <input type="text" id="settings_image_alt" name="image_alt" class="form-control" value="<?= $data->notification->settings->image_alt ?>" maxlength="100" />
-        <small class="form-text text-muted"><?= language()->notification->settings->image_alt_help ?></small>
-    </div>
-
-    <div class="form-group">
         <label for="settings_content_title"><?= language()->notification->settings->content_title ?></label>
-        <input type="text" id="settings_content_title" name="content_title" class="form-control" value="<?= $data->notification->settings->content_title ?>" maxlength="256" />
+        <input type="text" id="settings_content_title" name="content_title" class="form-control" value="<?= $data->notification->settings->content_title ?>" />
     </div>
 
     <div class="form-group">
         <label for="settings_content_description"><?= language()->notification->settings->content_description ?></label>
-        <input type="text" id="settings_content_description" name="content_description" class="form-control" value="<?= $data->notification->settings->content_description ?>" maxlength="512" />
+        <input type="text" id="settings_content_description" name="content_description" class="form-control" value="<?= $data->notification->settings->content_description ?>" />
     </div>
 
     <div class="form-group">
         <label for="settings_input_placeholder"><?= language()->notification->settings->input_placeholder ?></label>
-        <input type="text" id="settings_input_placeholder" name="input_placeholder" class="form-control" value="<?= $data->notification->settings->input_placeholder ?>" maxlength="128" />
+        <input type="text" id="settings_input_placeholder" name="input_placeholder" class="form-control" value="<?= $data->notification->settings->input_placeholder ?>" />
     </div>
 
     <div class="form-group">
         <label for="settings_button_text"><?= language()->notification->settings->button_text ?></label>
-        <input type="text" id="settings_button_text" name="button_text" class="form-control" value="<?= $data->notification->settings->button_text ?>" maxlength="128" />
+        <input type="text" id="settings_button_text" name="button_text" class="form-control" value="<?= $data->notification->settings->button_text ?>" />
     </div>
 
     <div class="form-group">
@@ -68,18 +62,18 @@ $javascript = '';
     <div id="agreement">
         <div class="form-group">
             <label for="settings_agreement_text"><?= language()->notification->settings->agreement_text ?></label>
-            <input type="text" id="settings_agreement_text" name="agreement_text" class="form-control" value="<?= $data->notification->settings->agreement_text ?>" maxlength="256" />
+            <input type="text" id="settings_agreement_text" name="agreement_text" class="form-control" value="<?= $data->notification->settings->agreement_text ?>" />
         </div>
 
         <div class="form-group">
             <label for="settings_agreement_url"><?= language()->notification->settings->agreement_url ?></label>
-            <input type="url" id="settings_agreement_url" name="agreement_url" class="form-control" value="<?= $data->notification->settings->agreement_url ?>" maxlength="2048" />
+            <input type="url" id="settings_agreement_url" name="agreement_url" class="form-control" value="<?= $data->notification->settings->agreement_url ?>" />
         </div>
     </div>
 
     <div class="form-group">
         <label for="settings_thank_you_url"><?= language()->notification->settings->thank_you_url ?></label>
-        <input type="text" id="settings_thank_you_url" name="thank_you_url" class="form-control" value="<?= $data->notification->settings->thank_you_url ?>" maxlength="2048" />
+        <input type="text" id="settings_thank_you_url" name="thank_you_url" class="form-control" value="<?= $data->notification->settings->thank_you_url ?>" />
         <small class="form-text text-muted"><?= language()->notification->settings->thank_you_url_help ?></small>
     </div>
 <?php $html['basic'] = ob_get_clean() ?>
@@ -237,13 +231,13 @@ $javascript = '';
     <div id="data_send" class="container-disabled">
         <div class="form-group">
             <label for="settings_data_send_webhook"><?= language()->notification->settings->data_send_webhook ?></label>
-            <input type="text" id="settings_data_send_webhook" name="data_send_webhook" class="form-control" value="<?= $data->notification->settings->data_send_webhook ?>" maxlength="2048" placeholder="<?= language()->notification->settings->data_send_webhook_placeholder ?>" aria-label="<?= language()->notification->settings->data_send_webhook_placeholder ?>" />
+            <input type="text" id="settings_data_send_webhook" name="data_send_webhook" class="form-control" value="<?= $data->notification->settings->data_send_webhook ?>" placeholder="<?= language()->notification->settings->data_send_webhook_placeholder ?>" aria-label="<?= language()->notification->settings->data_send_webhook_placeholder ?>" />
             <small class="form-text text-muted"><?= language()->notification->settings->data_send_webhook_help ?></small>
         </div>
 
         <div class="form-group">
             <label for="settings_data_send_email"><?= language()->notification->settings->data_send_email ?></label>
-            <input type="text" id="settings_data_send_email" name="data_send_email" class="form-control" value="<?= $data->notification->settings->data_send_email ?>" maxlength="320"  placeholder="<?= language()->notification->settings->data_send_email_placeholder ?>" aria-label="<?= language()->notification->settings->data_send_email_placeholder ?>" />
+            <input type="text" id="settings_data_send_email" name="data_send_email" class="form-control" value="<?= $data->notification->settings->data_send_email ?>" placeholder="<?= language()->notification->settings->data_send_email_placeholder ?>" aria-label="<?= language()->notification->settings->data_send_email_placeholder ?>" />
             <small class="form-text text-muted"><?= language()->notification->settings->data_send_email_help ?></small>
         </div>
     </div>

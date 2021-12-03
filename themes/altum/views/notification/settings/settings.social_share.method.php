@@ -12,22 +12,22 @@ $javascript = '';
 <?php ob_start() ?>
     <div class="form-group">
         <label for="settings_name"><?= language()->notification->settings->name ?></label>
-        <input type="text" id="settings_name" name="name" class="form-control" value="<?= $data->notification->name ?>" maxlength="256" required="required" />
+        <input type="text" id="settings_name" name="name" class="form-control" value="<?= $data->notification->name ?>" required="required" />
     </div>
 
     <div class="form-group">
         <label for="settings_title"><?= language()->notification->settings->title ?></label>
-        <input type="text" id="settings_title" name="title" class="form-control" value="<?= $data->notification->settings->title ?>" maxlength="256" />
+        <input type="text" id="settings_title" name="title" class="form-control" value="<?= $data->notification->settings->title ?>" />
     </div>
 
     <div class="form-group">
         <label for="settings_description"><?= language()->notification->settings->description ?></label>
-        <input type="text" id="settings_description" name="description" class="form-control" value="<?= $data->notification->settings->description ?>" maxlength="512" />
+        <input type="text" id="settings_description" name="description" class="form-control" value="<?= $data->notification->settings->description ?>" />
     </div>
 
     <div class="form-group">
         <label for="settings_share_url"><?= language()->notification->settings->share_url ?></label>
-        <input type="url" id="settings_share_url" name="share_url" class="form-control" value="<?= $data->notification->settings->share_url ?>" maxlength="2048" />
+        <input type="url" id="settings_share_url" name="share_url" class="form-control" value="<?= $data->notification->settings->share_url ?>" />
         <small class="form-text text-muted"><?= language()->notification->settings->share_url_help ?></small>
     </div>
 

@@ -18,7 +18,6 @@ class AdminAffiliatesWithdrawals extends Controller {
 
         /* Prepare the filtering system */
         $filters = (new \Altum\Filters(['is_paid', 'user_id'], [], ['amount', 'datetime']));
-        $filters->set_default_order_by('affiliate_withdrawal_id', 'DESC');
 
         /* Prepare the paginator */
         $total_rows = database()->query("SELECT COUNT(*) AS `total` FROM `affiliates_withdrawals` WHERE 1 = 1 {$filters->get_sql_where()}")->fetch_object()->total ?? 0;

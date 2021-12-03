@@ -1,9 +1,10 @@
 <?php defined('ALTUMCODE') || die() ?>
 
 <div>
-    
+   
 
     <div <?= !\Altum\Plugin::is_active('affiliate') ? 'data-toggle="tooltip" title="' . sprintf(language()->admin_plugins->no_access, \Altum\Plugin::get('affiliate')->name ?? 'affiliate') . '"' : null ?>>
+       
             <div class="form-group">
                 <label for="is_enabled"><?= language()->admin_settings->affiliate->is_enabled ?></label>
                 <select id="is_enabled" name="is_enabled" class="form-control form-control-lg">

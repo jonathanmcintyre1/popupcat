@@ -10,6 +10,7 @@
 namespace Altum\Controllers;
 
 use Altum\Middlewares\Authentication;
+use Altum\Models\Model;
 use Altum\Models\Plan;
 
 class Invoice extends Controller {
@@ -31,11 +32,9 @@ class Invoice extends Controller {
 
         /* Try to see if we get details from the billing */
         $payment->billing = json_decode($payment->billing);
-        $payment->business = json_decode($payment->business);
-        $payment->plan = json_decode($payment->plan);
 
         /* Get the plan details */
-        $payment->plan_db = (new Plan())->get_plan_by_id($payment->plan_id);
+        $payment->plan = (new Plan())->get_plan_by_id($payment->plan_id);
 
         /* Check for potential taxes */
         $payment_taxes = (new \Altum\Models\Plan())->get_plan_taxes_by_taxes_ids($payment->taxes_ids);

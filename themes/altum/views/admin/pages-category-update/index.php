@@ -1,14 +1,5 @@
 <?php defined('ALTUMCODE') || die() ?>
 
-<nav aria-label="breadcrumb">
-    <ol class="custom-breadcrumbs small">
-        <li>
-            <a href="<?= url('admin/pages') ?>"><?= language()->admin_pages->breadcrumb ?></a><i class="fa fa-fw fa-angle-right"></i>
-        </li>
-        <li class="active" aria-current="page"><?= language()->admin_pages_category_update->breadcrumb ?></li>
-    </ol>
-</nav>
-
 <div class="d-flex justify-content-between mb-4">
     <h1 class="h3"><i class="fa fa-fw fa-xs fa-book text-primary-900 mr-2"></i> <?= language()->admin_pages_category_update->header ?></h1>
 </div>

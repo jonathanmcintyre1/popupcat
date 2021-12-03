@@ -18,7 +18,6 @@ class AdminUsersLogs extends Controller {
 
         /* Prepare the filtering system */
         $filters = (new \Altum\Filters(['user_id'], ['type', 'ip', 'country_code', 'device_type'], ['datetime']));
-        $filters->set_default_order_by('id', 'DESC');
 
         /* Prepare the paginator */
         $total_rows = database()->query("SELECT COUNT(*) AS `total` FROM `users_logs` WHERE 1 = 1 {$filters->get_sql_where()}")->fetch_object()->total ?? 0;

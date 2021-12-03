@@ -26,7 +26,7 @@
                             <?= \Altum\Alerts::output_field_error('password') ?>
                         </div>
 
-                        <?php if($data->user && $data->user->twofa_secret && $data->user->status == 1): ?>
+                        <?php if($data->user && $data->user->twofa_secret && $data->user->active): ?>
                             <div class="form-group">
                                 <label for="twofa_token"><?= language()->login->form->twofa_token ?></label>
                                 <input id="twofa_token" type="text" name="twofa_token" class="form-control form-control-lg <?= \Altum\Alerts::has_field_errors('twofa_token') ? 'is-invalid' : null ?>" placeholder="<?= language()->login->form->twofa_token_placeholder ?>" required="required" autocomplete="off" />

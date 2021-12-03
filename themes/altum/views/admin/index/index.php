@@ -113,15 +113,16 @@
 </div>
 
 <div class="mb-5">
-    <h1 class="h3 mb-4"><?= language()->admin_index->users ?></h1>
+    <h1 class="h3 mb-4"><?= language()->admin_index->users->header ?></h1>
 
     <?php $result = database()->query("SELECT * FROM `users` ORDER BY `user_id` DESC LIMIT 5"); ?>
+    <?php $data->plans = [] ?>
     <div class="table-responsive table-custom-container">
         <table class="table table-custom">
             <thead>
             <tr>
                 <th><?= language()->admin_users->table->user ?></th>
-                <th><?= language()->admin_users->main->status ?></th>
+                <th><?= language()->admin_users->table->active ?></th>
                 <th><?= language()->admin_users->table->plan_id ?></th>
                 <th><?= language()->admin_users->table->details ?></th>
             </tr>
@@ -145,13 +146,13 @@
                         </div>
                     </td>
                     <td>
-                        <?php if($row->status == 0): ?>
-                        <span class="badge badge-pill badge-warning"><i class="fa fa-fw fa-eye-slash"></i> <?= language()->admin_users->main->status_unconfirmed ?>
-                            <?php elseif($row->status == 1): ?>
-                        <span class="badge badge-pill badge-success"><i class="fa fa-fw fa-check"></i> <?= language()->admin_users->main->status_active ?>
-                            <?php elseif($row->status == 2): ?>
-                        <span class="badge badge-pill badge-light"><i class="fa fa-fw fa-times"></i> <?= language()->admin_users->main->status_disabled ?>
-                        <?php endif ?>
+                        <?php if($row->active == 0): ?>
+                        <span class="badge badge-pill badge-warning"><i class="fa fa-fw fa-eye-slash"></i> <?= language()->admin_user_update->main->is_enabled_unconfirmed ?>
+                            <?php elseif($row->active == 1): ?>
+                            <span class="badge badge-pill badge-success"><i class="fa fa-fw fa-check"></i> <?= language()->admin_user_update->main->is_enabled_active ?>
+                                <?php elseif($row->active == 2): ?>
+                            <span class="badge badge-pill badge-light"><i class="fa fa-fw fa-times"></i> <?= language()->admin_user_update->main->is_enabled_disabled ?>
+                                <?php endif ?>
                     </td>
                     <td>
                         <div class="d-flex flex-column">
@@ -166,7 +167,7 @@
                     </td>
                     <td>
                         <div class="d-flex align-items-center">
-                            <span class="mr-2" data-toggle="tooltip" title="<?= sprintf(language()->admin_users->table->datetime, \Altum\Date::get($row->datetime)) ?>">
+                            <span class="mr-2" data-toggle="tooltip" title="<?= sprintf(language()->admin_users->table->date, \Altum\Date::get($row->date)) ?>">
                                 <i class="fa fa-fw fa-clock text-muted"></i>
                             </span>
 
@@ -199,15 +200,15 @@
 
     <?php if($result->num_rows): ?>
         <div class="mb-5">
-            <h1 class="h3 mb-4"><?= language()->admin_index->payments ?></h1>
+            <h1 class="h3 mb-4"><?= language()->admin_index->payments->header ?></h1>
 
             <div class="table-responsive table-custom-container">
                 <table class="table table-custom">
                     <thead>
                     <tr>
                         <th><?= language()->admin_payments->table->user ?></th>
+                        <th><?= language()->admin_payments->table->payer ?></th>
                         <th><?= language()->admin_payments->table->type ?></th>
-                        <th><?= language()->admin_payments->table->plan ?></th>
                         <th><?= language()->admin_payments->table->total_amount ?></th>
                     </tr>
                     </thead>
@@ -227,6 +228,12 @@
                             </td>
                             <td>
                                 <div class="d-flex flex-column">
+                                    <span><?= $row->name ?></span>
+                                    <span class="text-muted"><?= $row->email ?></span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column">
                                     <span><?= language()->pay->custom_plan->{$row->type . '_type'} ?></span>
                                     <div>
                                         <span class="text-muted"><?= language()->pay->custom_plan->{$row->frequency} ?></span> - <span class="text-muted"><?= language()->pay->custom_plan->{$row->processor} ?></span>
@@ -235,16 +242,11 @@
                             </td>
                             <td>
                                 <div class="d-flex flex-column">
-                                    <a href="<?= url('admin/plans/plan-update/' . $row->plan_id) ?>"><?= $data->plans[$row->plan_id]->name ?></a>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="d-flex flex-column">
                                     <span class=""><?= nr($row->total_amount, 2) . ' ' . $row->currency ?></span>
                                     <div>
-                                        <span class="text-muted" data-toggle="tooltip" title="<?= \Altum\Date::get($row->datetime) ?>">
-                                            <?= \Altum\Date::get($row->datetime, 2) ?>
-                                        </span>
+                            <span class="text-muted" data-toggle="tooltip" title="<?= \Altum\Date::get($row->date) ?>">
+                                <?= \Altum\Date::get($row->date, 2) ?>
+                            </span>
                                     </div>
                                 </div>
                             </td>

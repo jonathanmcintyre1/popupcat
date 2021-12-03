@@ -43,9 +43,9 @@ class LostPassword extends Controller {
             /* If there are no errors, resend the activation link */
             if(!Alerts::has_field_errors() && !Alerts::has_errors()) {
 
-                $this_account = db()->where('email', $_POST['email'])->getOne('users', ['user_id', 'email', 'name', 'status', 'language']);
+                $this_account = db()->where('email', $_POST['email'])->getOne('users', ['user_id', 'email', 'name', 'active', 'language']);
 
-                if($this_account && $this_account->status != 2) {
+                if($this_account && $this_account->active != 2) {
                     /* Define some variables */
                     $lost_password_code = md5($_POST['email'] . microtime());
 

@@ -61,7 +61,7 @@ class Cron extends Controller {
         database()->query("DELETE FROM `track_logs` WHERE `datetime` < '{$activity_date}'");
 
         /* Clean the track notifications table based on the users plan */
-        $result = database()->query("SELECT `user_id`, `plan_settings` FROM `users` WHERE `status` = 1");
+        $result = database()->query("SELECT `user_id`, `plan_settings` FROM `users` WHERE `active` = 1");
 
         /* Go through each result */
         while($user = $result->fetch_object()) {
@@ -97,7 +97,7 @@ class Cron extends Controller {
             FROM 
                 `users`
             WHERE 
-                `status` = 1
+                `active` = 1
                 AND `plan_id` <> 'free'
                 AND `plan_expiry_reminder` = '0'
                 AND (`payment_subscription_id` IS NOT NULL OR `payment_subscription_id` <> '')

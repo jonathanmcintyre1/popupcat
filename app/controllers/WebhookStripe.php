@@ -71,7 +71,7 @@ class WebhookStripe extends Controller {
 
                 /* Vars */
                 $payment_type = $session->subscription ? 'recurring' : 'one_time';
-                $payment_subscription_id = $payment_type == 'recurring' ? $session->subscription : '';
+                $payment_subscription_id = $payment_type == 'recurring' ? 'stripe###' . $session->subscription : '';
 
                 break;
 
@@ -99,7 +99,7 @@ class WebhookStripe extends Controller {
 
                 /* Vars */
                 $payment_type = $session->subscription ? 'recurring' : 'one_time';
-                $payment_subscription_id =  $payment_type == 'recurring' ? $session->subscription : '';
+                $payment_subscription_id =  $payment_type == 'recurring' ? 'stripe###' . $session->subscription : '';
 
                 break;
         }
@@ -152,19 +152,19 @@ class WebhookStripe extends Controller {
             'processor' => 'stripe',
             'type' => $payment_type,
             'frequency' => $payment_frequency,
-            'code' => $code->code,
+            'code' => $code,
             'discount_amount' => $discount_amount,
             'base_amount' => $base_amount,
             'email' => $payer_email,
             'payment_id' => $payment_id,
+            'subscription_id' => $session->subscription,
+            'payer_id' => $payer_id,
             'name' => $payer_name,
-            'plan' => json_encode(db()->where('plan_id', $plan_id)->getOne('plans', ['plan_id', 'name'])),
             'billing' => settings()->payment->taxes_and_billing_is_enabled && $user->billing ? $user->billing : null,
-            'business' => json_encode(settings()->business),
             'taxes_ids' => $taxes_ids,
             'total_amount' => $payment_total,
             'currency' => $payment_currency,
-            'datetime' => \Altum\Date::$date
+            'date' => \Altum\Date::$date
         ]);
 
         /* Update the user with the new plan */
@@ -189,10 +189,7 @@ class WebhookStripe extends Controller {
             'plan_settings' => $plan->settings,
             'plan_expiration_date' => $plan_expiration_date,
             'plan_expiry_reminder' => 0,
-            'payment_subscription_id' => $payment_subscription_id,
-            'payment_processor' => 'stripe',
-            'payment_total_amount' => $payment_total,
-            'payment_currency' => $payment_currency,
+            'payment_subscription_id' => $payment_subscription_id
         ]);
 
         /* Clear the cache */

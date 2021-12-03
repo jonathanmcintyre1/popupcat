@@ -34,8 +34,8 @@
                 </label>
             </div>
         <?php endif ?>
-        <input id="logo" type="file" name="logo" accept="<?= \Altum\Uploads::get_whitelisted_file_extensions_accept('logo') ?>" class="form-control-file" />
-        <small class="form-text text-muted"><?= sprintf(language()->global->accessibility->whitelisted_file_extensions, \Altum\Uploads::get_whitelisted_file_extensions_accept('logo')) ?></small>
+        <input id="logo" type="file" name="logo" accept=".gif, .ico, .png, .jpg, .jpeg, .svg" class="form-control-file" />
+        <small class="form-text text-muted"><?= language()->admin_settings->main->logo_help ?></small>
     </div>
 
     <div class="form-group">
@@ -51,8 +51,8 @@
                 </label>
             </div>
         <?php endif ?>
-        <input id="favicon" type="file" name="favicon" accept="<?= \Altum\Uploads::get_whitelisted_file_extensions_accept('favicon') ?>" class="form-control-file" />
-        <small class="form-text text-muted"><?= sprintf(language()->global->accessibility->whitelisted_file_extensions, \Altum\Uploads::get_whitelisted_file_extensions_accept('favicon')) ?></small>
+        <input id="favicon" type="file" name="favicon" accept=".gif, .ico, .png" class="form-control-file" />
+        <small class="form-text text-muted"><?= language()->admin_settings->main->favicon_help ?></small>
     </div>
 
     <div class="form-group">
@@ -68,8 +68,8 @@
                 </label>
             </div>
         <?php endif ?>
-        <input id="opengraph" type="file" name="opengraph" accept="<?= \Altum\Uploads::get_whitelisted_file_extensions_accept('opengraph') ?>" class="form-control-file" />
-        <small class="form-text text-muted"><?= sprintf(language()->global->accessibility->whitelisted_file_extensions, \Altum\Uploads::get_whitelisted_file_extensions_accept('opengraph')) ?></small>
+        <input id="opengraph" type="file" name="opengraph" accept=".gif, .png, .jpg, .jpeg" class="form-control-file" />
+        <small class="form-text text-muted"><?= language()->admin_settings->main->opengraph_help ?></small>
     </div>
 
     <div class="form-group">

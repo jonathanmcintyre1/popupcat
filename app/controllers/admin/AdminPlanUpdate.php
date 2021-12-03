@@ -42,16 +42,12 @@ class AdminPlanUpdate extends Controller {
                 /* Parse the settings of the plan */
                 $plan->settings = json_decode($plan->settings);
 
-                /* Parse codes & taxes */
+                /* Parse the taxes */
                 $plan->taxes_ids = json_decode($plan->taxes_ids);
-                $plan->codes_ids = json_decode($plan->codes_ids);
 
                 if(in_array(settings()->license->type, ['Extended License', 'extended'])) {
                     /* Get the available taxes from the system */
-                    $taxes = db()->get('taxes');
-
-                    /* Get the available codes from the system */
-                    $codes = db()->get('codes');
+                    $taxes = db()->get('taxes', null, ['tax_id', 'internal_name', 'name', 'description']);
                 }
 
                 break;
@@ -169,8 +165,7 @@ class AdminPlanUpdate extends Controller {
                     $_POST['trial_days'] = (int) $_POST['trial_days'];
                     $_POST['status'] = (int) $_POST['status'];
                     $_POST['order'] = (int) $_POST['order'];
-                    $_POST['taxes_ids'] = json_encode($_POST['taxes_ids'] ?? []);
-                    $_POST['codes_ids'] = json_encode($_POST['codes_ids'] ?? []);
+                    $_POST['taxes_ids'] = json_encode(array_keys($_POST['taxes_ids'] ?? []));
 
                     /* Check for any errors */
                     $required_fields = ['name'];
@@ -260,10 +255,9 @@ class AdminPlanUpdate extends Controller {
 
         /* Main View */
         $data = [
-            'plan_id' => $plan_id,
-            'plan' => $plan,
-            'taxes' => $taxes ?? null,
-            'codes' => $codes ?? null,
+            'plan_id'    => $plan_id,
+            'plan'       => $plan,
+            'taxes'      => $taxes ?? null,
         ];
 
         $view = new \Altum\Views\View('admin/plan-update/index', (array) $this);

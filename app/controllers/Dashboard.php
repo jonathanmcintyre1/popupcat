@@ -17,9 +17,30 @@ class Dashboard extends Controller {
 
         Authentication::guard();
 
+        /* Delete Campaign Modal */
+        $view = new \Altum\Views\View('campaign/campaign_delete_modal', (array) $this);
+        \Altum\Event::add_content($view->run(), 'modals');
+
+        /* Create Campaign Modal */
+        $view = new \Altum\Views\View('campaign/create_campaign_modal', (array) $this);
+        \Altum\Event::add_content($view->run(), 'modals');
+
+        /* Update Campaign Modal */
+        $view = new \Altum\Views\View('campaign/update_campaign_modal', (array) $this);
+        \Altum\Event::add_content($view->run(), 'modals');
+
+        /* Custom Branding Campaign Modal */
+        if($this->user->plan_settings->custom_branding) {
+            $view = new \Altum\Views\View('campaign/custom_branding_campaign_modal', (array)$this);
+            \Altum\Event::add_content($view->run(), 'modals');
+        }
+
+        /* Pixel Modal */
+        $view = new \Altum\Views\View('campaign/campaign_pixel_key_modal', (array) $this);
+        \Altum\Event::add_content($view->run(), 'modals');
+
         /* Prepare the filtering system */
         $filters = (new \Altum\Filters(['is_enabled'], ['name', 'domain'], ['name', 'datetime']));
-        $filters->set_default_order_by('campaign_id', 'DESC');
 
         /* Prepare the paginator */
         $total_rows = database()->query("SELECT COUNT(*) AS `total` FROM `campaigns` WHERE `user_id` = {$this->user->user_id} {$filters->get_sql_where()}")->fetch_object()->total ?? 0;

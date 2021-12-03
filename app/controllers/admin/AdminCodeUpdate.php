@@ -25,7 +25,6 @@ class AdminCodeUpdate extends Controller {
 
         if(!empty($_POST)) {
             /* Filter some the variables */
-            $_POST['name'] = trim(Database::clean_string($_POST['name']));
             $_POST['type'] = in_array($_POST['type'], ['discount', 'redeemable']) ? Database::clean_string($_POST['type']) : 'discount';
             $_POST['days'] = $_POST['type'] == 'redeemable' ? (int) $_POST['days'] : null;
             $_POST['plan_id'] = empty($_POST['plan_id']) ? null : (int) $_POST['plan_id'];
@@ -43,9 +42,9 @@ class AdminCodeUpdate extends Controller {
 
                 /* Database query */
                 db()->where('code_id', $code_id)->update('codes', [
-                    'name' => $_POST['name'],
                     'type' => $_POST['type'],
                     'days' => $_POST['days'],
+                    'plan_id' => $_POST['plan_id'],
                     'code' => $_POST['code'],
                     'discount' => $_POST['discount'],
                     'quantity' => $_POST['quantity'],
@@ -61,10 +60,14 @@ class AdminCodeUpdate extends Controller {
 
         }
 
+        /* Get all the plans available */
+        $plans = db()->where('status', 0, '<>')->get('plans');
+
         /* Main View */
         $data = [
-            'code_id' => $code_id,
-            'code' => $code,
+            'code_id'       => $code_id,
+            'code'          => $code,
+            'plans'  => $plans
         ];
 
         $view = new \Altum\Views\View('admin/code-update/index', (array) $this);

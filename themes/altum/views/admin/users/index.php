@@ -11,7 +11,7 @@
 
         <div class="ml-3">
             <div class="dropdown">
-                <button type="button" class="btn btn-outline-secondary dropdown-toggle-simple" data-toggle="dropdown" data-boundary="viewport" title="<?= language()->global->export ?>">
+                <button type="button" class="btn btn-outline-secondary dropdown-toggle-simple" data-toggle="dropdown" title="<?= language()->global->export ?>">
                     <i class="fa fa-fw fa-sm fa-download"></i>
                 </button>
 
@@ -28,7 +28,7 @@
 
         <div class="ml-3">
             <div class="dropdown">
-                <button type="button" class="btn <?= count($data->filters->get) ? 'btn-outline-primary' : 'btn-outline-secondary' ?> filters-button dropdown-toggle-simple" data-toggle="dropdown" data-boundary="viewport" title="<?= language()->global->filters->header ?>">
+                <button type="button" class="btn <?= count($data->filters->get) ? 'btn-outline-primary' : 'btn-outline-secondary' ?> filters-button dropdown-toggle-simple" data-toggle="dropdown" title="<?= language()->global->filters->header ?>">
                     <i class="fa fa-fw fa-sm fa-filter"></i>
                 </button>
 
@@ -45,40 +45,31 @@
 
                     <form action="" method="get" role="form">
                         <div class="form-group px-4">
-                            <label for="filters_search" class="small"><?= language()->global->filters->search ?></label>
-                            <input type="search" name="search" id="filters_search" class="form-control form-control-sm" value="<?= $data->filters->search ?>" />
+                            <label for="search" class="small"><?= language()->global->filters->search ?></label>
+                            <input type="search" name="search" id="search" class="form-control form-control-sm" value="<?= $data->filters->search ?>" />
                         </div>
 
                         <div class="form-group px-4">
-                            <label for="filters_search_by" class="small"><?= language()->global->filters->search_by ?></label>
-                            <select name="search_by" id="filters_search_by" class="form-control form-control-sm">
-                                <option value="name" <?= $data->filters->search_by == 'name' ? 'selected="selected"' : null ?>><?= language()->admin_users->main->name ?></option>
-                                <option value="email" <?= $data->filters->search_by == 'email' ? 'selected="selected"' : null ?>><?= language()->admin_users->main->email ?></option>
+                            <label for="search_by" class="small"><?= language()->global->filters->search_by ?></label>
+                            <select name="search_by" id="search_by" class="form-control form-control-sm">
+                                <option value="name" <?= $data->filters->search_by == 'name' ? 'selected="selected"' : null ?>><?= language()->admin_users->filters->search_by_name ?></option>
+                                <option value="email" <?= $data->filters->search_by == 'email' ? 'selected="selected"' : null ?>><?= language()->admin_users->filters->search_by_email ?></option>
                             </select>
                         </div>
 
                         <div class="form-group px-4">
-                            <label for="filters_type" class="small"><?= language()->admin_users->main->type ?></label>
-                            <select name="type" id="filters_type" class="form-control form-control-sm">
+                            <label for="active" class="small"><?= language()->admin_users->filters->is_enabled ?></label>
+                            <select name="active" id="active" class="form-control form-control-sm">
                                 <option value=""><?= language()->global->filters->all ?></option>
-                                <option value="0" <?= isset($data->filters->filters['type']) && $data->filters->filters['type'] == '0' ? 'selected="selected"' : null ?>><?= language()->admin_users->main->type_user ?></option>
-                                <option value="1" <?= isset($data->filters->filters['type']) && $data->filters->filters['type'] == '1' ? 'selected="selected"' : null ?>><?= language()->admin_users->main->type_admin ?></option>
+                                <option value="1" <?= isset($data->filters->filters['active']) && $data->filters->filters['active'] == '1' ? 'selected="selected"' : null ?>><?= language()->admin_users->filters->is_enabled_active ?></option>
+                                <option value="0" <?= isset($data->filters->filters['active']) && $data->filters->filters['active'] == '0' ? 'selected="selected"' : null ?>><?= language()->admin_users->filters->is_enabled_unconfirmed ?></option>
+                                <option value="2" <?= isset($data->filters->filters['active']) && $data->filters->filters['active'] == '2' ? 'selected="selected"' : null ?>><?= language()->admin_users->filters->is_enabled_disabled ?></option>
                             </select>
                         </div>
 
                         <div class="form-group px-4">
-                            <label for="filters_status" class="small"><?= language()->admin_users->main->status ?></label>
-                            <select name="status" id="filters_status" class="form-control form-control-sm">
-                                <option value=""><?= language()->global->filters->all ?></option>
-                                <option value="1" <?= isset($data->filters->filters['status']) && $data->filters->filters['status'] == '1' ? 'selected="selected"' : null ?>><?= language()->admin_users->main->status_active ?></option>
-                                <option value="0" <?= isset($data->filters->filters['status']) && $data->filters->filters['status'] == '0' ? 'selected="selected"' : null ?>><?= language()->admin_users->main->status_unconfirmed ?></option>
-                                <option value="2" <?= isset($data->filters->filters['status']) && $data->filters->filters['status'] == '2' ? 'selected="selected"' : null ?>><?= language()->admin_users->main->status_disabled ?></option>
-                            </select>
-                        </div>
-
-                        <div class="form-group px-4">
-                            <label for="filters_plan_id" class="small"><?= language()->admin_users->filters->plan_id ?></label>
-                            <select name="plan_id" id="filters_plan_id" class="form-control form-control-sm">
+                            <label for="plan_id" class="small"><?= language()->admin_users->filters->plan_id ?></label>
+                            <select name="plan_id" id="plan_id" class="form-control form-control-sm">
                                 <option value=""><?= language()->global->filters->all ?></option>
                                 <?php foreach($data->plans as $plan): ?>
                                     <option value="<?= $plan->plan_id ?>" <?= isset($data->filters->filters['plan_id']) && $data->filters->filters['plan_id'] == $plan->plan_id ? 'selected="selected"' : null ?>><?= $plan->name ?></option>
@@ -87,8 +78,8 @@
                         </div>
 
                         <div class="form-group px-4">
-                            <label for="filters_country" class="small"><?= language()->admin_users->filters->country ?></label>
-                            <select name="country" id="filters_country" class="form-control form-control-sm">
+                            <label for="country" class="small"><?= language()->admin_users->filters->country ?></label>
+                            <select name="country" id="country" class="form-control form-control-sm">
                                 <option value=""><?= language()->global->filters->all ?></option>
                                 <?php foreach(get_countries_array() as $country => $country_name): ?>
                                     <option value="<?= $country ?>" <?= isset($data->filters->filters['country']) && $data->filters->filters['country'] == $country ? 'selected="selected"' : null ?>><?= $country_name ?></option>
@@ -97,27 +88,27 @@
                         </div>
 
                         <div class="form-group px-4">
-                            <label for="filters_order_by" class="small"><?= language()->global->filters->order_by ?></label>
-                            <select name="order_by" id="filters_order_by" class="form-control form-control-sm">
-                                <option value="datetime" <?= $data->filters->order_by == 'datetime' ? 'selected="selected"' : null ?>><?= language()->admin_users->filters->order_by_datetime ?></option>
+                            <label for="order_by" class="small"><?= language()->global->filters->order_by ?></label>
+                            <select name="order_by" id="order_by" class="form-control form-control-sm">
+                                <option value="date" <?= $data->filters->order_by == 'date' ? 'selected="selected"' : null ?>><?= language()->admin_users->filters->order_by_date ?></option>
                                 <option value="last_activity" <?= $data->filters->order_by == 'last_activity' ? 'selected="selected"' : null ?>><?= language()->admin_users->filters->order_by_last_activity ?></option>
-                                <option value="name" <?= $data->filters->order_by == 'name' ? 'selected="selected"' : null ?>><?= language()->admin_users->main->name ?></option>
-                                <option value="email" <?= $data->filters->order_by == 'email' ? 'selected="selected"' : null ?>><?= language()->admin_users->main->email ?></option>
+                                <option value="name" <?= $data->filters->order_by == 'name' ? 'selected="selected"' : null ?>><?= language()->admin_users->filters->order_by_name ?></option>
+                                <option value="email" <?= $data->filters->order_by == 'email' ? 'selected="selected"' : null ?>><?= language()->admin_users->filters->order_by_email ?></option>
                                 <option value="total_logins" <?= $data->filters->order_by == 'total_logins' ? 'selected="selected"' : null ?>><?= language()->admin_users->filters->order_by_total_logins ?></option>
                             </select>
                         </div>
 
                         <div class="form-group px-4">
-                            <label for="filters_order_type" class="small"><?= language()->global->filters->order_type ?></label>
-                            <select name="order_type" id="filters_order_type" class="form-control form-control-sm">
+                            <label for="order_type" class="small"><?= language()->global->filters->order_type ?></label>
+                            <select name="order_type" id="order_type" class="form-control form-control-sm">
                                 <option value="ASC" <?= $data->filters->order_type == 'ASC' ? 'selected="selected"' : null ?>><?= language()->global->filters->order_type_asc ?></option>
                                 <option value="DESC" <?= $data->filters->order_type == 'DESC' ? 'selected="selected"' : null ?>><?= language()->global->filters->order_type_desc ?></option>
                             </select>
                         </div>
 
                         <div class="form-group px-4">
-                            <label for="filters_results_per_page" class="small"><?= language()->global->filters->results_per_page ?></label>
-                            <select name="results_per_page" id="filters_results_per_page" class="form-control form-control-sm">
+                            <label for="results_per_page" class="small"><?= language()->global->filters->results_per_page ?></label>
+                            <select name="results_per_page" id="results_per_page" class="form-control form-control-sm">
                                 <?php foreach($data->filters->allowed_results_per_page as $key): ?>
                                     <option value="<?= $key ?>" <?= $data->filters->results_per_page == $key ? 'selected="selected"' : null ?>><?= $key ?></option>
                                 <?php endforeach ?>
@@ -138,7 +129,7 @@
 
             <div id="bulk_group" class="btn-group d-none" role="group">
                 <div class="btn-group" role="group">
-                    <button id="bulk_actions" type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" data-boundary="viewport" aria-haspopup="true" aria-expanded="false">
+                    <button id="bulk_actions" type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <?= language()->global->bulk_actions ?> <span id="bulk_counter" class="d-none"></span>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="bulk_actions">
@@ -170,7 +161,7 @@
                     </div>
                 </th>
                 <th><?= language()->admin_users->table->user ?></th>
-                <th><?= language()->admin_users->main->status ?></th>
+                <th><?= language()->admin_users->table->active ?></th>
                 <th><?= language()->admin_users->table->plan_id ?></th>
                 <th><?= language()->admin_users->table->details ?></th>
                 <th></th>
@@ -200,17 +191,17 @@
                         </div>
                     </td>
                     <td>
-                        <?php if($row->status == 0): ?>
-                        <span class="badge badge-pill badge-warning"><i class="fa fa-fw fa-eye-slash"></i> <?= language()->admin_users->main->status_unconfirmed ?>
-                            <?php elseif($row->status == 1): ?>
-                        <span class="badge badge-pill badge-success"><i class="fa fa-fw fa-check"></i> <?= language()->admin_users->main->status_active ?>
-                            <?php elseif($row->status == 2): ?>
-                        <span class="badge badge-pill badge-light"><i class="fa fa-fw fa-times"></i> <?= language()->admin_users->main->status_disabled ?>
+                        <?php if($row->active == 0): ?>
+                        <span class="badge badge-pill badge-warning"><i class="fa fa-fw fa-eye-slash"></i> <?= language()->admin_user_update->main->is_enabled_unconfirmed ?>
+                            <?php elseif($row->active == 1): ?>
+                        <span class="badge badge-pill badge-success"><i class="fa fa-fw fa-check"></i> <?= language()->admin_user_update->main->is_enabled_active ?>
+                            <?php elseif($row->active == 2): ?>
+                        <span class="badge badge-pill badge-light"><i class="fa fa-fw fa-times"></i> <?= language()->admin_user_update->main->is_enabled_disabled ?>
                             <?php endif ?>
                     </td>
                     <td>
                         <div class="d-flex flex-column">
-                            <a href="<?= url('admin/plan-update/' . $row->plan_id) ?>"><?= $data->plans[$row->plan_id]->name ?></a>
+                            <span><?= $data->plans[$row->plan_id]->name ?></span>
 
                             <?php if($row->plan_id != 'free'): ?>
                                 <div>
@@ -221,7 +212,7 @@
                     </td>
                     <td>
                         <div class="d-flex align-items-center">
-                            <span class="mr-2" data-toggle="tooltip" title="<?= sprintf(language()->admin_users->table->datetime, \Altum\Date::get($row->datetime)) ?>">
+                            <span class="mr-2" data-toggle="tooltip" title="<?= sprintf(language()->admin_users->table->date, \Altum\Date::get($row->date)) ?>">
                                 <i class="fa fa-fw fa-clock text-muted"></i>
                             </span>
 

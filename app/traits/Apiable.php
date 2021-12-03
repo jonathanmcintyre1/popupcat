@@ -45,7 +45,7 @@ trait Apiable {
         }
 
         /* Get the user data of the API key owner, if any */
-        $this->api_user = db()->where('api_key', $api_key)->where('status', 1)->getOne('users');
+        $this->api_user = db()->where('api_key', $api_key)->where('active', 1)->getOne('users');
 
         if(!$this->api_user) {
             $this->response_error(language()->api->error_message->no_access, 401);

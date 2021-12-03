@@ -190,57 +190,25 @@ echo a(['fòô', 'bàř', 'bàř'])->unique()->reverse()->implode(','); // 'bà�
 
 complex example:
 ```php
-/**
- * @property int    $id
- * @property string $firstName
- * @property string $lastName
- *
- * @extends  \Arrayy\Arrayy<array-key,mixed>
- */
-class User extends \Arrayy\Arrayy
-{
-  protected $checkPropertyTypes = true;
-
-  protected $checkPropertiesMismatchInConstructor = true;
-}
-
-/**
- * @template TKey of array-key
- * @extends  AbstractCollection<TKey,User>
- */
-class UserCollection extends \Arrayy\Collection\AbstractCollection
-{
-    /**
-     * The type (FQCN) associated with this collection.
-     *
-     * @return string
-     */
-    public function getType()
-    {
-        return User::class;
-    }
-}
-
-
-$m = User::meta();
+$m = UserData::meta();
 
 $data = static function () use ($m) {
-    yield new User([$m->id => 40, $m->firstName => 'Foo', $m->lastName => 'Moelleken']);
-    yield new User([$m->id => 30, $m->firstName => 'Sven', $m->lastName => 'Moelleken']);
-    yield new User([$m->id => 20, $m->firstName => 'Lars', $m->lastName => 'Moelleken']);
-    yield new User([$m->id => 10, $m->firstName => 'Lea', $m->lastName => 'Moelleken']);
+    yield new UserData([$m->id => 40, $m->firstName => 'Foo', $m->lastName => 'Moelleken']);
+    yield new UserData([$m->id => 30, $m->firstName => 'Sven', $m->lastName => 'Moelleken']);
+    yield new UserData([$m->id => 20, $m->firstName => 'Lars', $m->lastName => 'Moelleken']);
+    yield new UserData([$m->id => 10, $m->firstName => 'Lea', $m->lastName => 'Moelleken']);
 };
 
-$users = UserCollection::createFromGeneratorFunction($data);
+$users = UserDataCollection::createFromGeneratorFunction($data);
 $names = $users
-    ->filter(static function (User $user): bool {
-        return $user->id <= 30;
+    ->filter(static function (UserData $person): bool {
+        return $person->id <= 30;
     })
-    ->customSortValuesImmutable(static function (User $a, User $b): int {
+    ->customSortValuesImmutable(static function (UserData $a, UserData $b): int {
         return $a->firstName <=> $b->firstName;
     })
-    ->map(static function (User $user): string {
-        return $user->firstName;
+    ->map(static function (UserData $person): string {
+        return (string)$person->firstName;
     })
     ->implode(';');
 
@@ -647,17 +615,17 @@ foreach ($arrayy) as $key => $value) {
 </td><td><a href="#createfromgeneratorfunctioncallable-generatorfunction-static">createFromGeneratorFunction</a>
 </td><td><a href="#createfromgeneratorimmutablegenerator-generator-static">createFromGeneratorImmutable</a>
 </td></tr><tr><td><a href="#createfromjsonstring-json-static">createFromJson</a>
-</td><td><a href="#createfromjsonmapperstring-json-static">createFromJsonMapper</a>
+</td><td><a href="#createfromjsonmapperstring-json-this">createFromJsonMapper</a>
 </td><td><a href="#createfromobjecttraversable-object-static">createFromObject</a>
 </td><td><a href="#createfromobjectvarsobject-object-static">createFromObjectVars</a>
 </td></tr><tr><td><a href="#createfromstringstring-str-stringnull-delimiter-stringnull-regex-static">createFromString</a>
 </td><td><a href="#createfromtraversableimmutabletraversable-traversable-bool-use_keys-static">createFromTraversableImmutable</a>
 </td><td><a href="#createwithrangefloatintstring-low-floatintstring-high-floatint-step-static">createWithRange</a>
 </td><td><a href="#current-falsemixed">current</a>
-</td></tr><tr><td><a href="#customsortkeyscallable-callable-this">customSortKeys</a>
-</td><td><a href="#customsortkeysimmutablecallable-callable-this">customSortKeysImmutable</a>
-</td><td><a href="#customsortvaluescallable-callable-this">customSortValues</a>
-</td><td><a href="#customsortvaluesimmutablecallable-callable-this">customSortValuesImmutable</a>
+</td></tr><tr><td><a href="#customsortkeyscallable-function-this">customSortKeys</a>
+</td><td><a href="#customsortkeysimmutablecallable-function-this">customSortKeysImmutable</a>
+</td><td><a href="#customsortvaluescallable-function-this">customSortValues</a>
+</td><td><a href="#customsortvaluesimmutablecallable-function-this">customSortValuesImmutable</a>
 </td></tr><tr><td><a href="#deleteintintstringstring-keyorkeys-void">delete</a>
 </td><td><a href="#diffarray-array-static">diff</a>
 </td><td><a href="#diffkeyarray-array-static">diffKey</a>
@@ -695,13 +663,13 @@ foreach ($arrayy) as $key => $value) {
 </td><td><a href="#getobject-stdclass">getObject</a>
 </td><td><a href="#getphpdocpropertiesfromclass">getPhpDocPropertiesFromClass</a>
 </td></tr><tr><td><a href="#getrandom-static">getRandom</a>
-</td><td><a href="#getrandomkey-mixednull">getRandomKey</a>
+</td><td><a href="#getrandomkey-nullmixed">getRandomKey</a>
 </td><td><a href="#getrandomkeysint-number-static">getRandomKeys</a>
-</td><td><a href="#getrandomvalue-mixednull">getRandomValue</a>
+</td><td><a href="#getrandomvalue-nullmixed">getRandomValue</a>
 </td></tr><tr><td><a href="#getrandomvaluesint-number-static">getRandomValues</a>
 </td><td><a href="#getvalues-static">getValues</a>
 </td><td><a href="#getvaluesyield-generator">getValuesYield</a>
-</td><td><a href="#groupcallableintstring-grouper-bool-savekeys-static">group</a>
+</td><td><a href="#groupcallablestring-grouper-bool-savekeys-static">group</a>
 </td></tr><tr><td><a href="#hasmixed-key-bool">has</a>
 </td><td><a href="#hasvaluemixed-value-bool">hasValue</a>
 </td><td><a href="#implodestring-glue-string-prefix-string">implode</a>
@@ -768,7 +736,7 @@ foreach ($arrayy) as $key => $value) {
 </td><td><a href="#pullintintstringstringnull-keyorkeys-mixed-fallback-mixed">pull</a>
 </td></tr><tr><td><a href="#pushmixed-args-this">push</a>
 </td><td><a href="#randomimmutableintnull-number-static">randomImmutable</a>
-</td><td><a href="#randomkey-mixednull">randomKey</a>
+</td><td><a href="#randomkey-nullmixed">randomKey</a>
 </td><td><a href="#randomkeysint-number-static">randomKeys</a>
 </td></tr><tr><td><a href="#randommutableintnull-number-this">randomMutable</a>
 </td><td><a href="#randomvalue-mixed">randomValue</a>
@@ -800,7 +768,7 @@ foreach ($arrayy) as $key => $value) {
 </td><td><a href="#setstring-key-mixed-value-this">set</a>
 </td></tr><tr><td><a href="#setandgetmixed-key-mixed-fallback-mixed">setAndGet</a>
 </td><td><a href="#setiteratorclassstring-iteratorclass-void">setIteratorClass</a>
-</td><td><a href="#shift-mixednull">shift</a>
+</td><td><a href="#shift-mixed">shift</a>
 </td><td><a href="#shufflebool-secure-arraynull-array-static">shuffle</a>
 </td></tr><tr><td><a href="#sizeint-mode-int">size</a>
 </td><td><a href="#sizeisint-size-bool">sizeIs</a>
@@ -825,10 +793,10 @@ foreach ($arrayy) as $key => $value) {
 </td></tr><tr><td><a href="#tolistbool-convertallarrayyelements-array">toList</a>
 </td><td><a href="#topermutationstringnull-items-string-helper-staticstatic">toPermutation</a>
 </td><td><a href="#tostringstring-separator-string">toString</a>
-</td><td><a href="#uasortcallable-callable-this">uasort</a>
-</td></tr><tr><td><a href="#uasortimmutablecallable-callable-this">uasortImmutable</a>
-</td><td><a href="#uksortcallable-callable-static">uksort</a>
-</td><td><a href="#uksortimmutablecallable-callable-static">uksortImmutable</a>
+</td><td><a href="#uasortcallable-function-this">uasort</a>
+</td></tr><tr><td><a href="#uasortimmutablecallable-function-this">uasortImmutable</a>
+</td><td><a href="#uksortcallable-function-static">uksort</a>
+</td><td><a href="#uksortimmutablecallable-function-static">uksortImmutable</a>
 </td><td><a href="#unique-static">unique</a>
 </td></tr><tr><td><a href="#uniquekeepindex-this">uniqueKeepIndex</a>
 </td><td><a href="#uniquenewindex-this">uniqueNewIndex</a>
@@ -879,7 +847,7 @@ a(['fòô' => ['bàř']])->appendArrayValues(['foo1', 'foo2'], 'fòô'); // Arra
 </code>
 
 **Parameters:**
-- `array<T> $values`
+- `array<array-key, T> $values`
 - `TKey|null $key`
 
 **Return:**
@@ -1156,7 +1124,7 @@ a([1 => true])->containsKeys(array(1 => 0)); // true
 </code>
 
 **Parameters:**
-- `array<TKey> $needles <p>The keys you are searching for.</p>`
+- `array<array-key>|array<TKey> $needles <p>The keys you are searching for.</p>`
 - `bool $recursive`
 
 **Return:**
@@ -1169,7 +1137,7 @@ a([1 => true])->containsKeys(array(1 => 0)); // true
 Check if all given needles are present in the array as key/index.
 
 **Parameters:**
-- `array<TKey> $needles <p>The keys you are searching for.</p>`
+- `array<array-key>|array<TKey> $needles <p>The keys you are searching for.</p>`
 
 **Return:**
 - `bool <p>Returns true if all the given keys/indexes exists in the array, false otherwise.</p>`
@@ -1209,7 +1177,7 @@ a([1, true])->containsValues(array(1, true)); // true
 </code>
 
 **Parameters:**
-- `array<T> $needles`
+- `array<mixed>|array<T> $needles`
 
 **Return:**
 - `bool <p>Returns true if all the given values exists in the array, false otherwise.</p>`
@@ -1348,7 +1316,7 @@ Create an new Arrayy object via JSON.
 
 --------
 
-## createFromJsonMapper(string $json): static
+## createFromJsonMapper(string $json): $this
 <a href="#voku-php-readme-class-methods">↑</a>
 
 
@@ -1356,7 +1324,7 @@ Create an new Arrayy object via JSON.
 - `string $json`
 
 **Return:**
-- `static <p>(Immutable)</p>`
+- `$this`
 
 --------
 
@@ -1440,7 +1408,7 @@ __nothing__
 
 --------
 
-## customSortKeys(callable $callable): $this
+## customSortKeys(callable $function): $this
 <a href="#voku-php-readme-class-methods">↑</a>
 Custom sort by index via "uksort".
 
@@ -1456,26 +1424,26 @@ $resultArrayy = $arrayy->customSortKeys($callable); // Arrayy['one' => 1, 'three
 </code>
 
 **Parameters:**
-- `callable(TKey , TKey ): int $callable`
+- `callable $function`
 
 **Return:**
 - `$this <p>(Mutable) Return this Arrayy object.</p>`
 
 --------
 
-## customSortKeysImmutable(callable $callable): $this
+## customSortKeysImmutable(callable $function): $this
 <a href="#voku-php-readme-class-methods">↑</a>
 Custom sort by index via "uksort".
 
 **Parameters:**
-- `callable(TKey , TKey ): int $callable`
+- `callable $function`
 
 **Return:**
 - `$this <p>(Immutable) Return this Arrayy object.</p>`
 
 --------
 
-## customSortValues(callable $callable): $this
+## customSortValues(callable $function): $this
 <a href="#voku-php-readme-class-methods">↑</a>
 Custom sort by value via "usort".
 
@@ -1487,23 +1455,23 @@ $callable = function ($a, $b) {
     return ($a > $b) ? 1 : -1;
 };
 $arrayy = a(['three' => 3, 'one' => 1, 'two' => 2]);
-$resultArrayy = $arrayy->customSortValues($callable); // Arrayy[1, 2, 3]
+$resultArrayy = $arrayy->customSortValues($callable); // Arrayy['one' => 1, 'two' => 2, 'three' => 3]
 </code>
 
 **Parameters:**
-- `callable(T , T ): int $callable`
+- `callable $function`
 
 **Return:**
 - `$this <p>(Mutable) Return this Arrayy object.</p>`
 
 --------
 
-## customSortValuesImmutable(callable $callable): $this
+## customSortValuesImmutable(callable $function): $this
 <a href="#voku-php-readme-class-methods">↑</a>
 Custom sort by value via "usort".
 
 **Parameters:**
-- `callable(T , T ): int $callable`
+- `callable $function`
 
 **Return:**
 - `$this <p>(Immutable) Return this Arrayy object.</p>`
@@ -1624,7 +1592,7 @@ a(['foo', 'bar' => 'bis'])->each($closure); // Arrayy[':foo:', 'bar' => ':bis:']
 </code>
 
 **Parameters:**
-- `\Closure(T  = default, ?TKey  = default): T $closure`
+- `\Closure(T  = default): T|\Closure(T  = default, TKey  = default): T $closure`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -1939,7 +1907,7 @@ $arrayy['user.firstname']; // Lars
 </code>
 
 **Parameters:**
-- `TKey $key <p>The key to look for.</p>`
+- `array-key $key <p>The key to look for.</p>`
 - `mixed $fallback <p>Value to fallback to.</p>`
 - `array<array-key, mixed>|array<TKey, T> $array <p>The array to get from, if it's set to "null" we use the current array from the
 class.</p>`
@@ -2131,7 +2099,7 @@ __nothing__
 
 --------
 
-## getRandomKey(): mixed|null
+## getRandomKey(): null|mixed
 <a href="#voku-php-readme-class-methods">↑</a>
 alias: for "Arrayy->randomKey()"
 
@@ -2139,7 +2107,7 @@ alias: for "Arrayy->randomKey()"
 __nothing__
 
 **Return:**
-- `mixed|null <p>Get a key/index or null if there wasn't a key/index.</p>`
+- `null|mixed <p>Get a key/index or null if there wasn't a key/index.</p>`
 
 --------
 
@@ -2155,7 +2123,7 @@ alias: for "Arrayy->randomKeys()"
 
 --------
 
-## getRandomValue(): mixed|null
+## getRandomValue(): null|mixed
 <a href="#voku-php-readme-class-methods">↑</a>
 alias: for "Arrayy->randomValue()"
 
@@ -2163,7 +2131,7 @@ alias: for "Arrayy->randomValue()"
 __nothing__
 
 **Return:**
-- `mixed|null <p>Get a random value or null if there wasn't a value.</p>`
+- `null|mixed <p>Get a random value or null if there wasn't a value.</p>`
 
 --------
 
@@ -2205,12 +2173,12 @@ appear in the array as Generator.</p>`
 
 --------
 
-## group(callable|int|string $grouper, bool $saveKeys): static
+## group(callable|string $grouper, bool $saveKeys): static
 <a href="#voku-php-readme-class-methods">↑</a>
 Group values from a array according to the results of a closure.
 
 **Parameters:**
-- `\Closure(T  = default, TKey  = default): TKey|TKey $grouper <p>A callable function name.</p>`
+- `callable|string $grouper <p>A callable function name.</p>`
 - `bool $saveKeys`
 
 **Return:**
@@ -2223,7 +2191,7 @@ Group values from a array according to the results of a closure.
 Check if an array has a given key.
 
 **Parameters:**
-- `null|TKey|TKey[] $key`
+- `null|TKey|array-key $key`
 
 **Return:**
 - `bool`
@@ -2412,7 +2380,7 @@ a(['💩'])->isEqual(['💩']); // true
 </code>
 
 **Parameters:**
-- `array<TKey, T> $array`
+- `array<array-key, mixed> $array`
 
 **Return:**
 - `bool`
@@ -2558,7 +2526,7 @@ see sort.
 </p>`
 
 **Return:**
-- `$this <p>(Immutable)</p>`
+- `$this <p>(Immutable) Return this Arrayy object.</p>`
 
 --------
 
@@ -2879,7 +2847,7 @@ Get the most used value from the array.
 __nothing__
 
 **Return:**
-- `mixed|null <p>(Immutable) Return null if there wasn't an element.</p>`
+- `mixed|null <p>(Immutable) Return null if there wasn't a element.</p>`
 
 --------
 
@@ -3218,7 +3186,7 @@ a([1, 2, 3, 4])->randomImmutable(2); // e.g.: Arrayy[1, 4]
 
 --------
 
-## randomKey(): mixed|null
+## randomKey(): null|mixed
 <a href="#voku-php-readme-class-methods">↑</a>
 Pick a random key/index from the keys of this array.
 
@@ -3231,7 +3199,7 @@ $arrayy->randomKey(); // e.g. 2
 __nothing__
 
 **Return:**
-- `mixed|null <p>Get a key/index or null if there wasn't a key/index.</p>`
+- `null|mixed <p>Get a key/index or null if there wasn't a key/index.</p>`
 
 --------
 
@@ -3390,7 +3358,7 @@ a([1 => 'bar', 'foo' => 'foo'])->remove(1); // Arrayy['foo' => 'foo']
 </code>
 
 **Parameters:**
-- `TKey|TKey[] $key`
+- `TKey $key`
 
 **Return:**
 - `static <p>(Mutable)</p>`
@@ -3479,9 +3447,9 @@ $arrayy->replace(2, 'notfoo', 'notbar'); // Arrayy[1 => 'foo', 'notfoo' => 'notb
 </code>
 
 **Parameters:**
-- `TKey $oldKey`
-- `TKey $newKey`
-- `T $newValue`
+- `mixed $oldKey`
+- `mixed $newKey`
+- `mixed $newValue`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -3508,7 +3476,7 @@ $arrayy->replaceAllKeys($secondArray); // Arrayy[1 => "one", 'one' => "two", 2 =
 </code>
 
 **Parameters:**
-- `array<TKey> $keys <p>An array of keys.</p>`
+- `array<array-key, TKey> $keys <p>An array of keys.</p>`
 
 **Return:**
 - `static <p>(Immutable) Arrayy object with keys from the other array, empty Arrayy object if the number of elements
@@ -3537,7 +3505,7 @@ $arrayy->replaceAllValues($secondArray); // Arrayy['one' => 1, 'two' => 'one', '
 </code>
 
 **Parameters:**
-- `array<T> $array <p>An array of values.</p>`
+- `array<array-key, T> $array <p>An array of values.</p>`
 
 **Return:**
 - `static <p>(Immutable) Arrayy object with values from the other array, empty Arrayy object if the number of elements
@@ -3555,7 +3523,7 @@ a([1 => 'bar', 'foo' => 'foo'])->replaceKeys([1 => 2, 'foo' => 'replaced']); // 
 </code>
 
 **Parameters:**
-- `array<TKey> $keys <p>An array of keys matching the array's size.</p>`
+- `array<array-key, TKey> $keys <p>An array of keys matching the array's size.</p>`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -3572,8 +3540,8 @@ a($testArray)->replaceOneValue('foo', 'replaced'); // Arrayy['bar', 'foo' => 're
 </code>
 
 **Parameters:**
-- `T $search <p>The value to replace.</p>`
-- `T $replacement <p>The value to replace.</p>`
+- `mixed $search <p>The value to replace.</p>`
+- `mixed $replacement <p>The value to replace.</p>`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -3687,7 +3655,7 @@ a(['fòô' => 'bàř'])->searchValue('fòô'); // Arrayy[0 => 'bàř']
 </code>
 
 **Parameters:**
-- `TKey $index`
+- `mixed $index`
 
 **Return:**
 - `static <p>(Immutable) Will return a empty Arrayy if the value wasn't found.</p>`
@@ -3741,8 +3709,8 @@ $arrayy->setAndGet(0, 4); // 4
 </code>
 
 **Parameters:**
-- `TKey $key <p>The key</p>`
-- `T $fallback <p>The default value to set if it isn't.</p>`
+- `mixed $key <p>The key</p>`
+- `mixed $fallback <p>The default value to set if it isn't.</p>`
 
 **Return:**
 - `mixed <p>(Mutable)</p>`
@@ -3761,7 +3729,7 @@ Sets the iterator classname for the current "Arrayy"-object.
 
 --------
 
-## shift(): mixed|null
+## shift(): mixed
 <a href="#voku-php-readme-class-methods">↑</a>
 Shifts a specified value off the beginning of array.
 
@@ -3769,7 +3737,7 @@ Shifts a specified value off the beginning of array.
 __nothing__
 
 **Return:**
-- `mixed|null <p>(Mutable) A shifted element from the current array.</p>`
+- `mixed <p>(Mutable) A shifted element from the current array.</p>`
 
 --------
 
@@ -4041,7 +4009,7 @@ var_dump($under); // Arrayy[1, 3, 5, 2, 4]
 **Parameters:**
 - `int $offset`
 - `int|null $length`
-- `array<T> $replacement`
+- `array<array-key, T> $replacement`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -4174,48 +4142,48 @@ Implodes array to a string with specified separator.
 
 --------
 
-## uasort(callable $callable): $this
+## uasort(callable $function): $this
 <a href="#voku-php-readme-class-methods">↑</a>
 Sort the entries with a user-defined comparison function and maintain key association.
 
 **Parameters:**
-- `callable(T , T ): int $callable`
+- `callable $function`
 
 **Return:**
 - `$this <p>(Mutable) Return this Arrayy object.</p>`
 
 --------
 
-## uasortImmutable(callable $callable): $this
+## uasortImmutable(callable $function): $this
 <a href="#voku-php-readme-class-methods">↑</a>
 Sort the entries with a user-defined comparison function and maintain key association.
 
 **Parameters:**
-- `callable(T , T ): int $callable`
+- `callable $function`
 
 **Return:**
 - `$this <p>(Immutable) Return this Arrayy object.</p>`
 
 --------
 
-## uksort(callable $callable): static
+## uksort(callable $function): static
 <a href="#voku-php-readme-class-methods">↑</a>
 Sort the entries by keys using a user-defined comparison function.
 
 **Parameters:**
-- `callable(TKey , TKey ): int $callable`
+- `callable $function`
 
 **Return:**
 - `static <p>(Mutable) Return this Arrayy object.</p>`
 
 --------
 
-## uksortImmutable(callable $callable): static
+## uksortImmutable(callable $function): static
 <a href="#voku-php-readme-class-methods">↑</a>
 Sort the entries by keys using a user-defined comparison function.
 
 **Parameters:**
-- `callable(TKey , TKey ): int $callable`
+- `callable $function`
 
 **Return:**
 - `static <p>(Immutable) Return this Arrayy object.</p>`
@@ -4337,7 +4305,7 @@ $arrayy->walk($callable); // Arrayy[0, 1, 2]
 </code>
 
 **Parameters:**
-- `callable(T , TKey , ?TExtra ): void $callable`
+- `callable $callable`
 - `bool $recursive [optional] <p>Whether array will be walked recursively or no</p>`
 - `mixed $userData [optional] <p>
 If the optional $userData parameter is supplied,

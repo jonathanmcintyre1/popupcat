@@ -23,7 +23,7 @@ class ApiUser extends Controller {
         switch($_SERVER['REQUEST_METHOD']) {
             case 'GET':
                 $this->get();
-                break;
+            break;
         }
 
         $this->return_404();
@@ -37,7 +37,7 @@ class ApiUser extends Controller {
 
             'email' => $this->api_user->email,
             'billing' => json_decode($this->api_user->billing),
-            'is_enabled' => (bool) $this->api_user->status,
+            'is_enabled' => (bool) $this->api_user->active,
             'plan_id' => $this->api_user->plan_id,
             'plan_expiration_date' => $this->api_user->plan_expiration_date,
             'plan_settings' => $this->api_user->plan_settings,
@@ -45,7 +45,7 @@ class ApiUser extends Controller {
             'language' => $this->api_user->language,
             'timezone' => $this->api_user->timezone,
             'country' => $this->api_user->country,
-            'datetime' => $this->api_user->datetime,
+            'date' => $this->api_user->date,
             'last_activity' => $this->api_user->last_activity,
             'total_logins' => (int) $this->api_user->total_logins,
         ];

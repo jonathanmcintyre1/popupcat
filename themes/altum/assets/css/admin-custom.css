@@ -4,8 +4,6 @@ body {
 }
 
 .admin-container {
-    width: 100%;
-    height: 100%;
 }
 
 .admin-sidebar {
@@ -119,7 +117,7 @@ body.admin-sidebar-opened .admin-sidebar {
 }
 
 .admin-content {
-    height: 100%;
+    flex-grow: 1;
     overflow: auto;
     margin-left: 0;
 }
@@ -385,30 +383,6 @@ footer img {
     width: 18rem;
     max-height: 30rem;
     overflow-y: auto;
-}
-
-/* Custom breadcrumbs */
-.custom-breadcrumbs {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.custom-breadcrumbs > li {
-    margin-right: .5rem;
-}
-
-.custom-breadcrumbs > li > a {
-    color: var(--gray);
-}
-
-.custom-breadcrumbs > li > svg {
-    color: var(--gray-400);
-    margin-left: .5rem;
-}
-
-.custom-breadcrumbs > li.active {
 }
 
 /* Base animation */

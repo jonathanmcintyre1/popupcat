@@ -4,11 +4,13 @@
 
 <div class="container">
     <nav aria-label="breadcrumb">
-        <ol class="custom-breadcrumbs small">
-            <li><a href="<?= url() ?>"><?= language()->index->breadcrumb ?></a> <i class="fa fa-fw fa-angle-right"></i></li>
-            <li><a href="<?= SITE_URL . 'pages' ?>"><?= language()->pages->index->breadcrumb ?></a> <i class="fa fa-fw fa-angle-right"></i></li>
-            <li class="active" aria-current="page"><?= language()->pages->pages_category->breadcrumb ?></li>
-        </ol>
+        <small>
+            <ol class="custom-breadcrumbs">
+                <li><a href="<?= url() ?>"><?= language()->index->breadcrumb ?></a> <i class="fa fa-fw fa-angle-right"></i></li>
+                <li><a href="<?= SITE_URL . 'pages' ?>"><?= language()->pages->index->breadcrumb ?></a> <i class="fa fa-fw fa-angle-right"></i></li>
+                <li class="active" aria-current="page"><?= language()->pages->pages_category->breadcrumb ?></li>
+            </ol>
+        </small>
     </nav>
 
     <div class="d-flex justify-content-between">

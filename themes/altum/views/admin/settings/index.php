@@ -13,12 +13,12 @@
                 <option value="<?= url('admin/settings/main') ?>" class="nav-link"><?= language()->admin_settings->tab->main ?></option>
                 <option value="<?= url('admin/settings/socialproofo') ?>" class="nav-link"><?= language()->admin_settings->tab->socialproofo ?></option>
                 <option value="<?= url('admin/settings/payment') ?>" class="nav-link"><?= language()->admin_settings->tab->payment ?></option>
-                <option value="<?= url('admin/settings/business') ?>" class="nav-link"><?= language()->admin_settings->tab->business ?></option>
                 <option value="<?= url('admin/settings/paypal') ?>" class="nav-link"><?= language()->admin_settings->tab->paypal ?></option>
                 <option value="<?= url('admin/settings/stripe') ?>" class="nav-link"><?= language()->admin_settings->tab->stripe ?></option>
                 <option value="<?= url('admin/settings/offline_payment') ?>" class="nav-link"><?= language()->admin_settings->tab->offline_payment ?></option>
                 <option value="<?= url('admin/settings/coinbase') ?>" class="nav-link"><?= language()->admin_settings->tab->coinbase ?></option>
                 <option value="<?= url('admin/settings/affiliate') ?>" class="nav-link"><?= language()->admin_settings->tab->affiliate ?></option>
+                <option value="<?= url('admin/settings/business') ?>" class="nav-link"><?= language()->admin_settings->tab->business ?></option>
                 <option value="<?= url('admin/settings/captcha') ?>" class="nav-link"><?= language()->admin_settings->tab->captcha ?></option>
                 <option value="<?= url('admin/settings/facebook') ?>" class="nav-link"><?= language()->admin_settings->tab->facebook ?></option>
                 <option value="<?= url('admin/settings/google') ?>" class="nav-link"><?= language()->admin_settings->tab->google ?></option>
@@ -48,12 +48,12 @@
             <a class="nav-link <?= $data->method == 'main' ? 'active' : null ?>" href="<?= url('admin/settings/main') ?>"><i class="fa fa-fw fa-sm fa-home mr-1"></i> <?= language()->admin_settings->tab->main ?></a>
             <a class="nav-link <?= $data->method == 'socialproofo' ? 'active' : null ?>" href="<?= url('admin/settings/socialproofo') ?>"><i class="fa fa-fw fa-sm fa-share-alt mr-1"></i> <?= language()->admin_settings->tab->socialproofo ?></a>
             <a class="nav-link <?= $data->method == 'payment' ? 'active' : null ?>" href="<?= url('admin/settings/payment') ?>"><i class="fa fa-fw fa-sm fa-dollar-sign mr-1"></i> <?= language()->admin_settings->tab->payment ?></a>
-            <a class="nav-link <?= $data->method == 'business' ? 'active' : null ?>" href="<?= url('admin/settings/business') ?>"><i class="fa fa-fw fa-sm fa-briefcase mr-1"></i> <?= language()->admin_settings->tab->business ?></a>
             <a class="nav-link <?= $data->method == 'paypal' ? 'active' : null ?>" href="<?= url('admin/settings/paypal') ?>"><i class="fab fa-fw fa-sm fa-paypal mr-1"></i> <?= language()->admin_settings->tab->paypal ?></a>
             <a class="nav-link <?= $data->method == 'stripe' ? 'active' : null ?>" href="<?= url('admin/settings/stripe') ?>"><i class="fab fa-fw fa-sm fa-stripe mr-1"></i> <?= language()->admin_settings->tab->stripe ?></a>
             <a class="nav-link <?= $data->method == 'offline_payment' ? 'active' : null ?>" href="<?= url('admin/settings/offline_payment') ?>"><i class="fa fa-fw fa-sm fa-university mr-1"></i> <?= language()->admin_settings->tab->offline_payment ?></a>
             <a class="nav-link <?= $data->method == 'coinbase' ? 'active' : null ?>" href="<?= url('admin/settings/coinbase') ?>"><i class="fab fa-fw fa-sm fa-bitcoin mr-1"></i> <?= language()->admin_settings->tab->coinbase ?></a>
             <a class="nav-link <?= $data->method == 'affiliate' ? 'active' : null ?>" href="<?= url('admin/settings/affiliate') ?>"><i class="fa fa-fw fa-sm fa-wallet mr-1"></i> <?= language()->admin_settings->tab->affiliate ?></a>
+            <a class="nav-link <?= $data->method == 'business' ? 'active' : null ?>" href="<?= url('admin/settings/business') ?>"><i class="fa fa-fw fa-sm fa-briefcase mr-1"></i> <?= language()->admin_settings->tab->business ?></a>
             <a class="nav-link <?= $data->method == 'captcha' ? 'active' : null ?>" href="<?= url('admin/settings/captcha') ?>"><i class="fa fa-fw fa-sm fa-low-vision mr-1"></i> <?= language()->admin_settings->tab->captcha ?></a>
             <a class="nav-link <?= $data->method == 'facebook' ? 'active' : null ?>" href="<?= url('admin/settings/facebook') ?>"><i class="fab fa-fw fa-sm fa-facebook mr-1"></i> <?= language()->admin_settings->tab->facebook ?></a>
             <a class="nav-link <?= $data->method == 'google' ? 'active' : null ?>" href="<?= url('admin/settings/google') ?>"><i class="fab fa-fw fa-sm fa-google mr-1"></i> <?= language()->admin_settings->tab->google ?></a>

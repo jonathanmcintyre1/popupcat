@@ -6,7 +6,7 @@
 
         <div class="altumcode-cookie-notification-header">
             <?php if(!empty($notification->settings->image)): ?>
-                <img src="<?= $notification->settings->image ?>" class="altumcode-cookie-notification-image" alt="<?= $notification->settings->image_alt ?>" loading="lazy" />
+                <img src="<?= $notification->settings->image ?>" class="altumcode-cookie-notification-image" loading="lazy" />
             <?php endif ?>
 
             <p class="altumcode-cookie-notification-description" style="color: <?= $notification->settings->description_color ?>">
@@ -16,7 +16,7 @@
             </p>
 
             <div class="altumcode-cookie-notification-close">
-                <button class="altumcode-close"></button>
+                <span class="altumcode-close"></span>
             </div>
         </div>
 

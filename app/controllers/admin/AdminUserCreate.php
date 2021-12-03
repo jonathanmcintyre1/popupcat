@@ -49,7 +49,7 @@ class AdminUserCreate extends Controller {
             if(!Csrf::check()) {
                 Alerts::add_error(language()->global->error_message->invalid_csrf_token);
             }
-            if(mb_strlen($_POST['name']) < 3 || mb_strlen($_POST['name']) > 64) {
+            if(mb_strlen($_POST['name']) < 3 || mb_strlen($_POST['name']) > 32) {
                 Alerts::add_field_error('name', language()->admin_users->error_message->name_length);
             }
             if(db()->where('email', $_POST['email'])->has('users')) {
@@ -70,6 +70,7 @@ class AdminUserCreate extends Controller {
                     $_POST['password'],
                     $_POST['name'],
                     1,
+                    null,
                     null,
                     null,
                     'free',

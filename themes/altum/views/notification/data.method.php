@@ -67,7 +67,7 @@
                     <td><span class="text-muted" data-toggle="tooltip" title="<?= \Altum\Date::get($row->datetime, 1) ?>"><?= \Altum\Date::get($row->datetime) ?></span></td>
                     <td>
                         <div class="dropdown">
-                            <button type="button" class="btn btn-link text-secondary dropdown-toggle dropdown-toggle-simple" data-toggle="dropdown" data-boundary="viewport">
+                            <button type="button" class="btn btn-link text-secondary dropdown-toggle dropdown-toggle-simple" data-toggle="dropdown">
                                 <i class="fa fa-fw fa-ellipsis-v"></i>
                             </button>
 

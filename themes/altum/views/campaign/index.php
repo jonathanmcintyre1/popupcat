@@ -4,12 +4,14 @@
     <div class="container">
 
         <nav aria-label="breadcrumb">
-            <ol class="custom-breadcrumbs small">
-                <li>
-                    <a href="<?= url('dashboard') ?>"><?= language()->dashboard->breadcrumb ?></a><i class="fa fa-fw fa-angle-right"></i>
-                </li>
-                <li class="active" aria-current="page"><?= language()->campaign->breadcrumb ?></li>
-            </ol>
+            <small>
+                <ol class="custom-breadcrumbs">
+                    <li>
+                        <a href="<?= url('dashboard') ?>"><?= language()->dashboard->breadcrumb ?></a><i class="fa fa-fw fa-angle-right"></i>
+                    </li>
+                    <li class="active" aria-current="page"><?= language()->campaign->breadcrumb ?></li>
+                </ol>
+            </small>
         </nav>
 
         <?php
@@ -51,7 +53,7 @@
                         </div>
 
                         <div class="dropdown">
-                            <button type="button" class="btn btn-link text-secondary dropdown-toggle dropdown-toggle-simple" data-toggle="dropdown" data-boundary="viewport">
+                            <button type="button" class="btn btn-link text-secondary dropdown-toggle dropdown-toggle-simple" data-toggle="dropdown">
                                 <i class="fa fa-fw fa-ellipsis-v"></i>
                             </button>
 
@@ -112,10 +114,3 @@
     <?= $this->views['method'] ?>
 
 </section>
-
-<?php \Altum\Event::add_content(include_view(THEME_PATH . 'views/campaign/campaign_delete_modal.php'), 'modals'); ?>
-<?php \Altum\Event::add_content(include_view(THEME_PATH . 'views/campaign/campaign_pixel_key_modal.php'), 'modals'); ?>
-<?php \Altum\Event::add_content(include_view(THEME_PATH . 'views/campaign/update_campaign_modal.php'), 'modals'); ?>
-<?php \Altum\Event::add_content(include_view(THEME_PATH . 'views/campaign/custom_branding_campaign_modal.php'), 'modals'); ?>
-<?php \Altum\Event::add_content(include_view(THEME_PATH . 'views/notification/notification_delete_modal.php'), 'modals'); ?>
-<?php \Altum\Event::add_content(include_view(THEME_PATH . 'views/notification/notification_duplicate_modal.php'), 'modals'); ?>

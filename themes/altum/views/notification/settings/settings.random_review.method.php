@@ -13,12 +13,12 @@ $javascript = '';
 <?php ob_start() ?>
     <div class="form-group">
         <label for="settings_name"><?= language()->notification->settings->name ?></label>
-        <input type="text" id="settings_name" name="name" class="form-control" value="<?= $data->notification->name ?>" maxlength="256" required="required" />
+        <input type="text" id="settings_name" name="name" class="form-control" value="<?= $data->notification->name ?>" required="required" />
     </div>
 
     <div class="form-group">
         <label for="settings_url"><?= language()->notification->settings->url ?></label>
-        <input type="url" id="settings_url" name="url" class="form-control" value="<?= $data->notification->settings->url ?>" maxlength="2048" />
+        <input type="url" id="settings_url" name="url" class="form-control" value="<?= $data->notification->settings->url ?>" />
         <small class="form-text text-muted"><?= language()->notification->settings->url_help ?></small>
     </div>
 

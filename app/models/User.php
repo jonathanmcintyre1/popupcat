@@ -147,9 +147,10 @@ class User extends Model {
         $email = '',
         $raw_password = '',
         $name = '',
-        $status = 0,
+        $active = 0,
         $email_activation_code = null,
         $lost_password_code = null,
+        $facebook_id = null,
         $plan_id = 'free',
         $plan_settings = '',
         $plan_expiration_date = null,
@@ -159,7 +160,7 @@ class User extends Model {
 
         /* Define some needed variables */
         $password = is_null($raw_password) ? null : password_hash($raw_password, PASSWORD_DEFAULT);
-        $total_logins = $status == '1' && !$is_admin_created ? 1 : 0;
+        $total_logins = $active == '1' && !$is_admin_created ? 1 : 0;
         $plan_expiration_date = $plan_expiration_date ?? \Altum\Date::$date;
         $plan_trial_done = 0;
         $language = \Altum\Language::$default_language;
@@ -190,6 +191,7 @@ class User extends Model {
             'name' => $name,
             'billing' => $billing,
             'api_key' => $api_key,
+            'facebook_id' => $facebook_id,
             'email_activation_code' => $email_activation_code,
             'lost_password_code' => $lost_password_code,
             'plan_id' => $plan_id,
@@ -200,8 +202,8 @@ class User extends Model {
             'referred_by' => $referred_by,
             'language' => $language,
             'timezone' => $timezone,
-            'status' => $status,
-            'datetime' => \Altum\Date::$date,
+            'active' => $active,
+            'date' => \Altum\Date::$date,
             'ip' => $ip,
             'country' => $country,
             'last_user_agent' => $last_user_agent,
@@ -244,20 +246,24 @@ class User extends Model {
 
     public function cancel_subscription($user_id) {
 
-        $user = db()->where('user_id', $user_id)->getOne('users', ['user_id', 'payment_subscription_id', 'payment_processor']);
+        $user = db()->where('user_id', $user_id)->getOne('users', ['user_id', 'payment_subscription_id']);
 
         if(empty($user->payment_subscription_id)) {
             return true;
         }
 
-        switch($user->payment_processor) {
+        $data = explode('###', $user->payment_subscription_id);
+        $type = $data[0];
+        $subscription_id = $data[1];
+
+        switch($type) {
             case 'stripe':
 
                 /* Initiate Stripe */
                 \Stripe\Stripe::setApiKey(settings()->stripe->secret_key);
 
                 /* Cancel the Stripe Subscription */
-                $subscription = \Stripe\Subscription::retrieve($user->payment_subscription_id);
+                $subscription = \Stripe\Subscription::retrieve($subscription_id);
                 $subscription->cancel();
 
                 break;
@@ -274,7 +280,7 @@ class User extends Model {
                     throw new \Exception($exception->getCode() . ':' . $exception->getMessage());
                 }
 
-                $response = \Unirest\Request::post($paypal_api_url . 'v1/billing/subscriptions/' . $user->payment_subscription_id . '/cancel', $headers, \Unirest\Request\Body::json([
+                $response = \Unirest\Request::post($paypal_api_url . 'v1/billing/subscriptions/' . $subscription_id . '/cancel', $headers, \Unirest\Request\Body::json([
                     'reason' => sprintf(language()->account_plan->cancel->reason, settings()->title)
                 ]));
 

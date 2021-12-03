@@ -86,7 +86,7 @@ class Authentication extends Middleware {
 
             case 'user':
 
-                if(!self::check() || (self::check() && self::$user->status != 1)) {
+                if(!self::check() || (self::check() && !self::$user->active)) {
                     redirect();
                 }
 
@@ -94,7 +94,7 @@ class Authentication extends Middleware {
 
             case 'admin':
 
-                if(!self::check() || (self::check() && (self::$user->status != 1 || self::$user->type != '1'))) {
+                if(!self::check() || (self::check() && (!self::$user->active || self::$user->type != '1'))) {
                     redirect();
                 }
 

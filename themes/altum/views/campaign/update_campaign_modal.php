@@ -74,10 +74,11 @@
             url: 'campaigns-ajax',
             data: $(event.currentTarget).serialize(),
             success: (data) => {
-                let notification_container = event.currentTarget.querySelector('.notification-container');
-                notification_container.innerHTML = '';
-
                 if (data.status == 'error') {
+                    let notification_container = $(event.currentTarget).find('.notification-container');
+
+                    notification_container.html('');
+
                     display_notifications(data.message, 'error', notification_container);
                 }
 

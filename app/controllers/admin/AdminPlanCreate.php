@@ -19,10 +19,7 @@ class AdminPlanCreate extends Controller {
 
         if(in_array(settings()->license->type, ['Extended License', 'extended'])) {
             /* Get the available taxes from the system */
-            $taxes = db()->get('taxes');
-
-            /* Get the available codes from the system */
-            $codes = db()->get('codes');
+            $taxes = db()->get('taxes', null, ['tax_id', 'internal_name', 'name', 'description']);
         }
 
         if(!empty($_POST)) {
@@ -57,8 +54,7 @@ class AdminPlanCreate extends Controller {
             $_POST['status'] = (int) $_POST['status'];
             $_POST['order'] = (int) $_POST['order'];
             $_POST['trial_days'] = (int) $_POST['trial_days'];
-            $_POST['taxes_ids'] = json_encode($_POST['taxes_ids'] ?? []);
-            $_POST['codes_ids'] = json_encode($_POST['codes_ids'] ?? []);
+            $_POST['taxes_ids'] = json_encode(array_keys($_POST['taxes_ids'] ?? []));
 
             //ALTUMCODE:DEMO if(DEMO) Alerts::add_error('This command is blocked on the demo.');
 
@@ -85,11 +81,10 @@ class AdminPlanCreate extends Controller {
                     'lifetime_price' => $_POST['lifetime_price'],
                     'settings' => $_POST['settings'],
                     'taxes_ids' => $_POST['taxes_ids'],
-                    'codes_ids' => $_POST['codes_ids'],
                     'color' => $_POST['color'],
                     'status' => $_POST['status'],
                     'order' => $_POST['order'],
-                    'datetime' => \Altum\Date::$date,
+                    'date' => \Altum\Date::$date,
                 ]);
 
                 /* Set a nice success message */
@@ -102,8 +97,7 @@ class AdminPlanCreate extends Controller {
 
         /* Main View */
         $data = [
-            'taxes' => $taxes ?? null,
-            'codes' => $codes ?? null,
+            'taxes' => $taxes ?? null
         ];
 
         $view = new \Altum\Views\View('admin/plan-create/index', (array) $this);

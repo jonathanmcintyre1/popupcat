@@ -19,7 +19,6 @@ class AdminNotifications extends Controller {
 
         /* Prepare the filtering system */
         $filters = (new \Altum\Filters(['user_id', 'campaign_id', 'type', 'is_enabled'], ['name'], ['datetime', 'name']));
-        $filters->set_default_order_by('notification_id', 'DESC');
 
         /* Prepare the paginator */
         $total_rows = database()->query("SELECT COUNT(*) AS `total` FROM `notifications` WHERE 1 = 1 {$filters->get_sql_where()}")->fetch_object()->total ?? 0;

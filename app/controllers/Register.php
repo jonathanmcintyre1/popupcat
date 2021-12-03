@@ -21,12 +21,12 @@ class Register extends Controller {
 
     public function index() {
 
-        Authentication::guard('guest');
-
         /* Check if Registration is enabled first */
         if(!settings()->register_is_enabled) {
             redirect();
         }
+
+        Authentication::guard('guest');
 
         $redirect = isset($_GET['redirect']) ? Database::clean_string($_GET['redirect']) : 'dashboard';
 
@@ -42,8 +42,8 @@ class Register extends Controller {
 
         if(!empty($_POST)) {
             /* Clean some posted variables */
-            $_POST['name'] = mb_substr(trim(filter_var($_POST['name'], FILTER_SANITIZE_STRING)), 0, 64);
-            $_POST['email'] = mb_substr(filter_var($_POST['email'], FILTER_SANITIZE_EMAIL), 0, 320);
+            $_POST['name'] = trim(filter_var($_POST['name'], FILTER_SANITIZE_STRING));
+            $_POST['email'] = trim(filter_var($_POST['email'], FILTER_SANITIZE_EMAIL));
 
             /* Default variables */
             $values['name'] = $_POST['name'];
@@ -61,7 +61,7 @@ class Register extends Controller {
             if(settings()->captcha->register_is_enabled && !$captcha->is_valid()) {
                 Alerts::add_field_error('captcha', language()->global->error_message->invalid_captcha);
             }
-            if(mb_strlen($_POST['name']) < 3 || mb_strlen($_POST['name']) > 64) {
+            if(mb_strlen($_POST['name']) < 3 || mb_strlen($_POST['name']) > 32) {
                 Alerts::add_field_error('name', language()->register->error_message->name_length);
             }
             if(db()->where('email', $_POST['email'])->has('users')) {
@@ -91,6 +91,7 @@ class Register extends Controller {
                     $_POST['name'],
                     (int) !settings()->email_confirmation,
                     $email_code,
+                    null,
                     null,
                     $plan_id,
                     $plan_settings,

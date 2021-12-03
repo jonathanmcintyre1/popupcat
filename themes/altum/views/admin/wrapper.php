@@ -1,6 +1,6 @@
 <?php defined('ALTUMCODE') || die() ?>
 <!DOCTYPE html>
-<html lang="<?= \Altum\Language::$language_code ?>" dir="<?= language()->direction ?>" class="w-100 h-100">
+<html lang="<?= \Altum\Language::$language_code ?>" dir="<?= language()->direction ?>">
 <head>
     <title><?= \Altum\Title::get() ?></title>
     <base href="<?= SITE_URL; ?>">

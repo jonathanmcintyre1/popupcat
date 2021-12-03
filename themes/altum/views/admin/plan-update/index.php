@@ -1,14 +1,5 @@
 <?php defined('ALTUMCODE') || die() ?>
 
-<nav aria-label="breadcrumb">
-    <ol class="custom-breadcrumbs small">
-        <li>
-            <a href="<?= url('admin/plans') ?>"><?= language()->admin_plans->breadcrumb ?></a><i class="fa fa-fw fa-angle-right"></i>
-        </li>
-        <li class="active" aria-current="page"><?= language()->admin_plan_update->breadcrumb ?></li>
-    </ol>
-</nav>
-
 <div class="d-flex justify-content-between mb-4">
     <div class="d-flex align-items-center">
         <h1 class="h3 mb-0 mr-1"><i class="fa fa-fw fa-xs fa-box-open text-primary-900 mr-2"></i> <?= sprintf(language()->admin_plan_update->header, $data->plan->name) ?></h1>
@@ -98,32 +89,23 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="taxes_ids"><?= language()->admin_plans->main->taxes_ids ?></label>
-                    <select id="taxes_ids" name="taxes_ids[]" class="form-control form-control-lg" multiple="multiple">
-                        <?php if($data->taxes): ?>
-                            <?php foreach($data->taxes as $tax): ?>
-                                <option value="<?= $tax->tax_id ?>" <?= in_array($tax->tax_id, $data->plan->taxes_ids)  ? 'selected="selected"' : null ?>>
-                                    <?= $tax->name . ' - ' . $tax->description ?>
-                                </option>
-                            <?php endforeach ?>
-                        <?php endif ?>
-                    </select>
-                    <small class="form-text text-muted"><?= sprintf(language()->admin_plans->main->taxes_ids_help, '<a href="' . url('admin/taxes') .'">', '</a>') ?></small>
+                    <span><?= language()->admin_plans->main->taxes_ids ?></span>
+                    <div><small class="form-text text-muted"><?= sprintf(language()->admin_plans->main->taxes_ids_help, '<a href="' . url('admin/taxes') .'">', '</a>') ?></small></div>
                 </div>
 
-                <div class="form-group">
-                    <label for="codes_ids"><?= language()->admin_plans->main->codes_ids ?></label>
-                    <select id="codes_ids" name="codes_ids[]" class="form-control form-control-lg" multiple="multiple">
-                        <?php if($data->codes): ?>
-                            <?php foreach($data->codes as $code): ?>
-                                <option value="<?= $code->code_id ?>" <?= in_array($code->code_id, $data->plan->codes_ids)  ? 'selected="selected"' : null ?>>
-                                    <?= $code->name . ' - ' . $code->code ?>
-                                </option>
-                            <?php endforeach ?>
-                        <?php endif ?>
-                    </select>
-                    <small class="form-text text-muted"><?= sprintf(language()->admin_plans->main->codes_ids_help, '<a href="' . url('admin/codes') .'">', '</a>') ?></small>
-                </div>
+                <?php if($data->taxes): ?>
+                    <div class="row">
+                        <?php foreach($data->taxes as $row): ?>
+                            <div class="col-12 col-xl-6">
+                                <div class="custom-control custom-switch my-3">
+                                    <input id="<?= 'tax_id_' . $row->tax_id ?>" name="taxes_ids[<?= $row->tax_id ?>]" type="checkbox" class="custom-control-input" <?= in_array($row->tax_id, $data->plan->taxes_ids) ? 'checked="checked"' : null ?>>
+                                    <label class="custom-control-label" for="<?= 'tax_id_' . $row->tax_id ?>"><?= $row->internal_name ?></label>
+                                    <div><span><small><?= $row->name ?></small> - <small class="text-muted"><?= $row->description ?></small></span></div>
+                                </div>
+                            </div>
+                        <?php endforeach ?>
+                    </div>
+                <?php endif ?>
 
             <?php endif ?>
 

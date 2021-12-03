@@ -27,13 +27,6 @@ class AdminIndex extends Controller {
             $payments = $payments_total_amount = 0;
         }
 
-        /* Requested plan details */
-        $plans = [];
-        $plans_result = database()->query("SELECT `plan_id`, `name` FROM `plans`");
-        while($row = $plans_result->fetch_object()) {
-            $plans[$row->plan_id] = $row;
-        }
-
         /* Main View */
         $data = [
             'campaigns' => $campaigns,
@@ -44,7 +37,6 @@ class AdminIndex extends Controller {
             'users' => $users,
             'payments' => $payments,
             'payments_total_amount' => $payments_total_amount,
-            'plans' => $plans,
         ];
 
         $view = new \Altum\Views\View('admin/index/index', (array) $this);

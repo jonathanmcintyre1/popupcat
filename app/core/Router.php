@@ -206,8 +206,6 @@ class Router {
             'referrals' => [
                 'controller' => 'Referrals',
                 'settings' => [
-                    'menu_no_margin' => true,
-                    'body_white' => false,
                     'no_ads'    => true
                 ]
             ],

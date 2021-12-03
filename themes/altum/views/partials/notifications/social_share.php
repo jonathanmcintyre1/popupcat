@@ -7,7 +7,7 @@
         <div class="altumcode-social-share-header">
             <p class="altumcode-social-share-title" style="color: <?= $notification->settings->title_color ?>"><?= $notification->settings->title ?></p>
 
-            <button class="altumcode-close"></button>
+            <span class="altumcode-close"></span>
         </div>
 
         <div class="altumcode-social-share-buttons">
@@ -68,6 +68,7 @@ new AltumCodeManager({
             let notification_id = main_element.getAttribute('data-notification-id');
 
             send_tracking_data({
+                ...user,
                 notification_id: notification_id,
                 type: 'notification',
                 subtype: 'click'

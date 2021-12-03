@@ -7,7 +7,7 @@
         <div class="altumcode-score-feedback-header">
             <p class="altumcode-score-feedback-title" style="color: <?= $notification->settings->title_color ?>"><?= $notification->settings->title ?></p>
 
-            <button class="altumcode-close"></button>
+            <span class="altumcode-close"></span>
         </div>
 
         <div class="altumcode-score-feedback-scores">
@@ -70,6 +70,7 @@ new AltumCodeManager({
                 let feedback = score.getAttribute('data-score');
 
                 send_tracking_data({
+                    ...user,
                     notification_id: notification_id,
                     type: 'notification',
                     subtype: `feedback_score_${feedback}`
@@ -81,15 +82,6 @@ new AltumCodeManager({
                 setTimeout(() => {
                     AltumCodeManager.remove_notification(main_element);
                 }, 950);
-
-                /* Redirect the user to thank you url if needed */
-                let thank_you_url = <?= json_encode($notification->settings->thank_you_url) ?>;
-
-                if(thank_you_url.trim() != '') {
-                    setTimeout(() => {
-                        window.location.href = thank_you_url;
-                    }, 350);
-                }
 
             });
         }

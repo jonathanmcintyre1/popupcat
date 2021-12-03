@@ -10,17 +10,16 @@
 
         <h1><?= language()->pay_thank_you->header ?></h1>
 
-        <?php if(isset($_GET['code_days'])): ?>
-            <p class="text-muted"><?= sprintf(language()->pay_thank_you->plan_redeemed, (int) $_GET['code_days']) ?></p>
-        <?php elseif(isset($_GET['payment_processor']) && in_array($_GET['payment_processor'], ['paypal', 'stripe', 'coinbase'])): ?>
+        <?php if(isset($_GET['payment_processor']) && in_array($_GET['payment_processor'], ['paypal', 'stripe'])): ?>
             <p class="text-muted"><?= language()->pay_thank_you->plan_custom_will_start ?></p>
         <?php elseif(isset($_GET['payment_processor']) && $_GET['payment_processor'] == 'offline_payment'): ?>
             <p class="text-muted"><?= language()->pay_thank_you->plan_custom_pending ?></p>
         <?php else: ?>
-            <p class="text-muted"><?= sprintf(language()->pay_thank_you->plan_trial_start, (int) $_GET['trial_days']) ?></p>
+            <p class="text-muted"><?= sprintf(language()->pay_thank_you->plan_trial_start, \Altum\Database\Database::clean_string($_GET['trial_days'])) ?></p>
         <?php endif ?>
 
         <a href="<?= url('dashboard') ?>" class="btn btn-outline-primary mt-4"><?= language()->pay_thank_you->button ?></a>
+
     </div>
 </div>
 

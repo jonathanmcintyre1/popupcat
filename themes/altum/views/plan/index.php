@@ -8,10 +8,12 @@
         <?= \Altum\Alerts::output_alerts() ?>
 
         <nav aria-label="breadcrumb">
-            <ol class="custom-breadcrumbs small">
-                <li><a href="<?= url() ?>"><?= language()->index->breadcrumb ?></a> <i class="fa fa-fw fa-angle-right"></i></li>
-                <li class="active" aria-current="page"><?= language()->plan->breadcrumb ?></li>
-            </ol>
+            <small>
+                <ol class="custom-breadcrumbs">
+                    <li><a href="<?= url() ?>"><?= language()->index->breadcrumb ?></a> <i class="fa fa-fw fa-angle-right"></i></li>
+                    <li class="active" aria-current="page"><?= language()->plan->breadcrumb ?></li>
+                </ol>
+            </small>
         </nav>
 
         <?php if(\Altum\Middlewares\Authentication::check() && $this->user->plan_is_expired && $this->user->plan_id != 'free'): ?>

@@ -2,10 +2,12 @@
 
 <div class="container">
     <nav aria-label="breadcrumb">
-        <ol class="custom-breadcrumbs small">
-            <li><a href="<?= url() ?>"><?= language()->index->breadcrumb ?></a> <i class="fa fa-fw fa-angle-right"></i></li>
-            <li class="active" aria-current="page"><?= language()->api_documentation->breadcrumb ?></li>
-        </ol>
+        <small>
+            <ol class="custom-breadcrumbs">
+                <li><a href="<?= url() ?>"><?= language()->index->breadcrumb ?></a> <i class="fa fa-fw fa-angle-right"></i></li>
+                <li class="active" aria-current="page"><?= language()->api_documentation->breadcrumb ?></li>
+            </ol>
+        </small>
     </nav>
 
     <div class="row mb-7">

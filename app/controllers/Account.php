@@ -29,8 +29,8 @@ class Account extends Controller {
         if(!empty($_POST)) {
 
             /* Clean some posted variables */
-            $_POST['email']		= mb_substr(filter_var($_POST['email'], FILTER_SANITIZE_EMAIL), 0, 320);
-            $_POST['name']		= mb_substr(filter_var($_POST['name'], FILTER_SANITIZE_STRING), 0, 64);
+            $_POST['email']		= filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+            $_POST['name']		= filter_var($_POST['name'], FILTER_SANITIZE_STRING);
             $_POST['timezone']  = in_array($_POST['timezone'], \DateTimeZone::listIdentifiers()) ? Database::clean_string($_POST['timezone']) : settings()->default_timezone;
             $_POST['twofa_is_enabled']  = (bool) $_POST['twofa_is_enabled'];
             $_POST['twofa_token']       = trim(filter_var($_POST['twofa_token'], FILTER_SANITIZE_STRING));
@@ -39,14 +39,14 @@ class Account extends Controller {
             /* Billing */
             if(empty($this->user->payment_subscription_id)) {
                 $_POST['billing_type'] = in_array($_POST['billing_type'], ['personal', 'business']) ? Database::clean_string($_POST['billing_type']) : 'personal';
-                $_POST['billing_name'] = mb_substr(trim(Database::clean_string($_POST['billing_name'])), 0, 128);
-                $_POST['billing_address'] = mb_substr(trim(Database::clean_string($_POST['billing_address'])), 0, 128);
-                $_POST['billing_city'] = mb_substr(trim(Database::clean_string($_POST['billing_city'])), 0, 64);
-                $_POST['billing_county'] = mb_substr(trim(Database::clean_string($_POST['billing_county'])), 0, 64);
-                $_POST['billing_zip'] = mb_substr(trim(Database::clean_string($_POST['billing_zip'])), 0, 32);
+                $_POST['billing_name'] = trim(Database::clean_string($_POST['billing_name']));
+                $_POST['billing_address'] = trim(Database::clean_string($_POST['billing_address']));
+                $_POST['billing_city'] = trim(Database::clean_string($_POST['billing_city']));
+                $_POST['billing_county'] = trim(Database::clean_string($_POST['billing_county']));
+                $_POST['billing_zip'] = trim(Database::clean_string($_POST['billing_zip']));
                 $_POST['billing_country'] = array_key_exists($_POST['billing_country'], get_countries_array()) ? Database::clean_string($_POST['billing_country']) : 'US';
-                $_POST['billing_phone'] = mb_substr(trim(Database::clean_string($_POST['billing_phone'])), 0, 32);
-                $_POST['billing_tax_id'] = $_POST['billing_type'] == 'business' ? mb_substr(trim(Database::clean_string($_POST['billing_tax_id'])), 0, 64) : '';
+                $_POST['billing_phone'] = trim(Database::clean_string($_POST['billing_phone']));
+                $_POST['billing_tax_id'] = $_POST['billing_type'] == 'business' ? trim(Database::clean_string($_POST['billing_tax_id'])) : '';
                 $_POST['billing'] = json_encode([
                     'type' => $_POST['billing_type'],
                     'name' => $_POST['billing_name'],
@@ -73,7 +73,7 @@ class Account extends Controller {
                 Alerts::add_field_error('email', language()->register->error_message->email_exists);
             }
 
-            if(mb_strlen($_POST['name']) < 3 || mb_strlen($_POST['name']) > 64) {
+            if(mb_strlen($_POST['name']) < 3 || mb_strlen($_POST['name']) > 32) {
                 Alerts::add_field_error('name', language()->register->error_message->name_length);
             }
 

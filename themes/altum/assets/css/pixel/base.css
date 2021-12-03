@@ -83,8 +83,6 @@
 }
 
 .altumcode-close {
-    border: none !important;
-    background: none !important;
     opacity: .4 !important;
     transition: .15s all !important;
 }

@@ -7,28 +7,28 @@
         <div class="altumcode-emoji-feedback-header">
             <p class="altumcode-emoji-feedback-title" style="color: <?= $notification->settings->title_color ?>"><?= $notification->settings->title ?></p>
 
-            <button class="altumcode-close"></button>
+            <span class="altumcode-close"></span>
         </div>
 
         <div class="altumcode-emoji-feedback-emojis">
             <?php if($notification->settings->show_angry): ?>
-                <img src="<?= ASSETS_FULL_URL . 'images/emojis/angry.svg' ?>" class="altumcode-emoji-feedback-emoji" data-type="angry" loading="lazy" />
+            <img src="<?= ASSETS_FULL_URL . 'images/emojis/angry.svg' ?>" class="altumcode-emoji-feedback-emoji" data-type="angry" loading="lazy" />
             <?php endif ?>
 
             <?php if($notification->settings->show_sad): ?>
-                <img src="<?= ASSETS_FULL_URL . 'images/emojis/sad.svg' ?>" class="altumcode-emoji-feedback-emoji" data-type="sad" loading="lazy" />
+            <img src="<?= ASSETS_FULL_URL . 'images/emojis/sad.svg' ?>" class="altumcode-emoji-feedback-emoji" data-type="sad" loading="lazy" />
             <?php endif ?>
 
             <?php if($notification->settings->show_neutral): ?>
-                <img src="<?= ASSETS_FULL_URL . 'images/emojis/neutral.svg' ?>" class="altumcode-emoji-feedback-emoji" data-type="neutral" loading="lazy" />
+            <img src="<?= ASSETS_FULL_URL . 'images/emojis/neutral.svg' ?>" class="altumcode-emoji-feedback-emoji" data-type="neutral" loading="lazy" />
             <?php endif ?>
 
             <?php if($notification->settings->show_happy): ?>
-                <img src="<?= ASSETS_FULL_URL . 'images/emojis/happy.svg' ?>" class="altumcode-emoji-feedback-emoji" data-type="happy" loading="lazy" />
+            <img src="<?= ASSETS_FULL_URL . 'images/emojis/happy.svg' ?>" class="altumcode-emoji-feedback-emoji" data-type="happy" loading="lazy" />
             <?php endif ?>
 
             <?php if($notification->settings->show_excited): ?>
-                <img src="<?= ASSETS_FULL_URL . 'images/emojis/excited.svg' ?>" class="altumcode-emoji-feedback-emoji" data-type="excited" loading="lazy" />
+            <img src="<?= ASSETS_FULL_URL . 'images/emojis/excited.svg' ?>" class="altumcode-emoji-feedback-emoji" data-type="excited" loading="lazy" />
             <?php endif ?>
         </div>
 
@@ -84,6 +84,7 @@ new AltumCodeManager({
                 let feedback = emoji.getAttribute('data-type');
 
                 send_tracking_data({
+                    ...user,
                     notification_id: notification_id,
                     type: 'notification',
                     subtype: `feedback_emoji_${feedback}`
@@ -94,16 +95,6 @@ new AltumCodeManager({
 
                 setTimeout(() => {
                     AltumCodeManager.remove_notification(main_element);
-
-                    /* Redirect the user to thank you url if needed */
-                    let thank_you_url = <?= json_encode($notification->settings->thank_you_url) ?>;
-
-                    if(thank_you_url.trim() != '') {
-                        setTimeout(() => {
-                            window.location.href = thank_you_url;
-                        }, 350);
-                    }
-
                 }, 950);
 
             });

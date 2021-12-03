@@ -25,7 +25,7 @@ class ApiLogs extends Controller {
 
                 $this->get_all();
 
-                break;
+            break;
         }
 
         $this->return_404();
@@ -35,7 +35,6 @@ class ApiLogs extends Controller {
 
         /* Prepare the filtering system */
         $filters = (new \Altum\Filters([], [], []));
-        $filters->set_default_order_by('id', 'DESC');
 
         /* Prepare the paginator */
         $total_rows = database()->query("SELECT COUNT(*) AS `total` FROM `users_logs` WHERE `user_id` = {$this->api_user->user_id}")->fetch_object()->total ?? 0;
@@ -61,7 +60,7 @@ class ApiLogs extends Controller {
             $row = [
                 'type' => $row->type,
                 'ip' => $row->ip,
-                'datetime' => $row->datetime,
+                'date' => $row->date,
             ];
 
             $data[] = $row;

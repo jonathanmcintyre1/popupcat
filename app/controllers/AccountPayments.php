@@ -22,8 +22,7 @@ class AccountPayments extends Controller {
         }
 
         /* Prepare the filtering system */
-        $filters = (new \Altum\Filters(['processor', 'type', 'frequency'], [], ['total_amount', 'datetime']));
-        $filters->set_default_order_by('id', 'DESC');
+        $filters = (new \Altum\Filters(['processor', 'type', 'frequency'], [], ['total_amount', 'date']));
 
         /* Prepare the paginator */
         $total_rows = database()->query("SELECT COUNT(*) AS `total` FROM `payments` WHERE `user_id` = {$this->user->user_id} {$filters->get_sql_where()}")->fetch_object()->total ?? 0;
@@ -35,8 +34,8 @@ class AccountPayments extends Controller {
         while($row = $payments_result->fetch_object()) $payments[] = $row;
 
         /* Export handler */
-        process_export_json($payments, 'include', ['id', 'user_id', 'plan_id', 'payment_id', 'email', 'name', 'processor', 'type', 'frequency', 'billing', 'taxes_ids', 'base_amount', 'code', 'discount_amount', 'total_amount', 'currency', 'status', 'datetime']);
-        process_export_csv($payments, 'include', ['id', 'user_id', 'plan_id', 'payment_id', 'email', 'name', 'processor', 'type', 'frequency', 'base_amount', 'code', 'discount_amount', 'total_amount', 'currency', 'status', 'datetime']);
+        process_export_json($payments, 'include', ['id', 'plan_id', 'payment_id', 'subscription_id', 'payer_id', 'email', 'name', 'processor', 'type', 'frequency', 'billing', 'taxes_ids', 'base_amount', 'code', 'discount_amount', 'total_amount', 'currency', 'status', 'date']);
+        process_export_csv($payments, 'include', ['id', 'plan_id', 'payment_id', 'subscription_id', 'payer_id', 'email', 'name', 'processor', 'type', 'frequency', 'base_amount', 'code', 'discount_amount', 'total_amount', 'currency', 'status', 'date']);
 
         /* Prepare the pagination view */
         $pagination = (new \Altum\Views\View('partials/pagination', (array) $this))->run(['paginator' => $paginator]);

@@ -6,7 +6,7 @@
     <div class="col-auto d-flex">
         <div class="">
             <div class="dropdown">
-                <button type="button" class="btn btn-outline-secondary dropdown-toggle-simple" data-toggle="dropdown" data-boundary="viewport" title="<?= language()->global->export ?>">
+                <button type="button" class="btn btn-outline-secondary dropdown-toggle-simple" data-toggle="dropdown" title="<?= language()->global->export ?>">
                     <i class="fa fa-fw fa-sm fa-download"></i>
                 </button>
 
@@ -23,7 +23,7 @@
 
         <div class="ml-3">
             <div class="dropdown">
-                <button type="button" class="btn <?= count($data->filters->get) ? 'btn-outline-primary' : 'btn-outline-secondary' ?> filters-button dropdown-toggle-simple" data-toggle="dropdown" data-boundary="viewport"><i class="fa fa-fw fa-sm fa-filter"></i></button>
+                <button type="button" class="btn <?= count($data->filters->get) ? 'btn-outline-primary' : 'btn-outline-secondary' ?> filters-button dropdown-toggle-simple" data-toggle="dropdown"><i class="fa fa-fw fa-sm fa-filter"></i></button>
 
                 <div class="dropdown-menu dropdown-menu-right filters-dropdown">
                     <div class="dropdown-header d-flex justify-content-between">
@@ -47,24 +47,24 @@
                         </div>
 
                         <div class="form-group px-4">
-                            <label for="filters_order_by" class="small"><?= language()->global->filters->order_by ?></label>
-                            <select name="order_by" id="filters_order_by" class="form-control form-control-sm">
+                            <label for="order_by" class="small"><?= language()->global->filters->order_by ?></label>
+                            <select name="order_by" id="order_by" class="form-control form-control-sm">
                                 <option value="datetime" <?= $data->filters->order_by == 'datetime' ? 'selected="selected"' : null ?>><?= language()->global->filters->order_by_datetime ?></option>
                                 <option value="amount" <?= $data->filters->order_by == 'amount' ? 'selected="selected"' : null ?>><?= language()->admin_affiliates_withdrawals->filters->order_by_amount ?></option>
                             </select>
                         </div>
 
                         <div class="form-group px-4">
-                            <label for="filters_order_type" class="small"><?= language()->global->filters->order_type ?></label>
-                            <select name="order_type" id="filters_order_type" class="form-control form-control-sm">
+                            <label for="order_type" class="small"><?= language()->global->filters->order_type ?></label>
+                            <select name="order_type" id="order_type" class="form-control form-control-sm">
                                 <option value="ASC" <?= $data->filters->order_type == 'ASC' ? 'selected="selected"' : null ?>><?= language()->global->filters->order_type_asc ?></option>
                                 <option value="DESC" <?= $data->filters->order_type == 'DESC' ? 'selected="selected"' : null ?>><?= language()->global->filters->order_type_desc ?></option>
                             </select>
                         </div>
 
                         <div class="form-group px-4">
-                            <label for="filters_results_per_page" class="small"><?= language()->global->filters->results_per_page ?></label>
-                            <select name="results_per_page" id="filters_results_per_page" class="form-control form-control-sm">
+                            <label for="results_per_page" class="small"><?= language()->global->filters->results_per_page ?></label>
+                            <select name="results_per_page" id="results_per_page" class="form-control form-control-sm">
                                 <?php foreach($data->filters->allowed_results_per_page as $key): ?>
                                     <option value="<?= $key ?>" <?= $data->filters->results_per_page == $key ? 'selected="selected"' : null ?>><?= $key ?></option>
                                 <?php endforeach ?>

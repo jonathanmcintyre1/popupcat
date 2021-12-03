@@ -46,11 +46,11 @@ class AdminStatistics extends Controller {
         $result = database()->query("
             SELECT
                  COUNT(*) AS `total`,
-                 DATE_FORMAT(`datetime`, '{$this->datetime['query_date_format']}') AS `formatted_date`
+                 DATE_FORMAT(`date`, '{$this->datetime['query_date_format']}') AS `formatted_date`
             FROM
                  `users`
             WHERE
-                `datetime` BETWEEN '{$this->datetime['query_start_date']}' AND '{$this->datetime['query_end_date']}'
+                `date` BETWEEN '{$this->datetime['query_start_date']}' AND '{$this->datetime['query_end_date']}'
             GROUP BY
                 `formatted_date`
             ORDER BY
@@ -101,11 +101,11 @@ class AdminStatistics extends Controller {
             $result = database()->query("
                 SELECT
                      COUNT(*) AS `total`,
-                     DATE_FORMAT(`datetime`, '{$this->datetime['query_date_format']}') AS `formatted_date`
+                     DATE_FORMAT(`date`, '{$this->datetime['query_date_format']}') AS `formatted_date`
                 FROM
                      `redeemed_codes`
                 WHERE
-                    `datetime` BETWEEN '{$this->datetime['query_start_date']}' AND '{$this->datetime['query_end_date']}'
+                    `date` BETWEEN '{$this->datetime['query_start_date']}' AND '{$this->datetime['query_end_date']}'
                 GROUP BY
                     `formatted_date`
                 ORDER BY
@@ -138,7 +138,7 @@ class AdminStatistics extends Controller {
         $total = ['total_amount' => 0, 'total_payments' => 0];
 
         $payments_chart = [];
-        $result = database()->query("SELECT COUNT(*) AS `total_payments`, DATE_FORMAT(`datetime`, '{$this->datetime['query_date_format']}') AS `formatted_date`, TRUNCATE(SUM(`total_amount`), 2) AS `total_amount` FROM `payments` WHERE `datetime` BETWEEN '{$this->datetime['query_start_date']}' AND '{$this->datetime['query_end_date']}' GROUP BY `formatted_date`");
+        $result = database()->query("SELECT COUNT(*) AS `total_payments`, DATE_FORMAT(`date`, '{$this->datetime['query_date_format']}') AS `formatted_date`, TRUNCATE(SUM(`total_amount`), 2) AS `total_amount` FROM `payments` WHERE `date` BETWEEN '{$this->datetime['query_start_date']}' AND '{$this->datetime['query_end_date']}' GROUP BY `formatted_date`");
         while($row = $result->fetch_object()) {
             $row->formatted_date = $this->datetime['process']($row->formatted_date);
 

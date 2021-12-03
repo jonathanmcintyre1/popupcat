@@ -27,8 +27,6 @@ class Filters {
 
     public $get = [];
 
-    private $is_processed = false;
-
     public function __construct($allowed_filters = [], $allowed_search_by = [], $allowed_order_by = [], $allowed_results_per_page = []) {
 
         $this->allowed_filters = $allowed_filters;
@@ -36,6 +34,7 @@ class Filters {
         $this->allowed_search_by = $allowed_search_by;
         $this->allowed_results_per_page = empty($allowed_results_per_page) ? [10, 25, 50, 100, 250] : $allowed_results_per_page;
 
+        $this->process();
     }
 
     public function process() {
@@ -85,8 +84,6 @@ class Filters {
     }
 
     public function get_sql_where($table_prefix = null) {
-        if(!$this->is_processed) $this->process();
-
         $where = '';
 
         $table_prefix = $table_prefix ? "`{$table_prefix}`." : null;
@@ -105,8 +102,6 @@ class Filters {
     }
 
     public function get_sql_order_by($table_prefix = null) {
-        if(!$this->is_processed) $this->process();
-
         $order_by = '';
 
         $table_prefix = $table_prefix ? "`{$table_prefix}`." : null;
@@ -131,10 +126,5 @@ class Filters {
         }
 
         return implode('&', $get);
-    }
-
-    public function set_default_order_by($order_by, $order_type) {
-        $this->order_by = $order_by;
-        $this->order_type = $order_type;
     }
 }

@@ -104,8 +104,6 @@ require_once APP_PATH . 'helpers/Alerts.php';
 require_once APP_PATH . 'helpers/core.php';
 require_once APP_PATH . 'helpers/Paypal.php';
 require_once APP_PATH . 'helpers/Coinbase.php';
-require_once APP_PATH . 'helpers/socialproofo.php';
-require_once APP_PATH . 'helpers/Uploads.php';
 
 /* Autoload for vendor */
 require_once ROOT_PATH . 'vendor/autoload.php';

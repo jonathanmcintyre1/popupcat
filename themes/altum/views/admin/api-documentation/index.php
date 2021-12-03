@@ -117,7 +117,7 @@
                             <tr>
                                 <td>order_by</td>
                                 <td><span class="badge badge-info"><?= language()->admin_api_documentation->optional ?></span></td>
-                                <td><?= sprintf(language()->admin_api_documentation->filters->order_by, '<code>' . implode('</code> , <code>', ['email', 'datetime', 'last_activity', 'name', 'total_logins']) . '</code>') ?></td>
+                                <td><?= sprintf(language()->admin_api_documentation->filters->order_by, '<code>' . implode('</code> , <code>', ['email', 'date', 'last_activity', 'name', 'total_logins']) . '</code>') ?></td>
                             </tr>
                             <tr>
                                 <td>order_by_type</td>
@@ -383,9 +383,9 @@
                                 <td>-</td>
                             </tr>
                             <tr>
-                                <td>status</td>
+                                <td>is_enabled</td>
                                 <td><span class="badge badge-info"><?= language()->admin_api_documentation->optional ?></span></td>
-                                <td><?= language()->admin_api_documentation->users->update->status ?></td>
+                                <td><?= language()->admin_api_documentation->users->update->is_enabled ?></td>
                             </tr>
                             <tr>
                                 <td>type</td>

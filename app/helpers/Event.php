@@ -36,41 +36,29 @@ class Event {
         }
     }
 
-    public static function exists_content_type($type) {
-        return isset(self::$content[$type]);
-    }
+    public static function add_content($content, $type) {
 
-    public static function exists_content_type_key($type, $key) {
-        return self::exists_content_type($type) && isset(self::$content[$type][$key]);
-    }
-
-    public static function add_content($content, $type, $key = null) {
-
-        if(!isset(self::$content[$type])) {
-            self::$content[$type] = [];
-        }
-
-        if(isset($key)) {
-            self::$content[$type][$key] = $content;
-        } else {
+        if(isset(self::$content[$type])) {
             self::$content[$type][] = $content;
+        } else {
+            self::$content[$type] = [ $content ];
         }
 
     }
 
     public static function get_content($type) {
 
-        $full_content = '';
+        $fullContent = '';
 
         if(isset(self::$content[$type])) {
-            foreach(self::$content[$type] as $key => $value) {
+            foreach (self::$content[$type] as $content) {
 
-                $full_content .= $value;
+                $fullContent .= $content;
 
             }
         }
 
-        return $full_content;
+        return $fullContent;
 
     }
 }

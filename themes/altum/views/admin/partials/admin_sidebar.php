@@ -113,7 +113,7 @@
                     </a>
                 </li>
             <?php endif ?>
-    
+       
 
         <li class="<?= \Altum\Routing\Router::$controller == 'AdminStatistics' ? 'active' : null ?>">
             <a class="nav-link d-flex flex-row" href="<?= url('admin/statistics') ?>">

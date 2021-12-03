@@ -38,7 +38,6 @@ class Campaign extends Controller {
 
                 /* Prepare the filtering system */
                 $filters = (new \Altum\Filters(['is_enabled', 'type'], ['name'], ['name', 'datetime']));
-                $filters->set_default_order_by('notification_id', 'DESC');
 
                 /* Prepare the paginator */
                 $total_rows = database()->query("SELECT COUNT(*) AS `total` FROM `notifications` WHERE `campaign_id` = {$campaign->campaign_id} AND `user_id` = {$this->user->user_id} {$filters->get_sql_where()}")->fetch_object()->total ?? 0;
@@ -140,6 +139,29 @@ class Campaign extends Controller {
 
                 break;
         }
+
+        /* Custom Branding Campaign Modal */
+        if($this->user->plan_settings->custom_branding) {
+            $data = ['campaign' => $campaign];
+            $view = new \Altum\Views\View('campaign/custom_branding_campaign_modal', (array) $this);
+            \Altum\Event::add_content($view->run($data), 'modals');
+        }
+
+        /* Delete Campaign Modal */
+        $view = new \Altum\Views\View('campaign/campaign_delete_modal', (array) $this);
+        \Altum\Event::add_content($view->run(), 'modals');
+
+        /* Pixel Modal */
+        $view = new \Altum\Views\View('campaign/campaign_pixel_key_modal', (array) $this);
+        \Altum\Event::add_content($view->run(), 'modals');
+
+        /* Update Campaign Modal */
+        $view = new \Altum\Views\View('campaign/update_campaign_modal', (array) $this);
+        \Altum\Event::add_content($view->run(), 'modals');
+
+        /* Delete Notification Modal */
+        $view = new \Altum\Views\View('notification/notification_delete_modal', (array) $this);
+        \Altum\Event::add_content($view->run(), 'modals');
 
         /* Prepare the View */
         $data = [

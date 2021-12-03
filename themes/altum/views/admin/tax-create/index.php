@@ -1,14 +1,5 @@
 <?php defined('ALTUMCODE') || die() ?>
 
-<nav aria-label="breadcrumb">
-    <ol class="custom-breadcrumbs small">
-        <li>
-            <a href="<?= url('admin/taxes') ?>"><?= language()->admin_taxes->breadcrumb ?></a><i class="fa fa-fw fa-angle-right"></i>
-        </li>
-        <li class="active" aria-current="page"><?= language()->admin_tax_create->breadcrumb ?></li>
-    </ol>
-</nav>
-
 <div class="d-flex justify-content-between mb-4">
     <h1 class="h3 mb-0 mr-1"><i class="fa fa-fw fa-xs fa-receipt text-primary-900 mr-2"></i> <?= language()->admin_tax_create->header ?></h1>
 </div>
@@ -23,6 +14,12 @@
     <div class="card-body">
         <form action="" method="post" role="form">
             <input type="hidden" name="token" value="<?= \Altum\Middlewares\Csrf::get() ?>" />
+
+            <div class="form-group">
+                <label for="internal_name"><?= language()->admin_taxes->main->internal_name ?></label>
+                <input type="text" id="internal_name" name="internal_name" class="form-control form-control-lg" required="required" />
+                <small class="form-text text-muted"><?= language()->admin_taxes->main->internal_name_help ?></small>
+            </div>
 
             <div class="form-group">
                 <label for="name"><?= language()->admin_taxes->main->name ?></label>

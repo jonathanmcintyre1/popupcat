@@ -1,14 +1,5 @@
 <?php defined('ALTUMCODE') || die() ?>
 
-<nav aria-label="breadcrumb">
-    <ol class="custom-breadcrumbs small">
-        <li>
-            <a href="<?= url('admin/users') ?>"><?= language()->admin_users->breadcrumb ?></a><i class="fa fa-fw fa-angle-right"></i>
-        </li>
-        <li class="active" aria-current="page"><?= language()->admin_user_update->breadcrumb ?></li>
-    </ol>
-</nav>
-
 <div class="d-flex justify-content-between mb-4">
     <div class="d-flex align-items-center">
         <h1 class="h3 mb-0 mr-1"><i class="fa fa-fw fa-xs fa-user text-primary-900 mr-2"></i> <?= language()->admin_user_update->header ?></h1>
@@ -28,33 +19,33 @@
             <input type="hidden" name="token" value="<?= \Altum\Middlewares\Csrf::get() ?>" />
 
             <div class="form-group">
-                <label for="name"><?= language()->admin_users->main->name ?></label>
+                <label for="name"><?= language()->admin_user_update->main->name ?></label>
                 <input id="name" type="text" name="name" class="form-control form-control-lg <?= \Altum\Alerts::has_field_errors('name') ? 'is-invalid' : null ?>" value="<?= $data->user->name ?>" required="required" />
                 <?= \Altum\Alerts::output_field_error('name') ?>
             </div>
 
             <div class="form-group">
-                <label for="email"><?= language()->admin_users->main->email ?></label>
+                <label for="email"><?= language()->admin_user_update->main->email ?></label>
                 <input id="email" type="email" name="email" class="form-control form-control-lg <?= \Altum\Alerts::has_field_errors('email') ? 'is-invalid' : null ?>" value="<?= $data->user->email ?>" required="required" />
                 <?= \Altum\Alerts::output_field_error('email') ?>
             </div>
 
             <div class="form-group">
-                <label for="status"><?= language()->admin_users->main->status ?></label>
-                <select id="status" name="status" class="form-control form-control-lg">
-                    <option value="2" <?= $data->user->status == 2 ? 'selected="selected"' : null ?>><?= language()->admin_users->main->status_disabled ?></option>
-                    <option value="1" <?= $data->user->status == 1 ? 'selected="selected"' : null ?>><?= language()->admin_users->main->status_active ?></option>
-                    <option value="0" <?= $data->user->status == 0 ? 'selected="selected"' : null ?>><?= language()->admin_users->main->status_unconfirmed ?></option>
+                <label for="is_enabled"><?= language()->admin_user_update->main->is_enabled ?></label>
+                <select id="is_enabled" name="is_enabled" class="form-control form-control-lg">
+                    <option value="2" <?= $data->user->active == 2 ? 'selected="selected"' : null ?>><?= language()->admin_user_update->main->is_enabled_disabled ?></option>
+                    <option value="1" <?= $data->user->active == 1 ? 'selected="selected"' : null ?>><?= language()->admin_user_update->main->is_enabled_active ?></option>
+                    <option value="0" <?= $data->user->active == 0 ? 'selected="selected"' : null ?>><?= language()->admin_user_update->main->is_enabled_unconfirmed ?></option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label for="type"><?= language()->admin_users->main->type ?></label>
+                <label for="type"><?= language()->admin_user_update->main->type ?></label>
                 <select id="type" name="type" class="form-control form-control-lg">
-                    <option value="1" <?= $data->user->type == 1 ? 'selected="selected"' : null ?>><?= language()->admin_users->main->type_admin ?></option>
-                    <option value="0" <?= $data->user->type == 0 ? 'selected="selected"' : null ?>><?= language()->admin_users->main->type_user ?></option>
+                    <option value="1" <?= $data->user->type == 1 ? 'selected="selected"' : null ?>><?= language()->admin_user_update->main->type_admin ?></option>
+                    <option value="0" <?= $data->user->type == 0 ? 'selected="selected"' : null ?>><?= language()->admin_user_update->main->type_user ?></option>
                 </select>
-                <small class="form-text text-muted"><?= language()->admin_users->main->type_help ?></small>
+                <small class="form-text text-muted"><?= language()->admin_user_update->main->type_help ?></small>
             </div>
 
             <div class="mt-5"></div>

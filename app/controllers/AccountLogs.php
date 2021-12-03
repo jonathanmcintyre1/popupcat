@@ -20,7 +20,6 @@ class AccountLogs extends Controller {
 
         /* Prepare the filtering system */
         $filters = (new \Altum\Filters(['user_id'], ['type', 'ip', 'country_code', 'device_type'], ['datetime']));
-        $filters->set_default_order_by('id', 'DESC');
 
         /* Prepare the paginator */
         $total_rows = database()->query("SELECT COUNT(*) AS `total` FROM `users_logs` WHERE `user_id` = {$this->user->user_id} {$filters->get_sql_where()}")->fetch_object()->total ?? 0;
@@ -32,8 +31,8 @@ class AccountLogs extends Controller {
         while($row = $logs_result->fetch_object()) $logs[] = $row;
 
         /* Export handler */
-        process_export_json($logs, 'include', ['id', 'user_id', 'type', 'ip', 'country_code', 'device_type', 'datetime']);
-        process_export_csv($logs, 'include', ['id', 'user_id', 'type', 'ip', 'country_code', 'device_type', 'datetime']);
+        process_export_json($logs, 'include', ['user_id', 'type', 'ip', 'country_code', 'device_type', 'datetime']);
+        process_export_csv($logs, 'include', ['user_id', 'type', 'ip', 'country_code', 'device_type', 'datetime']);
 
         /* Prepare the pagination view */
         $pagination = (new \Altum\Views\View('partials/pagination', (array) $this))->run(['paginator' => $paginator]);

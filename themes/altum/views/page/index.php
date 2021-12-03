@@ -4,14 +4,16 @@
 
 <div class="container">
     <nav aria-label="breadcrumb">
-        <ol class="custom-breadcrumbs small">
-            <li><a href="<?= url() ?>"><?= language()->index->breadcrumb ?></a> <i class="fa fa-fw fa-angle-right"></i></li>
-            <li><a href="<?= SITE_URL . 'pages' ?>"><?= language()->pages->index->breadcrumb ?></a> <i class="fa fa-fw fa-angle-right"></i></li>
-            <?php if($data->page->pages_category_url): ?>
-                <li><a href="<?= SITE_URL . 'pages/' . $data->page->pages_category_url ?>"><?= $data->page->pages_category_title ?></a> <i class="fa fa-fw fa-angle-right"></i></li>
-            <?php endif ?>
-            <li class="active" aria-current="page"><?= language()->page->breadcrumb ?></li>
-        </ol>
+        <small>
+            <ol class="custom-breadcrumbs">
+                <li><a href="<?= url() ?>"><?= language()->index->breadcrumb ?></a> <i class="fa fa-fw fa-angle-right"></i></li>
+                <li><a href="<?= SITE_URL . 'pages' ?>"><?= language()->pages->index->breadcrumb ?></a> <i class="fa fa-fw fa-angle-right"></i></li>
+                <?php if($data->page->pages_category_url): ?>
+                    <li><a href="<?= SITE_URL . 'pages/' . $data->page->pages_category_url ?>"><?= $data->page->pages_category_title ?></a> <i class="fa fa-fw fa-angle-right"></i></li>
+                <?php endif ?>
+                <li class="active" aria-current="page"><?= language()->page->breadcrumb ?></li>
+            </ol>
+        </small>
     </nav>
 
     <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-md-between">

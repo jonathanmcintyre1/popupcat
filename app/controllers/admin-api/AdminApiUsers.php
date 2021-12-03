@@ -63,8 +63,7 @@ class AdminApiUsers extends Controller {
     private function get_all() {
 
         /* Prepare the filtering system */
-        $filters = (new \Altum\Filters([], ['name', 'email'], ['email', 'datetime', 'last_activity', 'name', 'total_logins']));
-        $filters->set_default_order_by('user_id', 'DESC');
+        $filters = (new \Altum\Filters([], ['name', 'email'], ['email', 'date', 'last_activity', 'name', 'total_logins']));
 
         /* Prepare the paginator */
         $total_rows = database()->query("SELECT COUNT(*) AS `total` FROM `users` WHERE 1 = 1 {$filters->get_sql_where()}")->fetch_object()->total ?? 0;
@@ -93,7 +92,7 @@ class AdminApiUsers extends Controller {
                 'email' => $row->email,
                 'api_key' => $row->api_key,
                 'billing' => json_decode($row->billing),
-                'status' => (bool) $row->status,
+                'is_enabled' => (bool) $row->active,
                 'plan_id' => $row->plan_id,
                 'plan_expiration_date' => $row->plan_expiration_date,
                 'plan_settings' => json_decode($row->plan_settings),
@@ -102,8 +101,7 @@ class AdminApiUsers extends Controller {
                 'timezone' => $row->timezone,
                 'ip' => $row->ip,
                 'country' => $row->country,
-                'last_datetime' => $row->last_datetime,
-                'datetime' => $row->datetime,
+                'date' => $row->date,
                 'last_activity' => $row->last_activity,
                 'total_logins' => (int) $row->total_logins,
             ];
@@ -153,7 +151,7 @@ class AdminApiUsers extends Controller {
             'email' => $user->email,
             'api_key' => $user->api_key,
             'billing' => json_decode($user->billing),
-            'status' => (bool) $user->status,
+            'is_enabled' => (bool) $user->active,
             'plan_id' => $user->plan_id,
             'plan_expiration_date' => $user->plan_expiration_date,
             'plan_settings' => json_decode($user->plan_settings),
@@ -162,8 +160,7 @@ class AdminApiUsers extends Controller {
             'timezone' => $user->timezone,
             'ip' => $user->ip,
             'country' => $user->country,
-            'last_datetime' => $user->last_datetime,
-            'datetime' => $user->datetime,
+            'date' => $user->date,
             'last_activity' => $user->last_activity,
             'total_logins' => (int) $user->total_logins,
         ];
@@ -184,7 +181,7 @@ class AdminApiUsers extends Controller {
             }
         }
 
-        if(mb_strlen($_POST['name']) < 3 || mb_strlen($_POST['name']) > 64) {
+        if(mb_strlen($_POST['name']) < 3 || mb_strlen($_POST['name']) > 32) {
             $this->response_error(language()->admin_user_create->error_message->name_length, 401);
         }
         if(db()->where('email', $_POST['email'])->has('users')) {
@@ -198,14 +195,15 @@ class AdminApiUsers extends Controller {
         }
 
         /* Define some needed variables */
-        $_POST['name'] = mb_substr(trim(filter_var($_POST['name'], FILTER_SANITIZE_STRING)), 0, 64);
-        $_POST['email'] = mb_substr(filter_var($_POST['email'], FILTER_SANITIZE_EMAIL), 0, 320);
+        $_POST['name'] = trim(filter_var($_POST['name'], FILTER_SANITIZE_STRING));
+        $_POST['email'] = trim(filter_var($_POST['email'], FILTER_SANITIZE_EMAIL));
 
         $registered_user_id = (new User())->create(
             $_POST['email'],
             $_POST['password'],
             $_POST['name'],
             1,
+            null,
             null,
             null,
             'free',
@@ -236,7 +234,7 @@ class AdminApiUsers extends Controller {
             $this->response_error(language()->api->error_message->not_found, 404);
         }
 
-        if(isset($_POST['name']) && (mb_strlen($_POST['name']) < 3 || mb_strlen($_POST['name']) > 64)) {
+        if(isset($_POST['name']) && (mb_strlen($_POST['name']) < 3 || mb_strlen($_POST['name']) > 32)) {
             $this->response_error(language()->admin_user_create->error_message->name_length, 401);
         }
         if(isset($_POST['email']) && $user->email != $_POST['email'] && db()->where('email', $_POST['email'])->has('users')) {
@@ -250,10 +248,10 @@ class AdminApiUsers extends Controller {
         }
 
         /* Define some needed variables */
-        $name = isset($_POST['name']) ? mb_substr(trim(filter_var($_POST['name'], FILTER_SANITIZE_STRING)), 0, 64) : $user->name;
-        $email = isset($_POST['email']) ? mb_substr(trim(filter_var($_POST['email'], FILTER_SANITIZE_EMAIL)), 0, 128) : $user->email;
+        $name = isset($_POST['name']) ? trim(filter_var($_POST['name'], FILTER_SANITIZE_STRING)) : $user->name;
+        $email = isset($_POST['email']) ? trim(filter_var($_POST['email'], FILTER_SANITIZE_STRING)) : $user->email;
         $password = isset($_POST['password']) ? password_hash($_POST['password'], PASSWORD_DEFAULT) : $user->password;
-        $status = isset($_POST['status']) ? (int) $_POST['status'] : $user->status;
+        $is_enabled = isset($_POST['is_enabled']) ? (int) $_POST['is_enabled'] : $user->active;
         $type = isset($_POST['type']) ? (int) $_POST['type'] : $user->type;
 
         $plan_id = $user->plan_id;
@@ -291,7 +289,7 @@ class AdminApiUsers extends Controller {
             'name' => $name,
             'email' => $email,
             'password' => $password,
-            'status' => $status,
+            'active' => $is_enabled,
             'type' => $type,
             'plan_id' => $plan_id,
             'plan_expiration_date' => $plan_expiration_date,
@@ -325,7 +323,7 @@ class AdminApiUsers extends Controller {
         }
 
         /* Define some needed variables */
-        $one_time_login_code = md5($user->email . $user->datetime . time());
+        $one_time_login_code = md5($user->email . $user->date . time());
 
         /* Update the basic user settings */
         db()->where('user_id', $user->user_id)->update('users', ['one_time_login_code' => $one_time_login_code]);

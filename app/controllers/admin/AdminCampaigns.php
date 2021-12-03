@@ -18,7 +18,6 @@ class AdminCampaigns extends Controller {
 
         /* Prepare the filtering system */
         $filters = (new \Altum\Filters(['user_id', 'is_enabled'], ['name', 'domain'], ['datetime', 'name']));
-        $filters->set_default_order_by('campaign_id', 'DESC');
 
         /* Prepare the paginator */
         $total_rows = database()->query("SELECT COUNT(*) AS `total` FROM `campaigns` WHERE 1 = 1 {$filters->get_sql_where()}")->fetch_object()->total ?? 0;

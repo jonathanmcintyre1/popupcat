@@ -14,10 +14,8 @@ use Altum\Database\Database;
 use Altum\Date;
 use Altum\Middlewares\Authentication;
 use Altum\Middlewares\Csrf;
-use Altum\Models\User;
 use Altum\PaymentGateways\Coinbase;
 use Altum\Response;
-use Altum\Uploads;
 
 class Pay extends Controller {
     public $plan_id;
@@ -26,8 +24,7 @@ class Pay extends Controller {
     public $plan;
     public $plan_taxes;
     public $applied_taxes_ids = [];
-    public $code = null;
-    public $stripe_session = null;
+    public $code;
 
     public function index() {
 
@@ -41,20 +38,15 @@ class Pay extends Controller {
         $this->return_type = isset($_GET['return_type']) && in_array($_GET['return_type'], ['success', 'cancel']) ? $_GET['return_type'] : null;
         $this->payment_processor = isset($_GET['payment_processor']) && in_array($_GET['payment_processor'], ['paypal', 'stripe', 'offline_payment', 'coinbase']) ? $_GET['payment_processor'] : null;
 
-        /* ^_^ */
+        /* Make sure it is either the trial / free plan or normal plans */
         switch($this->plan_id) {
-            case 'free':
 
-                $this->plan = settings()->plan_free;
-
-                if($this->user->plan_id == 'free') {
-                    Alerts::add_info(language()->pay->free->free_already);
-                } else {
-                    Alerts::add_info(language()->pay->free->other_plan_not_expired);
-                }
-
+            case 'custom':
                 redirect('plan');
+                break;
 
+            case 'free':
+                $this->plan = settings()->plan_free;
                 break;
 
             default:
@@ -66,9 +58,6 @@ class Pay extends Controller {
 
                 /* Check for potential taxes */
                 $this->plan_taxes = (new \Altum\Models\Plan())->get_plan_taxes_by_taxes_ids($this->plan->taxes_ids);
-
-                /* Parse codes ids */
-                $this->plan->codes_ids = json_decode($this->plan->codes_ids);
 
                 /* Filter them out */
                 if($this->plan_taxes) {
@@ -103,10 +92,22 @@ class Pay extends Controller {
 
         if(
             settings()->payment->taxes_and_billing_is_enabled
+            && !in_array($this->plan_id, ['free'])
             && ($this->user->plan_trial_done || !$this->plan->trial_days)
             && (empty($this->user->billing->name) || empty($this->user->billing->address) || empty($this->user->billing->city) || empty($this->user->billing->county) || empty($this->user->billing->zip))
         ) {
             redirect('pay-billing/' . $this->plan_id);
+        }
+
+        /* More checks depending on the user plan and what it has been chosen */
+        if($this->plan_id == 'free') {
+            if($this->user->plan_id == 'free') {
+                Alerts::add_info(language()->pay->free->free_already);
+            } else {
+                Alerts::add_info(language()->pay->free->other_plan_not_expired);
+            }
+
+            redirect('plan');
         }
 
         /* Form submission processing */
@@ -116,70 +117,60 @@ class Pay extends Controller {
             //ALTUMCODE:DEMO if(DEMO) Alerts::add_error('This command is blocked on the demo.');
             //ALTUMCODE:DEMO if(DEMO) redirect('pay/' . $this->plan_id);
 
-            /* Check for code usage */
-            if(settings()->payment->codes_is_enabled && isset($_POST['code'])) {
-                $_POST['code'] = Database::clean_string($_POST['code']);
-                $this->code = database()->query("SELECT * FROM `codes` WHERE `code` = '{$_POST['code']}' AND `redeemed` < `quantity`")->fetch_object();
-
-                if($this->code && db()->where('user_id', $this->user->user_id)->where('code_id', $this->code->code_id)->has('redeemed_codes')) {
-                    redirect('pay/' . $this->plan_id);
-                }
-            }
-
             /* Check for any errors */
             if(!Csrf::check()) {
                 Alerts::add_error(language()->global->error_message->invalid_csrf_token);
             }
 
-            /* Process further */
-            if($this->plan->trial_days && !$this->user->plan_trial_done) {
-                /* :) */
-            } else if($this->code && $this->code->type == 'redeemable' && in_array($this->code->code_id, $this->plan->codes_ids)) {
+            switch($this->plan_id) {
+                case 'free':
+                    redirect('pay/' . $this->plan_id);
+                    break;
 
-                /* Cancel current subscription if needed */
-                if($this->user->plan_id != $this->plan->plan_id) {
-                    try {
-                        (new User())->cancel_subscription($this->user->user_id);
-                    } catch (\Exception $exception) {
-                        Alerts::add_error($exception->getCode() . ':' . $exception->getMessage());
-                        redirect('pay/' . $this->plan_id);
+                default:
+
+                    /* Check if we should start the trial or not */
+                    if($this->plan->trial_days && !$this->user->plan_trial_done) {
+                        // :)
+                    } else {
+
+                        $_POST['payment_frequency'] = Database::clean_string($_POST['payment_frequency']);
+                        $_POST['payment_processor'] = Database::clean_string($_POST['payment_processor']);
+                        $_POST['payment_type'] = Database::clean_string($_POST['payment_type']);
+
+                        /* Make sure the chosen option comply */
+                        if(!in_array($_POST['payment_frequency'], ['monthly', 'annual', 'lifetime'])) {
+                            redirect('pay/' . $this->plan_id);
+                        }
+
+                        if(!in_array($_POST['payment_processor'], ['paypal', 'stripe', 'offline_payment', 'coinbase'])) {
+                            redirect('pay/' . $this->plan_id);
+                        } else {
+
+                            /* Make sure the payment processor is active */
+                            if(!settings()->{$_POST['payment_processor']}->is_enabled) {
+                                redirect('pay/' . $this->plan_id);
+                            }
+
+                        }
+
+                        if(!in_array($_POST['payment_type'], ['one_time', 'recurring'])) {
+                            redirect('pay/' . $this->plan_id);
+                        }
+
+                        /* Lifetime */
+                        if($_POST['payment_frequency'] == 'lifetime') {
+                            $_POST['payment_type'] = 'one_time';
+                        }
+
+                        /* Offline / Coinbase payment */
+                        if(in_array($_POST['payment_processor'], ['offline_payment', 'coinbase'])) {
+                            $_POST['payment_type'] = 'one_time';
+                        }
+
                     }
-                }
 
-            } else {
-                $_POST['payment_frequency'] = Database::clean_string($_POST['payment_frequency']);
-                $_POST['payment_processor'] = Database::clean_string($_POST['payment_processor']);
-                $_POST['payment_type'] = Database::clean_string($_POST['payment_type']);
-
-                /* Make sure the chosen option comply */
-                if(!in_array($_POST['payment_frequency'], ['monthly', 'annual', 'lifetime'])) {
-                    redirect('pay/' . $this->plan_id);
-                }
-
-                if(!in_array($_POST['payment_processor'], ['paypal', 'stripe', 'offline_payment', 'coinbase'])) {
-                    redirect('pay/' . $this->plan_id);
-                } else {
-
-                    /* Make sure the payment processor is active */
-                    if(!settings()->{$_POST['payment_processor']}->is_enabled) {
-                        redirect('pay/' . $this->plan_id);
-                    }
-
-                }
-
-                if(!in_array($_POST['payment_type'], ['one_time', 'recurring'])) {
-                    redirect('pay/' . $this->plan_id);
-                }
-
-                /* Lifetime */
-                if($_POST['payment_frequency'] == 'lifetime') {
-                    $_POST['payment_type'] = 'one_time';
-                }
-
-                /* Offline / Coinbase payment */
-                if(in_array($_POST['payment_processor'], ['offline_payment', 'coinbase'])) {
-                    $_POST['payment_type'] = 'one_time';
-                }
+                    break;
             }
 
             if(!Alerts::has_field_errors() && !Alerts::has_errors()) {
@@ -203,45 +194,42 @@ class Pay extends Controller {
 
                     /* Success message and redirect */
                     $this->redirect_pay_thank_you();
-                }
+                } else {
 
-                /* Redeem */
-                else if($this->code && $this->code->type == 'redeemable' && in_array($this->code->code_id, $this->plan->codes_ids)) {
+                    /* Check for code usage */
+                    $this->code = false;
 
-                    $datetime = $this->user->plan_id == $this->plan->plan_id ? $this->user->plan_expiration_date : '';
-                    $plan_expiration_date = (new \DateTime($datetime))->modify('+' . $this->code->days . ' days')->format('Y-m-d H:i:s');
-                    $plan_settings = json_encode($this->plan->settings);
+                    if(settings()->payment->codes_is_enabled && isset($_POST['code'])) {
 
-                    /* Database query */
-                    db()->where('user_id', $this->user->user_id)->update('users', [
-                        'plan_id' => $this->plan_id,
-                        'plan_expiration_date' => $plan_expiration_date,
-                        'plan_settings' => $plan_settings,
-                        'plan_expiry_reminder' => 0,
-                    ]);
+                        $_POST['code'] = Database::clean_string($_POST['code']);
 
-                    /* Update the code usage */
-                    db()->where('code_id', $this->code->code_id)->update('codes', ['redeemed' => db()->inc()]);
+                        $this->code = database()->query("SELECT `code_id`, `code`, `discount` FROM `codes` WHERE (`plan_id` IS NULL OR `plan_id` = '{$this->plan_id}') AND `code` = '{$_POST['code']}' AND `redeemed` < `quantity` AND `type` = 'discount'")->fetch_object();
 
-                    /* Add log for the redeemed code */
-                    db()->insert('redeemed_codes', [
-                        'code_id'   => $this->code->code_id,
-                        'user_id'   => $this->user->user_id,
-                        'datetime'  => \Altum\Date::$date
-                    ]);
+                        if($this->code && db()->where('user_id', $this->user->user_id)->where('code_id', $this->code->code_id)->has('redeemed_codes')) {
+                            redirect('pay/' . $this->plan_id);
+                        }
+                    }
 
-                    /* Clear the cache */
-                    \Altum\Cache::$adapter->deleteItemsByTag('user_id=' . $this->user->user_id);
+                    switch($_POST['payment_processor']) {
+                        case 'paypal':
+                            $this->paypal_create();
+                            break;
 
-                    /* Success message and redirect */
-                    $this->redirect_pay_thank_you();
-                }
+                        case 'stripe':
+                            $stripe_session = $this->stripe_create();
+                            break;
 
-                else {
-                    $this->{$_POST['payment_processor']}();
+                        case 'offline_payment':
+                            $this->offline_payment_process();
+                            break;
+
+                        case 'coinbase':
+                            $this->coinbase_create();
+                            break;
+                    }
+
                 }
             }
-
         }
 
         /* Include the detection of callbacks processing */
@@ -252,7 +240,7 @@ class Pay extends Controller {
             'plan_id'           => $this->plan_id,
             'plan'              => $this->plan,
             'plan_taxes'        => $this->plan_taxes,
-            'stripe_session'    => $this->stripe_session
+            'stripe_session'    => $stripe_session ?? false
         ];
 
         $view = new \Altum\Views\View('pay/index', (array) $this);
@@ -261,7 +249,7 @@ class Pay extends Controller {
 
     }
 
-    private function paypal() {
+    private function paypal_create() {
 
         /* Payment details */
         $price = $base_amount = (float) $this->plan->{$_POST['payment_frequency'] . '_price'};
@@ -315,7 +303,7 @@ class Pay extends Controller {
                         'description' => '',
                         'custom_id' => $custom_id,
                         'items' => [[
-                            'name' => settings()->business->brand_name . ' - ' . $this->plan->name,
+                            'name' => settings()->payment->brand_name . ' - ' . $this->plan->name,
                             'description' => '',
                             'quantity' => 1,
                             'unit_amount' => [
@@ -325,7 +313,7 @@ class Pay extends Controller {
                         ]]
                     ]],
                     'application_context' => [
-                        'brand_name' => settings()->business->brand_name,
+                        'brand_name' => settings()->payment->brand_name,
                         'landing_page' => 'NO_PREFERENCE',
                         'shipping_preference' => 'NO_SHIPPING',
                         'user_action' => 'PAY_NOW',
@@ -363,7 +351,7 @@ class Pay extends Controller {
                     /* Create the product if not existing */
                     $response = \Unirest\Request::post($paypal_api_url . 'v1/catalogs/products', $headers, \Unirest\Request\Body::json([
                         'id' => $paypal_plan_id,
-                        'name' => settings()->business->brand_name . ' - ' . $this->plan->name,
+                        'name' => settings()->payment->brand_name . ' - ' . $this->plan->name,
                         'type' => 'DIGITAL',
                     ]));
 
@@ -381,7 +369,7 @@ class Pay extends Controller {
                 /* Create a new plan */
                 $response = \Unirest\Request::post($paypal_api_url . 'v1/billing/plans', $headers, \Unirest\Request\Body::json([
                     'product_id' => $paypal_plan_id,
-                    'name' => settings()->business->brand_name . ' - ' . $this->plan->name . ' - ' . $_POST['payment_frequency'],
+                    'name' => settings()->payment->brand_name . ' - ' . $this->plan->name . ' - ' . $_POST['payment_frequency'],
                     'description' => $_POST['payment_frequency'],
                     'status' => 'ACTIVE',
                     'billing_cycles' => [[
@@ -432,7 +420,7 @@ class Pay extends Controller {
                         'payee_preferred' => 'IMMEDIATE_PAYMENT_REQUIRED'
                     ],
                     'application_context' => [
-                        'brand_name' => settings()->business->brand_name,
+                        'brand_name' => settings()->payment->brand_name,
                         'shipping_preference' => 'NO_SHIPPING',
                         'user_action' => 'SUBSCRIBE_NOW',
                         'return_url' => url('pay/' . $this->plan_id . $this->return_url_parameters('success', $base_amount, $price, $code, $discount_amount)),
@@ -460,7 +448,7 @@ class Pay extends Controller {
 
     }
 
-    private function stripe() {
+    private function stripe_create() {
 
         /* Initiate Stripe */
         \Stripe\Stripe::setApiKey(settings()->stripe->secret_key);
@@ -498,7 +486,7 @@ class Pay extends Controller {
                 $stripe_session = \Stripe\Checkout\Session::create([
                     'payment_method_types' => ['card'],
                     'line_items' => [[
-                        'name' => settings()->business->brand_name . ' - ' . $product,
+                        'name' => settings()->payment->brand_name . ' - ' . $product,
                         'description' => $_POST['payment_frequency'],
                         'amount' => $stripe_formatted_price,
                         'currency' => settings()->payment->currency,
@@ -532,7 +520,7 @@ class Pay extends Controller {
                     /* Create the product if not already created */
                     $stripe_product = \Stripe\Product::create([
                         'id'    => $this->plan_id,
-                        'name'  => settings()->business->brand_name . ' - ' . $product,
+                        'name'  => settings()->payment->brand_name . ' - ' . $product,
                     ]);
                 }
 
@@ -594,11 +582,11 @@ class Pay extends Controller {
                 break;
         }
 
-        $this->stripe_session = $stripe_session;
+        return $stripe_session;
 
     }
 
-    private function coinbase() {
+    private function coinbase_create() {
 
         /* Payment details */
         $product = $this->plan->name;
@@ -627,7 +615,7 @@ class Pay extends Controller {
             Coinbase::get_api_url() . 'charges',
             Coinbase::get_headers(),
             \Unirest\Request\Body::json([
-                'name' => settings()->business->brand_name . ' - ' . $this->plan->name,
+                'name' => settings()->payment->brand_name . ' - ' . $this->plan->name,
                 'description' => '',
                 'local_price' => [
                     'amount' => $price,
@@ -661,7 +649,24 @@ class Pay extends Controller {
         header('Location: ' . $response->body->data->hosted_url); die();
     }
 
-    private function offline_payment() {
+    private function payment_return_process() {
+
+        /* Return confirmation processing if successfully */
+        if($this->return_type && $this->payment_processor && $this->return_type == 'success') {
+
+            /* Redirect to the thank you page */
+            $this->redirect_pay_thank_you();
+        }
+
+        /* Return confirmation processing if failed */
+        if($this->return_type && $this->payment_processor && $this->return_type == 'cancel') {
+            Alerts::add_error(language()->pay->error_message->canceled_payment);
+            redirect('pay/' . $this->plan_id);
+        }
+
+    }
+
+    private function offline_payment_process() {
 
         /* Return confirmation processing if successfully */
         if($this->return_type && $this->payment_processor && $this->return_type == 'success' && $this->payment_processor == 'offline_payment') {
@@ -693,6 +698,7 @@ class Pay extends Controller {
 
         /* Other vars */
         $payment_id = md5($this->user->user_id . $this->plan_id . $_POST['payment_type'] . $_POST['payment_frequency'] . $this->user->email . Date::$date);
+        $file_allowed_extensions = ['jpg', 'jpeg', 'png', 'pdf'];
         $offline_payment_proof = (!empty($_FILES['offline_payment_proof']['name']));
 
         /* Error checks */
@@ -706,7 +712,7 @@ class Pay extends Controller {
         $offline_payment_proof_file_extension = mb_strtolower(end($offline_payment_proof_file_extension));
         $offline_payment_proof_file_temp = $_FILES['offline_payment_proof']['tmp_name'];
 
-        if(!in_array($offline_payment_proof_file_extension, Uploads::get_whitelisted_file_extensions('offline_payment_proofs'))) {
+        if(!in_array($offline_payment_proof_file_extension, $file_allowed_extensions)) {
             Alerts::add_error(language()->global->error_message->invalid_file_type);
             redirect('pay/' . $this->plan_id);
         }
@@ -757,16 +763,16 @@ class Pay extends Controller {
             'base_amount' => $base_amount,
             'email' => $this->user->email,
             'payment_id' => $payment_id,
+            'subscription_id' => '',
+            'payer_id' => $this->user->user_id,
             'name' => $this->user->name,
-            'plan' => json_encode(db()->where('plan_id', $this->plan_id)->getOne('plans', ['plan_id', 'name'])),
             'billing' => settings()->payment->taxes_and_billing_is_enabled && $this->user->billing ? json_encode($this->user->billing) : null,
-            'business' => json_encode(settings()->business),
             'taxes_ids' => !empty($this->applied_taxes_ids) ? json_encode($this->applied_taxes_ids) : null,
             'total_amount' => $price,
             'currency' => settings()->payment->currency,
             'payment_proof' => $offline_payment_proof_new_name,
             'status' => 0,
-            'datetime' => Date::$date
+            'date' => Date::$date
         ]);
 
         /* Send notification to admin if needed */
@@ -797,23 +803,6 @@ class Pay extends Controller {
 
     }
 
-    private function payment_return_process() {
-
-        /* Return confirmation processing if successfully */
-        if($this->return_type && $this->payment_processor && $this->return_type == 'success') {
-
-            /* Redirect to the thank you page */
-            $this->redirect_pay_thank_you();
-        }
-
-        /* Return confirmation processing if failed */
-        if($this->return_type && $this->payment_processor && $this->return_type == 'cancel') {
-            Alerts::add_error(language()->pay->error_message->canceled_payment);
-            redirect('pay/' . $this->plan_id);
-        }
-
-    }
-
     /* Ajax to check if discount codes are available */
     public function code() {
         Authentication::guard();
@@ -832,22 +821,13 @@ class Pay extends Controller {
             die();
         }
 
-        $_POST['plan_id'] = (int) $_POST['plan_id'];
-        $_POST['code'] = trim(Database::clean_string($_POST['code']));
-
-        if(!$plan = db()->where('plan_id', $_POST['plan_id'])->getOne('plans')) {
-            Response::json(language()->pay->error_message->code_invalid, 'error');
-        }
-        $plan->codes_ids = json_decode($plan->codes_ids);
+        $_POST['plan_id'] = !$_POST['plan_id'] ? null : (int) $_POST['plan_id'];
+        $_POST['code'] = Database::clean_string($_POST['code']);
 
         /* Make sure the discount code exists */
-        $code = database()->query("SELECT * FROM `codes` WHERE `code` = '{$_POST['code']}' AND `redeemed` < `quantity`")->fetch_object();
+        $code = database()->query("SELECT * FROM `codes` WHERE (`plan_id` IS NULL OR `plan_id` = '{$_POST['plan_id']}') AND `code` = '{$_POST['code']}' AND `redeemed` < `quantity` AND `type` = 'discount'")->fetch_object();
 
         if(!$code) {
-            Response::json(language()->pay->error_message->code_invalid, 'error');
-        }
-
-        if(!in_array($code->code_id, $plan->codes_ids)) {
             Response::json(language()->pay->error_message->code_invalid, 'error');
         }
 
@@ -855,14 +835,8 @@ class Pay extends Controller {
             Response::json(language()->pay->error_message->code_used, 'error');
         }
 
-        Response::json(
-            sprintf(language()->pay->success_message->code, '<strong>' . $code->discount . '%</strong>'),
-            'success',
-            [
-                'code' => $code,
-                'submit_text' => $code->type == 'redeemable' ? sprintf(language()->pay->custom_plan->code_redeemable, $code->days) : language()->pay->custom_plan->pay
-            ]
-        );
+
+        Response::json(sprintf(language()->pay->success_message->code, '<strong>' . $code->discount . '%</strong>'), 'success', ['discount' => $code->discount]);
     }
 
     /* Generate the generic return url parameters */
@@ -886,15 +860,8 @@ class Pay extends Controller {
 
         $thank_you_url_parameters = '&plan_id=' . $this->plan_id;
         $thank_you_url_parameters .= '&user_id=' . $this->user->user_id;
-
-        /* Trial */
         if($this->plan->trial_days && !$this->user->plan_trial_done) {
             $thank_you_url_parameters .= '&trial_days=' . $this->plan->trial_days;
-        }
-
-        /* Redeemed */
-        if($this->code && $this->code->type == 'redeemable' && in_array($this->code->code_id, $this->plan->codes_ids)) {
-            $thank_you_url_parameters .= '&code_days=' . $this->code->days;
         }
 
         foreach($thank_you_url_parameters_raw as $key => $value) {

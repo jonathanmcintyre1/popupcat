@@ -56,6 +56,7 @@ class WebhookPaypal extends Controller {
                 /* Payment payer details */
                 $payer_email = $response->body->payer->email_address;
                 $payer_name = $response->body->payer->name->given_name . $response->body->payer->name->surname;
+                $payer_id = $response->body->payer->payer_id;
 
                 /* Parse metadata */
                 $metadata = explode('&', $response->body->purchase_units[0]->payments->captures[0]->custom_id);
@@ -112,19 +113,19 @@ class WebhookPaypal extends Controller {
                     'processor' => 'paypal',
                     'type' => $payment_type,
                     'frequency' => $payment_frequency,
-                    'code' => $code->code,
+                    'code' => $code,
                     'discount_amount' => $discount_amount,
                     'base_amount' => $base_amount,
                     'email' => $payer_email,
                     'payment_id' => $payment_id,
+                    'subscription_id' => '',
+                    'payer_id' => $payer_id,
                     'name' => $payer_name,
-                    'plan' => json_encode(db()->where('plan_id', $plan_id)->getOne('plans', ['plan_id', 'name'])),
                     'billing' => settings()->payment->taxes_and_billing_is_enabled && $user->billing ? $user->billing : null,
-                    'business' => json_encode(settings()->business),
                     'taxes_ids' => !empty($taxes_ids) ? $taxes_ids : null,
                     'total_amount' => $payment_total,
                     'currency' => $payment_currency,
-                    'datetime' => \Altum\Date::$date
+                    'date' => \Altum\Date::$date
                 ]);
 
                 /* Update the user with the new plan */
@@ -149,10 +150,7 @@ class WebhookPaypal extends Controller {
                     'plan_settings' => $plan->settings,
                     'plan_expiration_date' => $plan_expiration_date,
                     'plan_expiry_reminder' => 0,
-                    'payment_subscription_id' => '',
-                    'payment_processor' => 'paypal',
-                    'payment_total_amount' => $payment_total,
-                    'payment_currency' => $payment_currency,
+                    'payment_subscription_id' => ''
                 ]);
 
                 /* Clear the cache */
@@ -222,7 +220,7 @@ class WebhookPaypal extends Controller {
                 $payment_total = $data->resource->amount->total;
                 $payment_currency = $data->resource->amount->currency;
                 $payment_type = 'recurring';
-                $payment_subscription_id = $data->resource->billing_agreement_id;
+                $payment_subscription_id = 'paypal###' . $data->resource->billing_agreement_id;
 
                 /* Payment payer details */
                 $payer_email = $response->body->subscriber->email_address;
@@ -285,7 +283,7 @@ class WebhookPaypal extends Controller {
                 }
 
                 /* Unsubscribe from the previous plan if needed */
-                if(!empty($user->payment_subscription_id) && $user->payment_subscription_id != $payment_subscription_id) {
+                if(!empty($user->payment_subscription_id)) {
                     try {
                         (new User())->cancel_subscription($user_id);
                     } catch (\Exception $exception) {
@@ -309,19 +307,19 @@ class WebhookPaypal extends Controller {
                     'processor' => 'paypal',
                     'type' => $payment_type,
                     'frequency' => $payment_frequency,
-                    'code' => $code->code,
+                    'code' => $code,
                     'discount_amount' => $discount_amount,
                     'base_amount' => $base_amount,
                     'email' => $payer_email,
                     'payment_id' => $payment_id,
+                    'subscription_id' => $payment_subscription_id,
+                    'payer_id' => $payer_id,
                     'name' => $payer_name,
-                    'plan' => json_encode(db()->where('plan_id', $plan_id)->getOne('plans', ['plan_id', 'name'])),
                     'billing' => settings()->payment->taxes_and_billing_is_enabled && $user->billing ? $user->billing : null,
-                    'business' => json_encode(settings()->business),
                     'taxes_ids' => !empty($taxes_ids) ? $taxes_ids : null,
                     'total_amount' => $payment_total,
                     'currency' => $payment_currency,
-                    'datetime' => \Altum\Date::$date
+                    'date' => \Altum\Date::$date
                 ]);
 
                 /* Update the user with the new plan */
@@ -346,10 +344,7 @@ class WebhookPaypal extends Controller {
                     'plan_settings' => $plan->settings,
                     'plan_expiration_date' => $plan_expiration_date,
                     'plan_expiry_reminder' => 0,
-                    'payment_subscription_id' => $payment_subscription_id,
-                    'payment_processor' => 'paypal',
-                    'payment_total_amount' => $payment_total,
-                    'payment_currency' => $payment_currency,
+                    'payment_subscription_id' => $payment_subscription_id
                 ]);
 
                 /* Clear the cache */

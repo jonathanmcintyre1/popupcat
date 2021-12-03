@@ -1,14 +1,5 @@
 <?php defined('ALTUMCODE') || die() ?>
 
-<nav aria-label="breadcrumb">
-    <ol class="custom-breadcrumbs small">
-        <li>
-            <a href="<?= url('admin/taxes') ?>"><?= language()->admin_taxes->breadcrumb ?></a><i class="fa fa-fw fa-angle-right"></i>
-        </li>
-        <li class="active" aria-current="page"><?= language()->admin_tax_update->breadcrumb ?></li>
-    </ol>
-</nav>
-
 <div class="d-flex justify-content-between mb-4">
     <div class="d-flex align-items-center">
         <h1 class="h3 mb-0 mr-1"><i class="fa fa-fw fa-xs fa-receipt text-primary-900 mr-2"></i> <?= language()->admin_tax_update->header ?></h1>
@@ -21,17 +12,24 @@
 
 <div class="card <?= \Altum\Alerts::has_field_errors() ? 'border-danger' : null ?>">
     <div class="card-body">
+
         <form action="" method="post" role="form">
             <input type="hidden" name="token" value="<?= \Altum\Middlewares\Csrf::get() ?>" />
 
             <div class="form-group">
+                <label for="internal_name"><?= language()->admin_taxes->main->internal_name ?></label>
+                <input type="text" id="internal_name" name="internal_name" class="form-control form-control-lg" value="<?= $data->tax->internal_name ?>" required="required" />
+                <small class="form-text text-muted"><?= language()->admin_taxes->main->internal_name_help ?></small>
+            </div>
+
+            <div class="form-group">
                 <label for="name"><?= language()->admin_taxes->main->name ?></label>
-                <input type="text" id="name" name="name" class="form-control form-control-lg" value="<?= $data->tax->name ?>" disabled="disabled" />
+                <input type="text" id="name" name="name" class="form-control form-control-lg" value="<?= $data->tax->name ?>" required="required" />
             </div>
 
             <div class="form-group">
                 <label for="description"><?= language()->admin_taxes->main->description ?></label>
-                <input type="text" id="description" name="description" class="form-control form-control-lg" value="<?= $data->tax->description ?>" disabled="disabled" />
+                <input type="text" id="description" name="description" class="form-control form-control-lg" value="<?= $data->tax->description ?>" required="required" />
             </div>
 
             <div class="row">
@@ -54,7 +52,7 @@
             </div>
 
             <div class="form-group">
-                <label for="type"><?= language()->admin_taxes->main->type ?></label>
+                <label for="type"><?= language()->admin_taxes->main->type ?> <?= $data->tax->type ?></label>
                 <select id="type" name="type" class="form-control form-control-lg" disabled="disabled">
                     <option value="inclusive" <?= $data->tax->type == 'inclusive' ? 'selected="selected"' : null ?>><?= language()->admin_taxes->main->type_inclusive ?></option>
                     <option value="exclusive" <?= $data->tax->type == 'exclusive' ? 'selected="selected"' : null ?>><?= language()->admin_taxes->main->type_exclusive ?></option>
@@ -80,7 +78,9 @@
                 <small class="form-text text-muted"><?= language()->admin_taxes->main->countries_help ?></small>
             </div>
 
+            <button type="submit" name="submit" class="btn btn-lg btn-block btn-primary mt-4"><?= language()->global->update ?></button>
         </form>
+
     </div>
 </div>
 

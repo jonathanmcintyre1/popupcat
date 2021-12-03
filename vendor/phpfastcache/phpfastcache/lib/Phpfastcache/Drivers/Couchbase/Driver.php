@@ -16,16 +16,15 @@ declare(strict_types=1);
 
 namespace Phpfastcache\Drivers\Couchbase;
 
-use Couchbase\Exception as CouchbaseException;
+use Couchbase\Exception;
 use Couchbase\PasswordAuthenticator;
-use Couchbase\Bucket as CouchbaseBucket;
-use Couchbase\Cluster as CouchbaseClient;
-use DateTime;
+use CouchbaseBucket;
+use CouchbaseCluster as CouchbaseClient;
+use CouchbaseException;
 use Phpfastcache\Cluster\AggregatablePoolInterface;
 use Phpfastcache\Core\Pool\{DriverBaseTrait, ExtendedCacheItemPoolInterface};
-use Phpfastcache\Config\ConfigurationOption;
 use Phpfastcache\Entities\DriverStatistic;
-use Phpfastcache\Exceptions\{PhpfastcacheDriverCheckException, PhpfastcacheInvalidArgumentException, PhpfastcacheLogicException};
+use Phpfastcache\Exceptions\{PhpfastcacheInvalidArgumentException, PhpfastcacheLogicException};
 use Psr\Cache\CacheItemInterface;
 
 
@@ -38,9 +37,7 @@ use Psr\Cache\CacheItemInterface;
  */
 class Driver implements ExtendedCacheItemPoolInterface, AggregatablePoolInterface
 {
-    use DriverBaseTrait {
-        __construct as __baseConstruct;
-    }
+    use DriverBaseTrait;
 
     /**
      * @var CouchbaseBucket[]
@@ -56,13 +53,6 @@ class Driver implements ExtendedCacheItemPoolInterface, AggregatablePoolInterfac
      * @var string
      */
     protected $currentBucket = '';
-
-    public function __construct(ConfigurationOption $config, $instanceId)
-    {
-        // @todo Deprecation to enable in v8.1
-        // \trigger_error('Couchbase driver is now deprecated and will be removed in the V9, use Couchbasev3 instead which will support SDK 3.', \E_USER_DEPRECATED);
-        $this->__baseConstruct($config, $instanceId);
-    }
 
     /**
      * @return bool
@@ -97,15 +87,12 @@ class Driver implements ExtendedCacheItemPoolInterface, AggregatablePoolInterfac
      */
     protected function driverConnect(): bool
     {
-        if (\class_exists(\Couchbase\ClusterOptions::class)) {
-            throw new PhpfastcacheDriverCheckException('You are using the Couchbase PHP SDK 3.x so please use driver Couchbasev3');
-        }
-
         if ($this->instance instanceof CouchbaseClient) {
             throw new PhpfastcacheLogicException('Already connected to Couchbase server');
         }
 
         $clientConfig = $this->getConfig();
+
 
         $authenticator = new PasswordAuthenticator();
         $authenticator->username($clientConfig->getUsername())->password($clientConfig->getPassword());
@@ -138,7 +125,7 @@ class Driver implements ExtendedCacheItemPoolInterface, AggregatablePoolInterfac
             /**
              * CouchbaseBucket::get() returns a CouchbaseMetaDoc object
              */
-            return $this->decodeDocument((array) $this->getBucket()->get($item->getEncodedKey())->value);
+            return $this->decode($this->getBucket()->get($item->getEncodedKey())->value);
         } catch (CouchbaseException $e) {
             return null;
         }
@@ -166,7 +153,7 @@ class Driver implements ExtendedCacheItemPoolInterface, AggregatablePoolInterfac
             try {
                 return (bool)$this->getBucket()->upsert(
                     $item->getEncodedKey(),
-                    $this->encodeDocument($this->driverPreWrap($item)),
+                    $this->encode($this->driverPreWrap($item)),
                     ['expiry' => $item->getTtl()]
                 );
             } catch (CouchbaseException $e) {
@@ -198,49 +185,6 @@ class Driver implements ExtendedCacheItemPoolInterface, AggregatablePoolInterfac
         throw new PhpfastcacheInvalidArgumentException('Cross-Driver type confusion detected');
     }
 
-    /**
-     * @param array $data
-     * @return array
-     */
-    protected function encodeDocument(array $data): array
-    {
-        $data[ExtendedCacheItemPoolInterface::DRIVER_DATA_WRAPPER_INDEX] = $this->encode($data[ExtendedCacheItemPoolInterface::DRIVER_DATA_WRAPPER_INDEX]);
-        $data[ExtendedCacheItemPoolInterface::DRIVER_EDATE_WRAPPER_INDEX] = $data[ExtendedCacheItemPoolInterface::DRIVER_EDATE_WRAPPER_INDEX]->format(\DateTime::ATOM);
-
-        if($this->getConfig()->isItemDetailedDate()){
-            $data[ExtendedCacheItemPoolInterface::DRIVER_CDATE_WRAPPER_INDEX] = $data[ExtendedCacheItemPoolInterface::DRIVER_CDATE_WRAPPER_INDEX]->format(\DateTime::ATOM);
-            $data[ExtendedCacheItemPoolInterface::DRIVER_MDATE_WRAPPER_INDEX] = $data[ExtendedCacheItemPoolInterface::DRIVER_MDATE_WRAPPER_INDEX]->format(\DateTime::ATOM);
-        }
-
-        return $data;
-    }
-
-    /**
-     * @param array $data
-     * @return array
-     */
-    protected function decodeDocument(array $data): array
-    {
-        $data[ExtendedCacheItemPoolInterface::DRIVER_DATA_WRAPPER_INDEX] = $this->decode($data[ExtendedCacheItemPoolInterface::DRIVER_DATA_WRAPPER_INDEX]);
-        $data[ExtendedCacheItemPoolInterface::DRIVER_EDATE_WRAPPER_INDEX] = \DateTime::createFromFormat(
-            \DateTime::ATOM,
-            $data[ExtendedCacheItemPoolInterface::DRIVER_EDATE_WRAPPER_INDEX]
-        );
-
-        if($this->getConfig()->isItemDetailedDate()){
-            $data[ExtendedCacheItemPoolInterface::DRIVER_CDATE_WRAPPER_INDEX] = \DateTime::createFromFormat(
-                \DateTime::ATOM,
-                $data[ExtendedCacheItemPoolInterface::DRIVER_CDATE_WRAPPER_INDEX]
-            );
-
-            $data[ExtendedCacheItemPoolInterface::DRIVER_MDATE_WRAPPER_INDEX] = \DateTime::createFromFormat(
-                \DateTime::ATOM,
-                $data[ExtendedCacheItemPoolInterface::DRIVER_MDATE_WRAPPER_INDEX]
-            );
-        }
-
-        return $data;
-    }
     /********************
      *
      * PSR-6 Extended Methods

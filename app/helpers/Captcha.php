@@ -59,33 +59,27 @@ class Captcha {
     public function display() {
 
         if(settings()->captcha->type == 'recaptcha' && settings()->captcha->recaptcha_public_key && settings()->captcha->recaptcha_private_key) {
+
             echo '<div class="g-recaptcha" data-sitekey="' . settings()->captcha->recaptcha_public_key . '"></div>';
+            echo '<script src="https://www.google.com/recaptcha/api.js" async defer></script>';
             echo '<input type="hidden" name="captcha" class="form-control ' . (\Altum\Alerts::has_field_errors('captcha') ? 'is-invalid' : null) . '">';
             echo \Altum\Alerts::output_field_error('captcha');
 
-            if(!\Altum\Event::exists_content_type_key('javascript', 'tiktok')) {
-                ob_start();
-                echo '<script src="https://www.google.com/recaptcha/api.js" async defer></script>';
-                \Altum\Event::add_content(ob_get_clean(), 'javascript', 'tiktok');
-            }
         }
 
         else if(settings()->captcha->type == 'hcaptcha' && settings()->captcha->hcaptcha_site_key && settings()->captcha->hcaptcha_secret_key) {
+
             echo '<div class="h-captcha" data-sitekey="' . settings()->captcha->hcaptcha_site_key . '"></div>';
+            echo '<script src="https://hcaptcha.com/1/api.js" async defer></script>';
             echo '<input type="hidden" name="captcha" class="form-control ' . (\Altum\Alerts::has_field_errors('captcha') ? 'is-invalid' : null) . '">';
             echo \Altum\Alerts::output_field_error('captcha');
 
-            if(!\Altum\Event::exists_content_type_key('javascript', 'tiktok')) {
-                ob_start();
-                echo '<script src="https://hcaptcha.com/1/api.js" async defer></script>';
-                \Altum\Event::add_content(ob_get_clean(), 'javascript', 'tiktok');
-            }
         }
 
         else {
             echo '
             <img src="data:image/png;base64,' . base64_encode($this->create_simple_captcha()) . '" class="mb-2" id="captcha" alt="' . language()->global->accessibility->captcha_alt . '" />
-            <input type="text" name="captcha" class="form-control ' . (\Altum\Alerts::has_field_errors('captcha') ? 'is-invalid' : null) . '" placeholder="' . language()->global->captcha_placeholder . '" aria-label="' . language()->global->accessibility->captcha_input . '" required="required" autocomplete="off" />
+            <input type="text" name="captcha" class="form-control form-control-lg ' . (\Altum\Alerts::has_field_errors('captcha') ? 'is-invalid' : null) . '" placeholder="' . language()->global->captcha_placeholder . '" aria-label="' . language()->global->accessibility->captcha_input . '" required="required" autocomplete="off" />
             ' . \Altum\Alerts::output_field_error('captcha') . '
             ';
         }

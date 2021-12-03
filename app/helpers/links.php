@@ -12,7 +12,7 @@ function url($append = '') {
 }
 
 function redirect($append = '') {
-    header('Location: ' . SITE_URL . $append);
+    header('Location: ' . url($append));
 
     die();
 }
@@ -32,45 +32,4 @@ function get_slug($string, $delimiter = '-', $lowercase = true) {
     $string = $lowercase ? mb_strtolower($string) : $string;
 
     return $string;
-}
-
-function google_safe_browsing_check($url, $api_key = '') {
-    $api_url = 'https://safebrowsing.googleapis.com/v4/threatMatches:find?key=' . $api_key;
-
-    $body = Unirest\Request\Body::json([
-        'client' => [
-            'clientId' => '',
-            'clientVersion' => '1.5.2'
-        ],
-        'threatInfo' => [
-            'threatTypes' => ['MALWARE', 'SOCIAL_ENGINEERING','THREAT_TYPE_UNSPECIFIED'],
-            'platformTypes' => ['ANY_PLATFORM'],
-            'threatEntryTypes' => ['URL'],
-            'threatEntries' => [
-                ['url' => $url]
-            ]
-        ]
-
-    ]);
-
-    $headers = [
-        'Content-Type' => 'application/json',
-        'Authorization' => 'Token :)'
-    ];
-
-    $response = Unirest\Request::post($api_url, $headers, $body);
-
-    if(isset($response->body->matches[0]->threatType) && $response->body->matches[0]->threatType) return true;
-
-    return false;
-}
-
-function get_domain_from_url($url) {
-
-    $host = parse_url($url, PHP_URL_HOST);
-
-    $host = explode('.', $host);
-
-    /* Return only the last 2 array values combined */
-    return implode('.', array_slice($host, -2, 2));
 }

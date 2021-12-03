@@ -75,7 +75,7 @@ class AdminPageUpdate extends Controller {
                     'type' => $_POST['type'],
                     'position' => $_POST['position'],
                     'order' => $_POST['order'],
-                    'last_datetime' => \Altum\Date::$date,
+                    'last_date' => \Altum\Date::$date,
                 ]);
 
                 /* Clear cache */

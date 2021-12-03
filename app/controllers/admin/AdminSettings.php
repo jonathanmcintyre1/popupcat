@@ -12,7 +12,6 @@ namespace Altum\Controllers;
 use Altum\Alerts;
 use Altum\Middlewares\Csrf;
 use Altum\Routing\Router;
-use Altum\Uploads;
 
 class AdminSettings extends Controller {
 
@@ -86,6 +85,11 @@ class AdminSettings extends Controller {
             $_POST['privacy_policy_url'] = filter_var($_POST['privacy_policy_url'], FILTER_SANITIZE_STRING);
 
             /* Check for errors & process  potential uploads */
+            $image_allowed_extensions = [
+                'logo' => ['jpg', 'jpeg', 'png', 'svg', 'gif'],
+                'favicon' => ['png', 'ico', 'gif'],
+                'opengraph' => ['jpg', 'jpeg', 'png', 'gif'],
+            ];
             $image = [
                 'logo' => !empty($_FILES['logo']['name']) && !isset($_POST['logo_remove']),
                 'favicon' => !empty($_FILES['favicon']['name']) && !isset($_POST['favicon_remove']),
@@ -99,7 +103,7 @@ class AdminSettings extends Controller {
                     $file_extension = mb_strtolower(end($file_extension));
                     $file_temp = $_FILES[$image_key]['tmp_name'];
 
-                    if(!in_array($file_extension, Uploads::get_whitelisted_file_extensions($image_key))) {
+                    if(!in_array($file_extension, $image_allowed_extensions[$image_key])) {
                         Alerts::add_error(language()->global->error_message->invalid_file_type);
                     }
 
@@ -222,16 +226,16 @@ class AdminSettings extends Controller {
             $_POST['is_enabled'] = (bool)$_POST['is_enabled'];
             $_POST['type'] = in_array($_POST['type'], ['one_time', 'recurring', 'both']) ? filter_var($_POST['type'], FILTER_SANITIZE_STRING) : 'both';
             $_POST['codes_is_enabled'] = (bool)$_POST['codes_is_enabled'];
+            $_POST['brand_name'] = filter_var($_POST['brand_name'], FILTER_SANITIZE_STRING);
             $_POST['taxes_and_billing_is_enabled'] = (bool)$_POST['taxes_and_billing_is_enabled'];
-            $_POST['invoice_is_enabled'] = (bool) $_POST['invoice_is_enabled'];
 
             $value = json_encode([
                 'is_enabled' => $_POST['is_enabled'],
                 'type' => $_POST['type'],
+                'brand_name' => $_POST['brand_name'],
                 'currency' => $_POST['currency'],
                 'codes_is_enabled' => $_POST['codes_is_enabled'],
                 'taxes_and_billing_is_enabled' => $_POST['taxes_and_billing_is_enabled'],
-                'invoice_is_enabled' => $_POST['invoice_is_enabled'],
             ]);
 
             $this->update_settings('payment', $value);
@@ -352,10 +356,10 @@ class AdminSettings extends Controller {
             //ALTUMCODE:DEMO if(DEMO) Alerts::add_error('This command is blocked on the demo.');
 
             /* :) */
-            $_POST['brand_name'] = filter_var($_POST['brand_name'], FILTER_SANITIZE_STRING);
+            $_POST['invoice_is_enabled'] = (bool) $_POST['invoice_is_enabled'];
 
             $value = json_encode([
-                'brand_name' => $_POST['brand_name'],
+                'invoice_is_enabled' => $_POST['invoice_is_enabled'],
                 'invoice_nr_prefix' => $_POST['invoice_nr_prefix'],
                 'name' => $_POST['name'],
                 'address' => $_POST['address'],

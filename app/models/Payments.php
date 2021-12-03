@@ -26,7 +26,7 @@ class Payments extends Model {
                 db()->insert('redeemed_codes', [
                     'code_id'   => $codes_code->code_id,
                     'user_id'   => $user->user_id,
-                    'datetime'  => \Altum\Date::$date
+                    'date'      => \Altum\Date::$date
                 ]);
             }
 
@@ -39,10 +39,10 @@ class Payments extends Model {
     public function affiliate_payment_check($payment_id, $payment_total, $user) {
         if(\Altum\Plugin::is_active('affiliate') && settings()->affiliate->is_enabled && $user->referred_by) {
             if((settings()->affiliate->commission_type == 'once' && !$user->referred_by_has_converted) || settings()->affiliate->commission_type == 'forever') {
-                $referral_user = db()->where('user_id', $user->referred_by)->getOne('users', ['user_id', 'email', 'status']);
+                $referral_user = db()->where('user_id', $user->referred_by)->getOne('users', ['user_id', 'email', 'active']);
 
                 /* Make sure the referral user is active and existing */
-                if($referral_user && $referral_user->status == 1) {
+                if($referral_user && $referral_user->active == 1) {
                     $amount = number_format($payment_total * (float) settings()->affiliate->commission_percentage / 100, 2, '.', '');
 
                     /* Insert the affiliate commission */

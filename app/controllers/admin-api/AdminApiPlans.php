@@ -72,7 +72,7 @@ class AdminApiPlans extends Controller {
                 'taxes_ids' => json_decode($row->taxes_ids),
                 'color' => $row->color,
                 'status' => (int) $row->status,
-                'datetime' => $row->datetime,
+                'date' => $row->date,
             ];
 
             $data[] = $row;
@@ -130,7 +130,7 @@ class AdminApiPlans extends Controller {
                 'taxes_ids' => json_decode($plan->taxes_ids),
                 'color' => $plan->color,
                 'status' => (int) $plan->status,
-                'datetime' => $plan->datetime,
+                'date' => $plan->date,
             ];
         }
 

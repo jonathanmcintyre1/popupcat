@@ -16,11 +16,15 @@ class AdminCodes extends Controller {
 
     public function index() {
 
-        $codes = db()->get('codes');
+        $codes_result = database()->query("
+            SELECT `codes`.*, `plans`.`name` AS `plan_name`
+            FROM `codes`
+            LEFT JOIN `plans` ON `codes`.`plan_id` = `plans`.`plan_id`
+        ");
 
         /* Main View */
         $data = [
-            'codes' => $codes
+            'codes_result' => $codes_result
         ];
 
         $view = new \Altum\Views\View('admin/codes/index', (array) $this);

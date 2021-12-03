@@ -30,16 +30,9 @@
                     </div>
 
                     <div class="form-group">
-                        <label><?= language()->notification->settings->image ?></label>
+                        <label><?= language()->notification->create_review_data_modal->input->image ?></label>
                         <input type="hidden" class="form-control" name="key[]" value="image" required="required" />
                         <input type="text" class="form-control" name="value[]" required="required" />
-                    </div>
-
-                    <div class="form-group">
-                        <label for=""><?= language()->notification->settings->image_alt ?></label>
-                        <input type="hidden" class="form-control" name="key[]" value="image_alt" required="required" />
-                        <input type="text" class="form-control" name="value[]" required="required" maxlength="100" />
-                        <small class="form-text text-muted"><?= language()->notification->settings->image_alt_help ?></small>
                     </div>
 
                     <div class="form-group">

@@ -16,13 +16,13 @@
                     <form action="" method="post" class="mt-4" role="form">
                         <div class="form-group">
                             <label for="name"><?= language()->register->form->name ?></label>
-                            <input id="name" type="text" name="name" class="form-control form-control-lg <?= \Altum\Alerts::has_field_errors('name') ? 'is-invalid' : null ?>" value="<?= $data->values['name'] ?>" maxlength="32" placeholder="<?= language()->register->form->name_placeholder ?>" required="required" autofocus="autofocus" />
+                            <input id="name" type="text" name="name" class="form-control form-control-lg <?= \Altum\Alerts::has_field_errors('name') ? 'is-invalid' : null ?>" value="<?= $data->values['name'] ?>" placeholder="<?= language()->register->form->name_placeholder ?>" required="required" autofocus="autofocus" />
                             <?= \Altum\Alerts::output_field_error('name') ?>
                         </div>
 
                         <div class="form-group">
                             <label for="email"><?= language()->register->form->email ?></label>
-                            <input id="email" type="email" name="email" class="form-control form-control-lg <?= \Altum\Alerts::has_field_errors('email') ? 'is-invalid' : null ?>" value="<?= $data->values['email'] ?>" maxlength="128" placeholder="<?= language()->register->form->email_placeholder ?>" required="required" />
+                            <input id="email" type="email" name="email" class="form-control form-control-lg <?= \Altum\Alerts::has_field_errors('email') ? 'is-invalid' : null ?>" value="<?= $data->values['email'] ?>" placeholder="<?= language()->register->form->email_placeholder ?>" required="required" />
                             <?= \Altum\Alerts::output_field_error('email') ?>
                         </div>
 

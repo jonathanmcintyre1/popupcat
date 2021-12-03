@@ -2,7 +2,6 @@
 Chart.defaults.global.elements.line.borderWidth = 4;
 Chart.defaults.global.elements.point.radius = 3;
 Chart.defaults.global.elements.point.borderWidth = 6;
-Chart.defaults.global.elements.point.hoverBorderWidth = 7;
 
 let chart_css = window.getComputedStyle(document.body);
 
@@ -72,4 +71,3 @@ let chart_options = {
     responsive: true,
     maintainAspectRatio: false
 };
-

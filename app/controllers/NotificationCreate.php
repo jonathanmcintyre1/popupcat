@@ -39,6 +39,7 @@ class NotificationCreate extends Controller {
         if(!empty($_POST)) {
             $_POST['type'] = trim(Database::clean_string($_POST['type']));
             $_POST['campaign_id'] = (int) $_POST['campaign_id'];
+            $is_enabled = 0;
 
             /* Check for any errors */
             $required_fields = ['type', 'campaign_id'];
@@ -81,7 +82,7 @@ class NotificationCreate extends Controller {
                     'type' => $_POST['type'],
                     'settings' => $notification_settings,
                     'notification_key' => $notification_key,
-                    'is_enabled' => 0,
+                    'is_enabled' => $is_enabled,
                     'datetime' => \Altum\Date::$date,
                 ]);
 

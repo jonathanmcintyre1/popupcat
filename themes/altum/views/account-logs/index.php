@@ -20,7 +20,7 @@
             <div class="col-auto p-0 d-flex">
                 <div class="ml-3">
                     <div class="dropdown">
-                        <button type="button" class="btn rounded-pill btn-outline-secondary dropdown-toggle-simple" data-toggle="dropdown" data-boundary="viewport" title="<?= language()->global->export ?>">
+                        <button type="button" class="btn rounded-pill btn-outline-secondary dropdown-toggle-simple" data-toggle="dropdown" title="<?= language()->global->export ?>">
                             <i class="fa fa-fw fa-sm fa-download"></i>
                         </button>
 
@@ -37,7 +37,7 @@
 
                 <div class="ml-3">
                     <div class="dropdown">
-                        <button type="button" class="btn rounded-pill <?= count($data->filters->get) ? 'btn-outline-primary' : 'btn-outline-secondary' ?> filters-button dropdown-toggle-simple" data-toggle="dropdown" data-boundary="viewport"><i class="fa fa-fw fa-sm fa-filter"></i></button>
+                        <button type="button" class="btn rounded-pill <?= count($data->filters->get) ? 'btn-outline-primary' : 'btn-outline-secondary' ?> filters-button dropdown-toggle-simple" data-toggle="dropdown"><i class="fa fa-fw fa-sm fa-filter"></i></button>
 
                         <div class="dropdown-menu dropdown-menu-right filters-dropdown">
                             <div class="dropdown-header d-flex justify-content-between">
@@ -52,36 +52,36 @@
 
                             <form action="" method="get" role="form">
                                 <div class="form-group px-4">
-                                    <label for="filters_search" class="small"><?= language()->global->filters->search ?></label>
-                                    <input type="search" name="search" id="filters_search" class="form-control form-control-sm" value="<?= $data->filters->search ?>" />
+                                    <label for="search" class="small"><?= language()->global->filters->search ?></label>
+                                    <input type="search" name="search" id="search" class="form-control form-control-sm" value="<?= $data->filters->search ?>" />
                                 </div>
 
                                 <div class="form-group px-4">
-                                    <label for="filters_search_by" class="small"><?= language()->global->filters->search_by ?></label>
-                                    <select name="search_by" id="filters_search_by" class="form-control form-control-sm">
+                                    <label for="search_by" class="small"><?= language()->global->filters->search_by ?></label>
+                                    <select name="search_by" id="search_by" class="form-control form-control-sm">
                                         <option value="type" <?= $data->filters->search_by == 'type' ? 'selected="selected"' : null ?>><?= language()->account_logs->filters->search_by_type ?></option>
                                         <option value="ip" <?= $data->filters->search_by == 'ip' ? 'selected="selected"' : null ?>><?= language()->account_logs->filters->search_by_ip ?></option>
                                     </select>
                                 </div>
 
                                 <div class="form-group px-4">
-                                    <label for="filters_order_by" class="small"><?= language()->global->filters->order_by ?></label>
-                                    <select name="order_by" id="filters_order_by" class="form-control form-control-sm">
+                                    <label for="order_by" class="small"><?= language()->global->filters->order_by ?></label>
+                                    <select name="order_by" id="order_by" class="form-control form-control-sm">
                                         <option value="datetime" <?= $data->filters->order_by == 'datetime' ? 'selected="selected"' : null ?>><?= language()->global->filters->order_by_datetime ?></option>
                                     </select>
                                 </div>
 
                                 <div class="form-group px-4">
-                                    <label for="filters_order_type" class="small"><?= language()->global->filters->order_type ?></label>
-                                    <select name="order_type" id="filters_order_type" class="form-control form-control-sm">
+                                    <label for="order_type" class="small"><?= language()->global->filters->order_type ?></label>
+                                    <select name="order_type" id="order_type" class="form-control form-control-sm">
                                         <option value="ASC" <?= $data->filters->order_type == 'ASC' ? 'selected="selected"' : null ?>><?= language()->global->filters->order_type_asc ?></option>
                                         <option value="DESC" <?= $data->filters->order_type == 'DESC' ? 'selected="selected"' : null ?>><?= language()->global->filters->order_type_desc ?></option>
                                     </select>
                                 </div>
 
                                 <div class="form-group px-4">
-                                    <label for="filters_results_per_page" class="small"><?= language()->global->filters->results_per_page ?></label>
-                                    <select name="results_per_page" id="filters_results_per_page" class="form-control form-control-sm">
+                                    <label for="results_per_page" class="small"><?= language()->global->filters->results_per_page ?></label>
+                                    <select name="results_per_page" id="results_per_page" class="form-control form-control-sm">
                                         <?php foreach($data->filters->allowed_results_per_page as $key): ?>
                                             <option value="<?= $key ?>" <?= $data->filters->results_per_page == $key ? 'selected="selected"' : null ?>><?= $key ?></option>
                                         <?php endforeach ?>

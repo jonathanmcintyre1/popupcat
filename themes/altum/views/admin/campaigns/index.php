@@ -6,7 +6,7 @@
     <div class="col-auto d-flex">
         <div class="ml-3">
             <div class="dropdown">
-                <button type="button" class="btn btn-outline-secondary dropdown-toggle-simple" data-toggle="dropdown" data-boundary="viewport" title="<?= language()->global->export ?>">
+                <button type="button" class="btn btn-outline-secondary dropdown-toggle-simple" data-toggle="dropdown" title="<?= language()->global->export ?>">
                     <i class="fa fa-fw fa-sm fa-download"></i>
                 </button>
 
@@ -23,7 +23,7 @@
 
         <div class="ml-3">
             <div class="dropdown">
-                <button type="button" class="btn <?= count($data->filters->get) ? 'btn-outline-primary' : 'btn-outline-secondary' ?> filters-button dropdown-toggle-simple" data-toggle="dropdown" data-boundary="viewport"><i class="fa fa-fw fa-sm fa-filter"></i></button>
+                <button type="button" class="btn <?= count($data->filters->get) ? 'btn-outline-primary' : 'btn-outline-secondary' ?> filters-button dropdown-toggle-simple" data-toggle="dropdown"><i class="fa fa-fw fa-sm fa-filter"></i></button>
 
                 <div class="dropdown-menu dropdown-menu-right filters-dropdown">
                     <div class="dropdown-header d-flex justify-content-between">
@@ -38,21 +38,21 @@
 
                     <form action="" method="get" role="form">
                         <div class="form-group px-4">
-                            <label for="filters_search" class="small"><?= language()->global->filters->search ?></label>
-                            <input type="search" name="search" id="filters_search" class="form-control form-control-sm" value="<?= $data->filters->search ?>" />
+                            <label for="search" class="small"><?= language()->global->filters->search ?></label>
+                            <input type="search" name="search" id="search" class="form-control form-control-sm" value="<?= $data->filters->search ?>" />
                         </div>
 
                         <div class="form-group px-4">
-                            <label for="filters_search_by" class="small"><?= language()->global->filters->search_by ?></label>
-                            <select name="search_by" id="filters_search_by" class="form-control form-control-sm">
+                            <label for="search_by" class="small"><?= language()->global->filters->search_by ?></label>
+                            <select name="search_by" id="search_by" class="form-control form-control-sm">
                                 <option value="name" <?= $data->filters->search_by == 'name' ? 'selected="selected"' : null ?>><?= language()->admin_campaigns->filters->search_by_name ?></option>
                                 <option value="domain" <?= $data->filters->search_by == 'domain' ? 'selected="selected"' : null ?>><?= language()->admin_campaigns->filters->search_by_domain ?></option>
                             </select>
                         </div>
 
                         <div class="form-group px-4">
-                            <label for="filters_is_enabled" class="small"><?= language()->global->filters->status ?></label>
-                            <select name="is_enabled" id="filters_is_enabled" class="form-control form-control-sm">
+                            <label for="is_enabled" class="small"><?= language()->global->filters->status ?></label>
+                            <select name="is_enabled" id="is_enabled" class="form-control form-control-sm">
                                 <option value=""><?= language()->global->filters->all ?></option>
                                 <option value="1" <?= isset($data->filters->filters['is_enabled']) && $data->filters->filters['is_enabled'] == '1' ? 'selected="selected"' : null ?>><?= language()->global->active ?></option>
                                 <option value="0" <?= isset($data->filters->filters['is_enabled']) && $data->filters->filters['is_enabled'] == '0' ? 'selected="selected"' : null ?>><?= language()->global->disabled ?></option>
@@ -60,24 +60,24 @@
                         </div>
 
                         <div class="form-group px-4">
-                            <label for="filters_order_by" class="small"><?= language()->global->filters->order_by ?></label>
-                            <select name="order_by" id="filters_order_by" class="form-control form-control-sm">
+                            <label for="order_by" class="small"><?= language()->global->filters->order_by ?></label>
+                            <select name="order_by" id="order_by" class="form-control form-control-sm">
                                 <option value="datetime" <?= $data->filters->order_by == 'datetime' ? 'selected="selected"' : null ?>><?= language()->global->filters->order_by_datetime ?></option>
                                 <option value="name" <?= $data->filters->order_by == 'name' ? 'selected="selected"' : null ?>><?= language()->admin_campaigns->filters->order_by_name ?></option>
                             </select>
                         </div>
 
                         <div class="form-group px-4">
-                            <label for="filters_order_type" class="small"><?= language()->global->filters->order_type ?></label>
-                            <select name="order_type" id="filters_order_type" class="form-control form-control-sm">
+                            <label for="order_type" class="small"><?= language()->global->filters->order_type ?></label>
+                            <select name="order_type" id="order_type" class="form-control form-control-sm">
                                 <option value="ASC" <?= $data->filters->order_type == 'ASC' ? 'selected="selected"' : null ?>><?= language()->global->filters->order_type_asc ?></option>
                                 <option value="DESC" <?= $data->filters->order_type == 'DESC' ? 'selected="selected"' : null ?>><?= language()->global->filters->order_type_desc ?></option>
                             </select>
                         </div>
 
                         <div class="form-group px-4">
-                            <label for="filters_results_per_page" class="small"><?= language()->global->filters->results_per_page ?></label>
-                            <select name="results_per_page" id="filters_results_per_page" class="form-control form-control-sm">
+                            <label for="results_per_page" class="small"><?= language()->global->filters->results_per_page ?></label>
+                            <select name="results_per_page" id="results_per_page" class="form-control form-control-sm">
                                 <?php foreach($data->filters->allowed_results_per_page as $key): ?>
                                     <option value="<?= $key ?>" <?= $data->filters->results_per_page == $key ? 'selected="selected"' : null ?>><?= $key ?></option>
                                 <?php endforeach ?>
@@ -98,7 +98,7 @@
 
             <div id="bulk_group" class="btn-group d-none" role="group">
                 <div class="btn-group" role="group">
-                    <button id="bulk_actions" type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" data-boundary="viewport" aria-haspopup="true" aria-expanded="false">
+                    <button id="bulk_actions" type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <?= language()->global->bulk_actions ?> <span id="bulk_counter" class="d-none"></span>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="bulk_actions">

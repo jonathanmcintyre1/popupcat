@@ -63,8 +63,8 @@ class CampaignsAjax extends Controller {
 
     private function custom_branding() {
         $_POST['campaign_id'] = (int) $_POST['campaign_id'];
-        $_POST['name'] = mb_substr(trim(Database::clean_string($_POST['name'])), 0, 128);
-        $_POST['url'] = mb_substr(trim(Database::clean_string($_POST['url'])), 0, 2048);
+        $_POST['name'] = trim(Database::clean_string($_POST['name']));
+        $_POST['url'] = trim(Database::clean_string($_POST['url']));
 
         /* Make sure the user has access to the custom branding method */
         if(!$this->user->plan_settings->custom_branding) {
@@ -89,7 +89,7 @@ class CampaignsAjax extends Controller {
         /* Clear the cache */
         \Altum\Cache::$adapter->deleteItemsByTag('campaign_id=' . $_POST['campaign_id']);
 
-        Response::json(language()->global->success_message->update2, 'success');
+        Response::json(language()->global->success_message->basic, 'success');
     }
 
     private function create() {

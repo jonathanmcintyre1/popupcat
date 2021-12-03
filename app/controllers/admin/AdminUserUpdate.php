@@ -35,7 +35,7 @@ class AdminUserUpdate extends Controller {
         if(!empty($_POST)) {
             /* Filter some the variables */
             $_POST['name'] = filter_var($_POST['name'], FILTER_SANITIZE_STRING);
-            $_POST['status'] = (int) $_POST['status'];
+            $_POST['is_enabled'] = (int) $_POST['is_enabled'];
             $_POST['type'] = (int) $_POST['type'];
             $_POST['plan_trial_done'] = (int) $_POST['plan_trial_done'];
 
@@ -97,7 +97,7 @@ class AdminUserUpdate extends Controller {
             if(!Csrf::check()) {
                 Alerts::add_error(language()->global->error_message->invalid_csrf_token);
             }
-            if(mb_strlen($_POST['name']) < 3 || mb_strlen($_POST['name']) > 64) {
+            if(mb_strlen($_POST['name']) < 3 || mb_strlen($_POST['name']) > 32) {
                 Alerts::add_field_error('name', language()->admin_users->error_message->name_length);
             }
             if(filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) == false) {
@@ -123,7 +123,7 @@ class AdminUserUpdate extends Controller {
                 db()->where('user_id', $user->user_id)->update('users', [
                     'name' => $_POST['name'],
                     'email' => $_POST['email'],
-                    'status' => $_POST['status'],
+                    'active' => $_POST['is_enabled'],
                     'type' => $_POST['type'],
                     'plan_id' => $_POST['plan_id'],
                     'plan_expiration_date' => $_POST['plan_expiration_date'],

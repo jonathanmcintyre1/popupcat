@@ -42,9 +42,9 @@ class ResendActivation extends Controller {
             /* If there are no errors, resend the activation link */
             if(!Alerts::has_field_errors() && !Alerts::has_errors()) {
 
-                $user = db()->where('email', $_POST['email'])->getOne('users', ['user_id', 'status', 'name', 'email', 'language']);
+                $user = db()->where('email', $_POST['email'])->getOne('users', ['user_id', 'active', 'name', 'email', 'language']);
 
-                if($user && !$user->status) {
+                if($user && !$user->active) {
                     /* Generate new email code */
                     $email_code = md5($_POST['email'] . microtime());
 

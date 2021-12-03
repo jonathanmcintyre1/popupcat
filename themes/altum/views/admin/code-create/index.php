@@ -1,14 +1,5 @@
 <?php defined('ALTUMCODE') || die() ?>
 
-<nav aria-label="breadcrumb">
-    <ol class="custom-breadcrumbs small">
-        <li>
-            <a href="<?= url('admin/codes') ?>"><?= language()->admin_codes->breadcrumb ?></a><i class="fa fa-fw fa-angle-right"></i>
-        </li>
-        <li class="active" aria-current="page"><?= language()->admin_code_create->breadcrumb ?></li>
-    </ol>
-</nav>
-
 <div class="d-flex justify-content-between mb-4">
     <h1 class="h3 mb-0 mr-1"><i class="fa fa-fw fa-xs fa-tags text-primary-900 mr-2"></i> <?= language()->admin_code_create->header ?></h1>
 </div>
@@ -20,11 +11,6 @@
 
         <form action="" method="post" role="form">
             <input type="hidden" name="token" value="<?= \Altum\Middlewares\Csrf::get() ?>" />
-
-            <div class="form-group">
-                <label for="name"><?= language()->admin_codes->main->name ?></label>
-                <input type="text" id="name" name="name" class="form-control form-control-lg" required="required" />
-            </div>
 
             <div class="form-group">
                 <label for="type"><?= language()->admin_codes->main->type ?></label>
@@ -39,22 +25,40 @@
                 <input type="text" id="code" name="code" class="form-control form-control-lg" required="required" />
             </div>
 
-            <div id="discount_container" class="form-group">
-                <label for="discount"><?= language()->admin_codes->main->discount ?></label>
-                <input id="discount" type="number" min="1" max="99" name="discount" class="form-control form-control-lg" value="1" />
-                <small class="form-text text-muted"><?= language()->admin_codes->main->discount_help ?></small>
-            </div>
-
-            <div id="days_container" class="form-group">
-                <label for="days"><?= language()->admin_codes->main->days ?></label>
-                <input id="days" type="number" min="1" max="999999" name="days" class="form-control form-control-lg" value="1" />
-                <small class="form-text text-muted"><?= language()->admin_codes->main->days_help ?></small>
-            </div>
-
             <div class="form-group">
-                <label for="quantity"><?= language()->admin_codes->main->quantity ?></label>
-                <input type="number" min="1" id="quantity" name="quantity" class="form-control form-control-lg" value="1" />
-                <small class="form-text text-muted"><?= language()->admin_codes->main->quantity_help ?></small>
+                <label for="plan_id"><?= language()->admin_codes->main->plan_id ?></label>
+                <select id="plan_id" name="plan_id" class="form-control form-control-lg">
+                    <?php foreach($data->plans as $row): ?>
+                        <option value="<?= $row->plan_id ?>"><?= $row->name ?></option>
+                    <?php endforeach ?>
+
+                    <option value=""><?= language()->admin_codes->main->plan_id_null ?></option>
+                </select>
+                <small class="form-text text-muted"><?= language()->admin_codes->main->plan_id_help ?></small>
+            </div>
+
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <div id="discount_container" class="form-group">
+                        <label for="discount"><?= language()->admin_codes->main->discount ?></label>
+                        <input type="number" min="1" max="99" id="discount" name="discount" class="form-control form-control-lg" value="1" />
+                        <small class="form-text text-muted"><?= language()->admin_codes->main->discount_help ?></small>
+                    </div>
+
+                    <div id="days_container" class="form-group">
+                        <label for="days"><?= language()->admin_codes->main->days ?></label>
+                        <input type="number" min="1" max="999999" id="days" name="days" class="form-control form-control-lg" value="1" />
+                        <small class="form-text text-muted"><?= language()->admin_codes->main->days_help ?></small>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <div class="form-group">
+                        <label for="quantity"><?= language()->admin_codes->main->quantity ?></label>
+                        <input type="number" min="1" id="quantity" name="quantity" class="form-control form-control-lg" value="1" />
+                        <small class="form-text text-muted"><?= language()->admin_codes->main->quantity_help ?></small>
+                    </div>
+                </div>
             </div>
 
             <button type="submit" name="submit" class="btn btn-lg btn-block btn-primary mt-4"><?= language()->global->create ?></button>

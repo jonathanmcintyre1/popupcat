@@ -24,7 +24,7 @@ class PixelWebhook extends Controller {
         }
 
         /* Make sure the $notification_key belongs to an active user */
-        if(!db()->where('user_id', $notification->user_id)->where('status', 1)->getOne('users')) {
+        if(!db()->where('user_id', $notification->user_id)->where('active', 1)->getOne('users')) {
             die();
         }
 

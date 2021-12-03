@@ -6,7 +6,7 @@
         <div class="altumcode-email-collector-header">
             <p class="altumcode-email-collector-title" style="color: <?= $notification->settings->title_color ?>"><?= $notification->settings->title ?></p>
 
-            <button class="altumcode-close"></button>
+            <span class="altumcode-close"></span>
         </div>
         <p class="altumcode-email-collector-description" style="color: <?= $notification->settings->description_color ?>"><?= $notification->settings->description ?></p>
 
@@ -74,6 +74,7 @@ new AltumCodeManager({
 
                 /* Data collection from the form */
                 send_tracking_data({
+                    ...user,
                     notification_id: notification_id,
                     type: 'collector',
                     email

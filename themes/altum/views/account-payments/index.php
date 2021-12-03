@@ -20,7 +20,7 @@
             <div class="col-auto p-0 d-flex">
                 <div class="ml-3">
                     <div class="dropdown">
-                        <button type="button" class="btn btn-outline-secondary rounded-pill dropdown-toggle-simple" data-toggle="dropdown" data-boundary="viewport" title="<?= language()->global->export ?>">
+                        <button type="button" class="btn btn-outline-secondary rounded-pill dropdown-toggle-simple" data-toggle="dropdown" title="<?= language()->global->export ?>">
                             <i class="fa fa-fw fa-sm fa-download"></i>
                         </button>
 
@@ -37,7 +37,7 @@
 
                 <div class="ml-3">
                     <div class="dropdown">
-                        <button type="button" class="btn <?= count($data->filters->get) ? 'btn-outline-primary' : 'btn-outline-secondary' ?> rounded-pill filters-button dropdown-toggle-simple" data-toggle="dropdown" data-boundary="viewport"><i class="fa fa-fw fa-sm fa-filter"></i></button>
+                        <button type="button" class="btn <?= count($data->filters->get) ? 'btn-outline-primary' : 'btn-outline-secondary' ?> rounded-pill filters-button dropdown-toggle-simple" data-toggle="dropdown"><i class="fa fa-fw fa-sm fa-filter"></i></button>
 
                         <div class="dropdown-menu dropdown-menu-right filters-dropdown">
                             <div class="dropdown-header d-flex justify-content-between">
@@ -82,24 +82,24 @@
                                 </div>
 
                                 <div class="form-group px-4">
-                                    <label for="filters_order_by" class="small"><?= language()->global->filters->order_by ?></label>
-                                    <select name="order_by" id="filters_order_by" class="form-control form-control-sm">
-                                        <option value="datetime" <?= $data->filters->order_by == 'datetime' ? 'selected="selected"' : null ?>><?= language()->global->filters->order_by_datetime ?></option>
+                                    <label for="order_by" class="small"><?= language()->global->filters->order_by ?></label>
+                                    <select name="order_by" id="order_by" class="form-control form-control-sm">
+                                        <option value="date" <?= $data->filters->order_by == 'date' ? 'selected="selected"' : null ?>><?= language()->global->filters->order_by_datetime ?></option>
                                         <option value="total_amount" <?= $data->filters->order_by == 'total_amount' ? 'selected="selected"' : null ?>><?= language()->account_payments->filters->order_by_total_amount ?></option>
                                     </select>
                                 </div>
 
                                 <div class="form-group px-4">
-                                    <label for="filters_order_type" class="small"><?= language()->global->filters->order_type ?></label>
-                                    <select name="order_type" id="filters_order_type" class="form-control form-control-sm">
+                                    <label for="order_type" class="small"><?= language()->global->filters->order_type ?></label>
+                                    <select name="order_type" id="order_type" class="form-control form-control-sm">
                                         <option value="ASC" <?= $data->filters->order_type == 'ASC' ? 'selected="selected"' : null ?>><?= language()->global->filters->order_type_asc ?></option>
                                         <option value="DESC" <?= $data->filters->order_type == 'DESC' ? 'selected="selected"' : null ?>><?= language()->global->filters->order_type_desc ?></option>
                                     </select>
                                 </div>
 
                                 <div class="form-group px-4">
-                                    <label for="filters_results_per_page" class="small"><?= language()->global->filters->results_per_page ?></label>
-                                    <select name="results_per_page" id="filters_results_per_page" class="form-control form-control-sm">
+                                    <label for="results_per_page" class="small"><?= language()->global->filters->results_per_page ?></label>
+                                    <select name="results_per_page" id="results_per_page" class="form-control form-control-sm">
                                         <?php foreach($data->filters->allowed_results_per_page as $key): ?>
                                             <option value="<?= $key ?>" <?= $data->filters->results_per_page == $key ? 'selected="selected"' : null ?>><?= $key ?></option>
                                         <?php endforeach ?>
@@ -155,15 +155,15 @@
                         <td>
                             <div class="d-flex flex-column">
                                 <span><span class="text-success"><?= $row->total_amount ?></span> <?= $row->currency ?></span>
-                                <span class="text-muted"><span data-toggle="tooltip" title="<?= \Altum\Date::get($row->datetime, 1) ?>"><?= \Altum\Date::get($row->datetime, 2) ?></span></span>
+                                <span class="text-muted"><span data-toggle="tooltip" title="<?= \Altum\Date::get($row->date, 1) ?>"><?= \Altum\Date::get($row->date, 2) ?></span></span>
                             </div>
                         </td>
 
                         <?php if($row->status): ?>
-                            <?php if(settings()->payment->invoice_is_enabled): ?>
+                            <?php if(settings()->business->invoice_is_enabled): ?>
 
                                 <td>
-                                    <a href="<?= url('invoice/' . $row->id) ?>" class="btn btn-sm btn-outline-secondary" target="_blank">
+                                    <a href="<?= url('invoice/' . $row->id) ?>" class="btn btn-sm btn-outline-secondary">
                                         <i class="fa fa-fw fa-sm fa-file-invoice"></i> <?= language()->account_payments->payments->invoice ?>
                                     </a>
                                 </td>

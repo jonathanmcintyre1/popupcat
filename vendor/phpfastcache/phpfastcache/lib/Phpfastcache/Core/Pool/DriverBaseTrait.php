@@ -44,7 +44,7 @@ trait DriverBaseTrait
     protected $fallback = false;
 
     /**
-     * @var object Instance of driver service
+     * @var mixed Instance of driver service
      */
     protected $instance;
 

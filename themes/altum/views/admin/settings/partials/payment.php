@@ -28,6 +28,12 @@
         </div>
 
         <div class="form-group">
+            <label for="brand_name"><i class="fa fa-fw fa-sm fa-copyright text-muted mr-1"></i> <?= language()->admin_settings->payment->brand_name ?></label>
+            <input id="brand_name" type="text" name="brand_name" class="form-control form-control-lg" value="<?= settings()->payment->brand_name ?>" />
+            <small class="form-text text-muted"><?= language()->admin_settings->payment->brand_name_help ?></small>
+        </div>
+
+        <div class="form-group">
             <label for="currency"><i class="fa fa-fw fa-sm fa-coins text-muted mr-1"></i> <?= language()->admin_settings->payment->currency ?></label>
             <input id="currency" type="text" name="currency" class="form-control form-control-lg" value="<?= settings()->payment->currency ?>" />
             <small class="form-text text-muted"><?= language()->admin_settings->payment->currency_help ?></small>
@@ -49,15 +55,6 @@
                 <option value="0" <?= !settings()->payment->taxes_and_billing_is_enabled ? 'selected="selected"' : null ?>><?= language()->global->no ?></option>
             </select>
             <small class="form-text text-muted"><?= language()->admin_settings->payment->taxes_and_billing_is_enabled_help ?></small>
-        </div>
-
-        <div class="form-group">
-            <label for="invoice_is_enabled"><i class="fa fa-fw fa-sm fa-file-invoice text-muted mr-1"></i> <?= language()->admin_settings->payment->invoice_is_enabled ?></label>
-            <select id="invoice_is_enabled" name="invoice_is_enabled" class="form-control form-control-lg">
-                <option value="1" <?= settings()->payment->invoice_is_enabled ? 'selected="selected"' : null ?>><?= language()->global->yes ?></option>
-                <option value="0" <?= !settings()->payment->invoice_is_enabled ? 'selected="selected"' : null ?>><?= language()->global->no ?></option>
-            </select>
-            <small class="form-text text-muted"><?= language()->admin_settings->payment->invoice_is_enabled_help ?></small>
         </div>
     </div>
 </div>
