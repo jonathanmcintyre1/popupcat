@@ -1,23 +1,24 @@
 /* Overriding bootstrap defaults */
-$primary-900: hsl(168, 100%, 95%);
-$primary-800: hsl(170, 77%, 83%);
-$primary-700: hsl(172, 67%, 70%);
-$primary-600: hsl(174, 59%, 56%);
-$primary: hsl(177, 45%, 46%);
-$primary-400: hsl(179, 45%, 39%);
-$primary-300: hsl(181, 41%, 33%);
-$primary-200: hsl(183, 30%, 27%);
-$primary-100: hsl(185, 25%, 23%);
-$gray-900: hsl(204, 0%, 95%) !default;
-$gray-800: hsl(210, 0%, 86%) !default;
-$gray-700: hsl(214, 0%, 74%) !default;
-$gray-600: hsl(211, 0%, 67%) !default;
-$gray-500: hsl(214, 0%, 50%) !default;
-$gray-400: hsl(216, 0%, 39%) !default;
-$gray-300: hsl(218, 0%, 25%) !default;
-$gray-200: hsl(218, 0%, 19%) !default;
-$gray-100: hsl(220, 0%, 10%) !default;
-$gray-50: hsl(220, 0%, 7%) !default;
+$primary-900: hsl(264, 100%, 96%);
+$primary-800: hsl(265, 92%, 86%);
+$primary-700: hsl(265, 85%, 78%);
+$primary-600: hsl(265, 72%, 69%);
+$primary: hsl(264, 69%, 63%);
+$primary-400: hsl(261, 58%, 55%);
+$primary-300: hsl(255, 45%, 48%);
+$primary-200: hsl(255, 38%, 27%);
+$primary-100: hsl(255, 43%, 13%);
+
+$gray-900: hsl(204, 45%, 94%) !default;
+$gray-800: hsl(210, 38%, 87%) !default;
+$gray-700: hsl(214, 32%, 81%) !default;
+$gray-600: hsl(211, 25%, 67%) !default;
+$gray-500: hsl(214, 20%, 63%) !default;
+$gray-400: hsl(216, 15%, 41%) !default;
+$gray-300: hsl(218, 17%, 27%) !default;
+$gray-200: hsl(218, 21%, 18%) !default;
+$gray-100: hsl(220, 17%, 9%) !default;
+$gray-50: hsl(220, 15%, 5%) !default;
 
 $theme-colors: (
     "gray-50": $gray-50,
@@ -56,35 +57,30 @@ $spacers: (
         10: ($spacer * 10)
 );
 
-/* Font */
-$font-family-sans-serif: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-$font-weight-bold: 500;
-
 /* Overriding */
-$white: hsl(210, 7%, 8%);
+$white: hsl(220, 7%, 8%);
 $black: #fff;
 $text-muted: $gray-400;
 
-$body-bg: hsl(0, 0%, 5%);
+$body-bg: hsl(220, 2%, 5%);
 $body-color: $gray-800;
 
-$nav-pills-link-active-color: $black;
+$nav-pills-link-active-bg: $primary-900;
+$nav-pills-border-radius: 10rem;
 
 $yiq-text-dark: $gray-100;
 $yiq-text-light: $black;
 
+$nav-pills-link-active-bg: $primary-900;
+$nav-pills-border-radius: 10rem;
+
 $code-color: $primary;
-$link-color: $gray-800;
-$btn-border-width: 0px;
-$modal-backdrop-bg: black;
+$btn-border-width: 1px;
+$dropdown-border-width: 0;
 
 /* Inputs */
-$input-border-color: $gray-200;
+$input-border-color: $gray-300;
 $input-color: $gray-600;
-
-/* Cards */
-$card-border-width: 2px;
-$card-border-color: $gray-200;
 
 /* Shadows */
 $box-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
@@ -112,7 +108,7 @@ a:not(.dropdown-item):not(.btn):not(.nav-link) {
 }
 
 .form-control:hover {
-    border-color: $gray-300;
+    border-color: $gray-500;
 }
 
 /* Shadows */
@@ -133,6 +129,14 @@ a:not(.dropdown-item):not(.btn):not(.nav-link) {
     box-shadow: $box-shadow-lg;
 }
 
+.dropdown-item > svg {
+    color: $gray-700;
+}
+
+.dropdown-item:focus > svg {
+    color: inherit;
+}
+
 /* Animate dropdown menu */
 .dropdown .dropdown-menu{
     animation-name: opacityIn;
@@ -147,7 +151,7 @@ a:not(.dropdown-item):not(.btn):not(.nav-link) {
 /* Nav pills */
 .nav-pills {
     .nav-link {
-        color: $gray-600;
+        color: $primary-900;
     }
 }
 
@@ -163,10 +167,16 @@ code {
     border-style: solid;
 }
 
+/* Simple line */
+.line {
+    height: 1px;
+    flex-grow: 1;
+    background: var(--gray);
+}
+
 /* Extra variables */
 :root {
     --black: #{$black};
     --body-bg: #{$body-bg};
     --body-color: #{$body-color};
-    --footer-bg: hsl(210, 7%, 8%);
 }

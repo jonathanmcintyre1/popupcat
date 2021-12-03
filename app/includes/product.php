@@ -7,8 +7,7 @@
  *  except the official ones linked from https://altumcode.com/.
  */
 
-const PRODUCT_NAME = 'Biolinks';
-const PRODUCT_KEY = 'biolinks';
-const PRODUCT_URL = 'https://altumco.de/phpbiolinks';
-const PRODUCT_DOCUMENTATION_URL = 'https://altumco.de/phpbiolinks-docs';
-
+const PRODUCT_NAME = 'SocialProofo';
+const PRODUCT_KEY = 'socialproof';
+const PRODUCT_URL = 'https://altumco.de/socialproofo';
+const PRODUCT_DOCUMENTATION_URL = 'https://altumco.de/socialproofo-docs';

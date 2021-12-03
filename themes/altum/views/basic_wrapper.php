@@ -1,6 +1,6 @@
 <?php defined('ALTUMCODE') || die() ?>
 <!DOCTYPE html>
-<html lang="<?= \Altum\Language::$language_code ?>" dir="<?= language()->direction ?>" class="w-100 h-100">
+<html lang="<?= \Altum\Language::$language_code ?>" dir="<?= language()->direction ?>">
     <head>
         <title><?= \Altum\Title::get() ?></title>
         <base href="<?= SITE_URL; ?>">
@@ -32,10 +32,10 @@
             <link href="<?= UPLOADS_FULL_URL . 'favicon/' . settings()->favicon ?>" rel="shortcut icon" />
         <?php endif ?>
 
-        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap" rel="stylesheet">
 
         <link href="<?= ASSETS_FULL_URL . 'css/' . \Altum\ThemeStyle::get_file() . '?v=' . PRODUCT_CODE ?>" id="css_theme_style" rel="stylesheet" media="screen,print">
-        <?php foreach(['custom.css', 'link-custom.css', 'animate.min.css'] as $file): ?>
+        <?php foreach(['custom.css', 'animate.min.css', 'pixel.css'] as $file): ?>
             <link href="<?= ASSETS_FULL_URL . 'css/' . $file . '?v=' . PRODUCT_CODE ?>" rel="stylesheet" media="screen">
         <?php endforeach ?>
 
@@ -50,10 +50,11 @@
         <?php endif ?>
     </head>
 
-    <body class="<?= language()->direction == 'rtl' ? 'rtl' : null ?> basic-wrapper-body py-6" data-theme-style="<?= \Altum\ThemeStyle::get() ?>">
-        <?php require THEME_PATH . 'views/partials/announcements.php' ?>
+    <body class="<?= language()->direction == 'rtl' ? 'rtl' : null ?> <?= \Altum\Routing\Router::$controller_settings['body_white'] ? 'bg-white' : null ?>">
+    <?php require THEME_PATH . 'views/partials/announcements.php' ?>
 
-        <main class="animate__animated animate__fadeIn">
+        <main class="py-5" data-theme-style="<?= \Altum\ThemeStyle::get() ?>">
+
             <div class="container mb-5">
                 <div class="d-flex justify-content-center">
                     <a href="<?= url() ?>">
@@ -67,6 +68,7 @@
             </div>
 
             <?= $this->views['content'] ?>
+
         </main>
 
         <?php if(\Altum\Routing\Router::$controller_key != 'index'): ?>

@@ -39,47 +39,20 @@
             </a>
         </li>
 
-        <li class="<?= in_array(\Altum\Routing\Router::$controller, ['AdminLinks']) ? 'active' : null ?>">
-            <a class="nav-link d-flex flex-row" href="<?= url('admin/links') ?>">
-                <div class="col-1 d-flex align-items-center"><i class="fa fa-fw fa-sm fa-link"></i></div>
+        <li class="<?= \Altum\Routing\Router::$controller == 'AdminCampaigns' ? 'active' : null ?>">
+            <a class="nav-link d-flex flex-row" href="<?= url('admin/campaigns') ?>">
+                <div class="col-1 d-flex align-items-center"><i class="fa fa-fw fa-sm fa-server"></i></div>
                 <div class="col">
-                    <span class="d-inline"><?= language()->admin_links->menu ?></span>
+                    <span class="d-inline"><?= language()->admin_campaigns->menu ?></span>
                 </div>
             </a>
         </li>
 
-        <li class="<?= in_array(\Altum\Routing\Router::$controller, ['AdminProjects']) ? 'active' : null ?>">
-            <a class="nav-link d-flex flex-row" href="<?= url('admin/projects') ?>">
-                <div class="col-1 d-flex align-items-center"><i class="fa fa-fw fa-sm fa-project-diagram"></i></div>
+        <li class="<?= \Altum\Routing\Router::$controller == 'AdminNotifications' ? 'active' : null ?>">
+            <a class="nav-link d-flex flex-row" href="<?= url('admin/notifications') ?>">
+                <div class="col-1 d-flex align-items-center"><i class="fa fa-fw fa-sm fa-bell"></i></div>
                 <div class="col">
-                    <span class="d-inline"><?= language()->admin_projects->menu ?></span>
-                </div>
-            </a>
-        </li>
-
-        <li class="<?= in_array(\Altum\Routing\Router::$controller, ['AdminPixels']) ? 'active' : null ?>">
-            <a class="nav-link d-flex flex-row" href="<?= url('admin/pixels') ?>">
-                <div class="col-1 d-flex align-items-center"><i class="fa fa-fw fa-sm fa-adjust"></i></div>
-                <div class="col">
-                    <span class="d-inline"><?= language()->admin_pixels->menu ?></span>
-                </div>
-            </a>
-        </li>
-
-        <li class="<?= in_array(\Altum\Routing\Router::$controller, ['AdminQrCodes']) ? 'active' : null ?>">
-            <a class="nav-link d-flex flex-row" href="<?= url('admin/qr-codes') ?>">
-                <div class="col-1 d-flex align-items-center"><i class="fa fa-fw fa-sm fa-qrcode"></i></div>
-                <div class="col">
-                    <span class="d-inline"><?= language()->admin_qr_codes->menu ?></span>
-                </div>
-            </a>
-        </li>
-
-        <li class="<?= in_array(\Altum\Routing\Router::$controller, ['AdminDomains', 'AdminDomainCreate', 'AdminDomainUpdate']) ? 'active' : null ?>">
-            <a class="nav-link d-flex flex-row" href="<?= url('admin/domains') ?>">
-                <div class="col-1 d-flex align-items-center"><i class="fa fa-fw fa-sm fa-globe"></i></div>
-                <div class="col">
-                    <span class="d-inline"><?= language()->admin_domains->menu ?></span>
+                    <span class="d-inline"><?= language()->admin_notifications->menu ?></span>
                 </div>
             </a>
         </li>
@@ -102,7 +75,7 @@
             </a>
         </li>
 
-        <?php if(in_array(settings()->license->type, ['SPECIAL','Extended License'])): ?>
+       
         <li class="<?= in_array(\Altum\Routing\Router::$controller, ['AdminCodes', 'AdminCodeCreate', 'AdminCodeUpdate']) ? 'active' : null ?>">
             <a class="nav-link d-flex flex-row" href="<?= url('admin/codes') ?>">
                 <div class="col-1 d-flex align-items-center"><i class="fa fa-fw fa-sm fa-tags"></i></div>
@@ -131,16 +104,16 @@
         </li>
 
             <?php if(\Altum\Plugin::is_active('affiliate')): ?>
-            <li class="<?= \Altum\Routing\Router::$controller == 'AdminAffiliatesWithdrawals' ? 'active' : null ?>">
-                <a class="nav-link d-flex flex-row" href="<?= url('admin/affiliates-withdrawals') ?>">
-                    <div class="col-1 d-flex align-items-center"><i class="fa fa-fw fa-sm fa-wallet"></i></div>
-                    <div class="col">
-                        <span class="d-inline"><?= language()->admin_affiliates_withdrawals->menu ?></span>
-                    </div>
-                </a>
-            </li>
+                <li class="<?= \Altum\Routing\Router::$controller == 'AdminAffiliatesWithdrawals' ? 'active' : null ?>">
+                    <a class="nav-link d-flex flex-row" href="<?= url('admin/affiliates-withdrawals') ?>">
+                        <div class="col-1 d-flex align-items-center"><i class="fa fa-fw fa-sm fa-wallet"></i></div>
+                        <div class="col">
+                            <span class="d-inline"><?= language()->admin_affiliates_withdrawals->menu ?></span>
+                        </div>
+                    </a>
+                </li>
             <?php endif ?>
-        <?php endif ?>
+    
 
         <li class="<?= \Altum\Routing\Router::$controller == 'AdminStatistics' ? 'active' : null ?>">
             <a class="nav-link d-flex flex-row" href="<?= url('admin/statistics') ?>">
@@ -193,7 +166,7 @@
 
         <li class="dropdown">
             <a class="nav-link d-flex flex-row dropdown-toggle dropdown-toggle-simple" data-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="false">
-                <div class="col-1 d-flex align-items-center"><img src="<?= get_gravatar($this->user->email) ?>" class="admin-avatar" loading="lazy" /></div>
+                <div class="col-1 d-flex align-items-center"><img src="<?= get_gravatar($this->user->email) ?>" class="admin-avatar" /></div>
                 <div class="col text-truncate">
                     <span class="d-inline"><?= $this->user->name ?></span>
                 </div>

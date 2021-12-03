@@ -26,19 +26,24 @@ require_once ROOT_PATH . 'config.php';
 define('COOKIE_PATH', preg_replace('|https?://[^/]+|i', '', SITE_URL));
 
 /* Determine if we should set the samesite=strict */
+$samesite_strict = isset($_GET['altum']) && mb_strpos($_GET['altum'], 'pixel') === 0;
+
 session_set_cookie_params([
     'lifetime' => null,
     'path' => COOKIE_PATH,
-    'samesite' => 'Lax'
+    'samesite' => $samesite_strict ? 'Strict' : 'Lax'
 ]);
 
 /* Only start a session handler if we need to */
 $should_start_session = !isset($_GET['altum'])
     || (
         isset($_GET['altum'])
+        && !(mb_strpos($_GET['altum'], 'pixel') === 0)
+        && !(mb_strpos($_GET['altum'], 'pixel-track') === 0)
         && !(mb_strpos($_GET['altum'], 'cron') === 0)
         && !(mb_strpos($_GET['altum'], 'sitemap') === 0)
     );
+
 
 if($should_start_session) {
     session_start();
@@ -78,18 +83,13 @@ require_once APP_PATH . 'models/Page.php';
 require_once APP_PATH . 'models/User.php';
 require_once APP_PATH . 'models/Payments.php';
 require_once APP_PATH . 'models/Settings.php';
-require_once APP_PATH . 'models/Domain.php';
-require_once APP_PATH . 'models/Project.php';
-require_once APP_PATH . 'models/Pixel.php';
-require_once APP_PATH . 'models/Link.php';
-require_once APP_PATH . 'models/BiolinkBlock.php';
-require_once APP_PATH . 'models/QrCode.php';
+require_once APP_PATH . 'models/Campaign.php';
 
 /* Load some helpers */
 require_once APP_PATH . 'helpers/Cache.php';
 require_once APP_PATH . 'helpers/ThemeStyle.php';
 require_once APP_PATH . 'helpers/Event.php';
-require_once APP_PATH . 'helpers/Link.php';
+require_once APP_PATH . 'helpers/Notification.php';
 require_once APP_PATH . 'helpers/Date.php';
 require_once APP_PATH . 'helpers/Captcha.php';
 require_once APP_PATH . 'helpers/Response.php';
@@ -103,10 +103,9 @@ require_once APP_PATH . 'helpers/Filters.php';
 require_once APP_PATH . 'helpers/Alerts.php';
 require_once APP_PATH . 'helpers/core.php';
 require_once APP_PATH . 'helpers/Paypal.php';
-require_once APP_PATH . 'helpers/Paystack.php';
 require_once APP_PATH . 'helpers/Coinbase.php';
+require_once APP_PATH . 'helpers/socialproofo.php';
 require_once APP_PATH . 'helpers/Uploads.php';
-require_once APP_PATH . 'helpers/phpbiolinks.php';
 
 /* Autoload for vendor */
 require_once ROOT_PATH . 'vendor/autoload.php';

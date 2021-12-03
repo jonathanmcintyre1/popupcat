@@ -22,12 +22,6 @@ class App {
 
     public function __construct() {
 
-        /* Connect to the database */
-        Database\Database::initialize();
-
-        /* Initialize caching system */
-        Cache::initialize();
-
         /* Initiate the Language system */
         Language::initialize(APP_PATH . 'languages/');
 
@@ -52,15 +46,21 @@ class App {
         /* Get the remaining params */
         $params = Router::get_params();
 
-        /* Check for Preflight requests for the tracking of submissions from biolink pages */
-        if(in_array(Router::$controller, ['Link'])) {
+        /* Check for Preflight requests for the tracking pixel */
+        if(in_array(Router::$controller, ['PixelTrack', 'PixelWebhook'])) {
             header('Access-Control-Allow-Origin: *');
-            header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+            header('Access-Control-Allow-Methods: POST, OPTIONS');
             header('Access-Control-Allow-Headers: Content-Type');
 
             /* Check if preflight request */
             if($_SERVER['REQUEST_METHOD'] == 'OPTIONS') die();
         }
+
+        /* Connect to the database */
+        Database\Database::initialize();
+
+        /* Initialize caching system */
+        Cache::initialize();
 
         /* Get the website settings */
         $settings = (new Settings())->get();
@@ -112,7 +112,7 @@ class App {
                 \Altum\Cache::$adapter->deleteItemsByTag('user_id=' .  Authentication::$user_id);
 
                 /* Make sure to redirect the person to the payment page and only let the person access the following pages */
-                if(!in_array(Router::$controller_key, ['plan', 'pay', 'pay-billing', 'pay-thank-you', 'account', 'account-plan', 'account-payments', 'account-logs', 'logout', 'register']) && Router::$path != 'admin') {
+                if(!in_array(Router::$controller_key, ['plan', 'pay', 'pay-billing', 'account', 'account-plan', 'account-payments', 'account-logs', 'logout', 'register']) && Router::$path != 'admin') {
                     redirect('plan/new');
                 }
             }

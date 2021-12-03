@@ -9,24 +9,7 @@
 
 namespace Altum\Controllers;
 
-use Altum\Models\User;
-
 class Cron extends Controller {
-
-    private function update_cron_execution_datetimes($key) {
-        /* Get non-cached values from the database */
-        $settings_cron = json_decode(db()->where('`key`', 'cron')->getValue('settings', 'value'));
-
-        $new_settings_cron_array = [
-            'key' => $settings_cron->key,
-            'cron_datetime' => $settings_cron->cron_datetime ?? \Altum\Date::$date,
-        ];
-
-        $new_settings_cron_array[$key] = \Altum\Date::$date;
-
-        /* Update database */
-        db()->where('`key`', 'cron')->update('settings', ['value' => json_encode($new_settings_cron_array)]);
-    }
 
     public function index() {
 
@@ -38,120 +21,44 @@ class Cron extends Controller {
             die();
         }
 
-        $this->users_deletion_reminder();
-
-        $this->auto_delete_inactive_users();
+        $date = \Altum\Date::$date;
 
         $this->users_plan_expiry_reminder();
 
-        $this->users_logs_cleanup();
-
-        $this->statistics_cleanup();
-
-        $this->update_cron_execution_datetimes('cron_datetime');
-
-    }
-
-    private function users_deletion_reminder() {
-        if(!settings()->main->auto_delete_inactive_users) {
-            return;
-        }
-
-        /* Determine when to send the email reminder */
-        $days_until_deletion = settings()->main->user_deletion_reminder;
-        $days = settings()->main->auto_delete_inactive_users - $days_until_deletion;
-        $past_date = (new \DateTime())->modify('-' . $days . ' days')->format('Y-m-d H:i:s');
-
-        /* Get the users that need to be reminded */
-        $result = database()->query("
-            SELECT `user_id`, `name`, `email`, `language` FROM `users` WHERE `plan_id` = 'free' AND `last_activity` < '{$past_date}' AND `user_deletion_reminder` = 0 AND `type` = 0 LIMIT 25
-        ");
-
-        /* Go through each result */
-        while($user = $result->fetch_object()) {
-
-            /* Get the language for the user */
-            $language = language($user->language);
-
-            /* Prepare the email */
-            $email_template = get_email_template(
-                [
-                    '{{DAYS_UNTIL_DELETION}}' => $days_until_deletion,
-                ],
-                $language->global->emails->user_deletion_reminder->subject,
-                [
-                    '{{DAYS_UNTIL_DELETION}}' => $days_until_deletion,
-                    '{{LOGIN_LINK}}' => url('login'),
-                    '{{NAME}}' => $user->name,
-                ],
-                $language->global->emails->user_deletion_reminder->body
-            );
-
-            if(settings()->main->user_deletion_reminder) {
-                send_mail($user->email, $email_template->subject, $email_template->body);
-            }
-
-            /* Update user */
-            db()->where('user_id', $user->user_id)->update('users', ['user_deletion_reminder' => 1]);
-
-            if(DEBUG) {
-                if(settings()->main->user_deletion_reminder) echo sprintf('User deletion reminder email sent for user_id %s', $user->user_id);
-            }
-        }
-
-    }
-
-    private function auto_delete_inactive_users() {
-        if(!settings()->main->auto_delete_inactive_users) {
-            return;
-        }
-
-        /* Determine what users to delete */
-        $days = settings()->main->auto_delete_inactive_users;
-        $past_date = (new \DateTime())->modify('-' . $days . ' days')->format('Y-m-d H:i:s');
-
-        /* Get the users that need to be reminded */
-        $result = database()->query("
-            SELECT `user_id`, `name`, `email`, `language` FROM `users` WHERE `plan_id` = 'free' AND `last_activity` < '{$past_date}' AND `user_deletion_reminder` = 1 AND `type` = 0 LIMIT 25
-        ");
-
-        /* Go through each result */
-        while($user = $result->fetch_object()) {
-
-            /* Get the language for the user */
-            $language = language($user->language);
-
-            /* Prepare the email */
-            $email_template = get_email_template(
-                [],
-                $language->global->emails->auto_delete_inactive_users->subject,
-                [
-                    '{{INACTIVITY_DAYS}}' => settings()->main->auto_delete_inactive_users,
-                    '{{REGISTER_LINK}}' => url('register'),
-                    '{{NAME}}' => $user->name,
-                ],
-                $language->global->emails->auto_delete_inactive_users->body
-            );
-
-            send_mail($user->email, $email_template->subject, $email_template->body);
-
-            /* Delete user */
-            (new User())->delete($user->user_id);
-
-            if(DEBUG) {
-                echo sprintf('User deletion for inactivity user_id %s', $user->user_id);
-            }
-        }
-
-    }
-
-    private function users_logs_cleanup() {
         /* Delete old users logs */
         $ninety_days_ago_datetime = (new \DateTime())->modify('-90 days')->format('Y-m-d H:i:s');
-        db()->where('datetime', $ninety_days_ago_datetime, '<')->delete('users_logs');
+        database()->query("DELETE FROM `users_logs` WHERE `datetime` < '{$ninety_days_ago_datetime}'");
+
+        /* Update cron job last run date */
+        $new_cron = json_encode(array_merge((array) settings()->cron, ['cron_datetime' => $date]));
+        db()->where('`key`', 'cron')->update('settings', ['value' => $new_cron]);
+
+        /* Make sure the reset date month is different than the current one to avoid double resetting */
+        $reset_date = (new \DateTime(settings()->cron->reset_date))->format('m');
+        $current_date = (new \DateTime())->format('m');
+
+        if($reset_date != $current_date) {
+            /* Reset the users notification impressions */
+            database()->query("UPDATE `users` SET `current_month_notifications_impressions` = 0");
+
+            $this->notifications_logs_cleanup();
+
+            /* Update the settings with the updated time */
+            $new_cron = json_encode(array_merge((array) settings()->cron, ['reset_date' => $date]));
+
+            /* Database query */
+            db()->where('`key`', 'cron')->update('settings', ['value' => $new_cron]);
+
+            /* Clear the cache */
+            \Altum\Cache::$adapter->deleteItem('settings');
+        }
     }
 
-    private function statistics_cleanup() {
+    private function notifications_logs_cleanup() {
+
+        /* Clean the track_logs table */
+        $activity_date = (new \DateTime())->modify('-30 day')->format('Y-m-d H:i:s');
+        database()->query("DELETE FROM `track_logs` WHERE `datetime` < '{$activity_date}'");
 
         /* Clean the track notifications table based on the users plan */
         $result = database()->query("SELECT `user_id`, `plan_settings` FROM `users` WHERE `status` = 1");
@@ -160,14 +67,14 @@ class Cron extends Controller {
         while($user = $result->fetch_object()) {
             $user->plan_settings = json_decode($user->plan_settings);
 
-            if($user->plan_settings->track_links_retention == -1) continue;
+            if($user->plan_settings->track_notifications_retention == -1) continue;
 
             /* Clear out old notification statistics logs */
-            $x_days_ago_datetime = (new \DateTime())->modify('-' . ($row->plan_settings->track_links_retention ?? 90) . ' days')->format('Y-m-d H:i:s');
-            database()->query("DELETE FROM `statistics` WHERE `datetime` < '{$x_days_ago_datetime}'");
+            $x_days_ago_datetime = (new \DateTime())->modify('-' . ($row->plan_settings->track_notifications_retention ?? 90) . ' days')->format('Y-m-d H:i:s');
+            database()->query("DELETE FROM `track_notifications` WHERE `datetime` < '{$x_days_ago_datetime}'");
 
             if(DEBUG) {
-                echo sprintf('Statistics cleanup done for user_id %s', $user->user_id);
+                echo sprintf('Track notifications cleanup done for user_id %s', $user->user_id);
             }
         }
 
@@ -179,7 +86,6 @@ class Cron extends Controller {
         $days = 5;
         $future_date = (new \DateTime())->modify('+' . $days . ' days')->format('Y-m-d H:i:s');
 
-        /* Get potential monitors from users that have almost all the conditions to get an email report right now */
         $result = database()->query("
             SELECT
                 `user_id`,

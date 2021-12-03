@@ -9,8 +9,6 @@
 
 namespace Altum\Controllers;
 
-use Altum\Title;
-
 class ApiDocumentation extends Controller {
 
     public function index() {
@@ -22,115 +20,6 @@ class ApiDocumentation extends Controller {
 
     }
 
-    public function user() {
-
-        Title::set(language()->api_documentation->user->title);
-
-        /* Prepare the View */
-        $view = new \Altum\Views\View('api-documentation/user', (array) $this);
-
-        $this->add_view_content('content', $view->run());
-
-    }
-
-    public function links() {
-
-        Title::set(language()->api_documentation->links->title);
-
-        /* Prepare the View */
-        $view = new \Altum\Views\View('api-documentation/links', (array) $this);
-
-        $this->add_view_content('content', $view->run());
-
-    }
-
-    public function statistics() {
-
-        Title::set(language()->api_documentation->statistics->title);
-
-        /* Prepare the View */
-        $view = new \Altum\Views\View('api-documentation/statistics', (array) $this);
-
-        $this->add_view_content('content', $view->run());
-
-    }
-
-    public function projects() {
-
-        Title::set(language()->api_documentation->projects->title);
-
-        /* Prepare the View */
-        $view = new \Altum\Views\View('api-documentation/projects', (array) $this);
-
-        $this->add_view_content('content', $view->run());
-
-    }
-
-    public function pixels() {
-
-        Title::set(language()->api_documentation->pixels->title);
-
-        /* Prepare the View */
-        $view = new \Altum\Views\View('api-documentation/pixels', (array) $this);
-
-        $this->add_view_content('content', $view->run());
-
-    }
-
-    public function qr_codes() {
-
-        Title::set(language()->api_documentation->qr_codes->title);
-
-        /* Prepare the View */
-        $view = new \Altum\Views\View('api-documentation/qr_codes', (array) $this);
-
-        $this->add_view_content('content', $view->run());
-
-    }
-
-    public function data() {
-
-        Title::set(language()->api_documentation->data->title);
-
-        /* Prepare the View */
-        $view = new \Altum\Views\View('api-documentation/data', (array) $this);
-
-        $this->add_view_content('content', $view->run());
-
-    }
-
-    public function domains() {
-
-        Title::set(language()->api_documentation->domains->title);
-
-        /* Prepare the View */
-        $view = new \Altum\Views\View('api-documentation/domains', (array) $this);
-
-        $this->add_view_content('content', $view->run());
-
-    }
-
-    public function payments() {
-
-        Title::set(language()->api_documentation->payments->title);
-
-        /* Prepare the View */
-        $view = new \Altum\Views\View('api-documentation/payments', (array) $this);
-
-        $this->add_view_content('content', $view->run());
-
-    }
-
-    public function users_logs() {
-
-        Title::set(language()->api_documentation->users_logs->title);
-
-        /* Prepare the View */
-        $view = new \Altum\Views\View('api-documentation/users_logs', (array) $this);
-
-        $this->add_view_content('content', $view->run());
-
-    }
 }
 
 

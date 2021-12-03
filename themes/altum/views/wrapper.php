@@ -42,10 +42,10 @@
             <link href="<?= UPLOADS_FULL_URL . 'favicon/' . settings()->favicon ?>" rel="shortcut icon" />
         <?php endif ?>
 
-        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap" rel="stylesheet">
 
         <link href="<?= ASSETS_FULL_URL . 'css/' . \Altum\ThemeStyle::get_file() . '?v=' . PRODUCT_CODE ?>" id="css_theme_style" rel="stylesheet" media="screen,print">
-        <?php foreach(['custom.css', 'link-custom.css', 'animate.min.css'] as $file): ?>
+        <?php foreach(['custom.css', 'animate.min.css'] as $file): ?>
             <link href="<?= ASSETS_FULL_URL . 'css/' . $file . '?v=' . PRODUCT_CODE ?>" rel="stylesheet" media="screen,print">
         <?php endforeach ?>
 
@@ -61,15 +61,13 @@
     </head>
 
     <body class="<?= language()->direction == 'rtl' ? 'rtl' : null ?> <?= \Altum\Routing\Router::$controller_settings['body_white'] ? 'bg-white' : null ?>" data-theme-style="<?= \Altum\ThemeStyle::get() ?>">
-    <?php //ALTUMCODE:DEMO if(DEMO) echo include_view(THEME_PATH . 'views/partials/ac_banner.php', ['demo_url' => 'https://phpbiolinks.com/demo/', 'title_text' => 'phpBiolinks by AltumCode', 'product_url' => 'https://altumco.de/phpbiolinks-buy', 'buy_text' => 'Buy phpBiolinks']) ?>
+        <?php //ALTUMCODE:DEMO if(DEMO) echo include_view(THEME_PATH . 'views/partials/ac_banner.php', ['demo_url' => 'https://socialproofo.com/demo/', 'title_text' => 'SocialProofo by AltumCode', 'product_url' => 'https://altumco.de/socialproofo-buy', 'buy_text' => 'Buy SocialProofo']) ?>
 
-    <?php require THEME_PATH . 'views/partials/announcements.php' ?>
+        <?php require THEME_PATH . 'views/partials/announcements.php' ?>
 
-        <?php if(\Altum\Routing\Router::$controller_key != 'index'): ?>
-            <?= $this->views['menu'] ?>
-        <?php endif ?>
+        <?= $this->views['menu'] ?>
 
-        <main class="animate__animated animate__fadeIn">
+        <main class="">
 
             <?= $this->views['content'] ?>
 
@@ -85,7 +83,7 @@
 
         <?php require THEME_PATH . 'views/partials/js_global_variables.php' ?>
 
-        <?php foreach(['libraries/jquery.min.js', 'libraries/popper.min.js', 'libraries/bootstrap.min.js', 'main.js', 'functions.js', 'libraries/fontawesome-all.min.js'] as $file): ?>
+        <?php foreach(['libraries/jquery.min.js', 'libraries/popper.min.js', 'libraries/bootstrap.min.js', 'main.js', 'functions.js', 'libraries/fontawesome.min.js', 'libraries/fontawesome-solid.min.js', 'libraries/fontawesome-brands.modified.js'] as $file): ?>
             <script src="<?= ASSETS_FULL_URL ?>js/<?= $file ?>?v=<?= PRODUCT_CODE ?>"></script>
         <?php endforeach ?>
 

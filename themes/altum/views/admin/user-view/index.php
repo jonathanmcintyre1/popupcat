@@ -181,13 +181,13 @@
     <div class="col-12 col-sm-6 col-xl-3 mb-4 position-relative">
         <div class="card d-flex flex-row h-100 overflow-hidden">
             <div class="card-body">
-                <small class="text-muted"><i class="fa fa-fw fa-sm fa-hashtag mr-1"></i> <?= language()->admin_user_view->biolink_links ?></small>
+                <small class="text-muted"><i class="fa fa-fw fa-sm fa-server mr-1"></i> <?= language()->admin_user_view->campaigns ?></small>
 
-                <div class="mt-3"><span class="h4"><?= nr($data->biolink_links) ?></span></div>
+                <div class="mt-3"><span class="h4"><?= nr($data->campaigns) ?></span></div>
             </div>
 
             <div class="bg-gray-200 px-2 d-flex flex-column justify-content-center">
-                <a href="<?= url('admin/links?type=biolink&user_id=' . $data->user->user_id) ?>" class="stretched-link">
+                <a href="<?= url('admin/campaigns?user_id=' . $data->user->user_id) ?>" class="stretched-link">
                     <i class="fa fa-fw fa-angle-right text-gray-500"></i>
                 </a>
             </div>
@@ -197,77 +197,13 @@
     <div class="col-12 col-sm-6 col-xl-3 mb-4 position-relative">
         <div class="card d-flex flex-row h-100 overflow-hidden">
             <div class="card-body">
-                <small class="text-muted"><i class="fa fa-fw fa-sm fa-link mr-1"></i> <?= language()->admin_user_view->shortened_links ?></small>
+                <small class="text-muted"><i class="fa fa-fw fa-sm fa-bell mr-1"></i> <?= language()->admin_user_view->notifications ?></small>
 
-                <div class="mt-3"><span class="h4"><?= nr($data->shortened_links) ?></span></div>
+                <div class="mt-3"><span class="h4"><?= nr($data->notifications) ?></span></div>
             </div>
 
             <div class="bg-gray-200 px-2 d-flex flex-column justify-content-center">
-                <a href="<?= url('admin/links?type=link&user_id=' . $data->user->user_id) ?>" class="stretched-link">
-                    <i class="fa fa-fw fa-angle-right text-gray-500"></i>
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-12 col-sm-6 col-xl-3 mb-4 position-relative">
-        <div class="card d-flex flex-row h-100 overflow-hidden">
-            <div class="card-body">
-                <small class="text-muted"><i class="fa fa-fw fa-sm fa-project-diagram mr-1"></i> <?= language()->admin_user_view->projects ?></small>
-
-                <div class="mt-3"><span class="h4"><?= nr($data->projects) ?></span></div>
-            </div>
-
-            <div class="bg-gray-200 px-2 d-flex flex-column justify-content-center">
-                <a href="<?= url('admin/projects?user_id=' . $data->user->user_id) ?>" class="stretched-link">
-                    <i class="fa fa-fw fa-angle-right text-gray-500"></i>
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-12 col-sm-6 col-xl-3 mb-4 position-relative">
-        <div class="card d-flex flex-row h-100 overflow-hidden">
-            <div class="card-body">
-                <small class="text-muted"><i class="fa fa-fw fa-sm fa-adjust mr-1"></i> <?= language()->admin_user_view->pixels ?></small>
-
-                <div class="mt-3"><span class="h4"><?= nr($data->pixels) ?></span></div>
-            </div>
-
-            <div class="bg-gray-200 px-2 d-flex flex-column justify-content-center">
-                <a href="<?= url('admin/pixels?user_id=' . $data->user->user_id) ?>" class="stretched-link">
-                    <i class="fa fa-fw fa-angle-right text-gray-500"></i>
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-12 col-sm-6 col-xl-3 mb-4 position-relative">
-        <div class="card d-flex flex-row h-100 overflow-hidden">
-            <div class="card-body">
-                <small class="text-muted"><i class="fa fa-fw fa-sm fa-qrcode mr-1"></i> <?= language()->admin_user_view->qr_codes ?></small>
-
-                <div class="mt-3"><span class="h4"><?= nr($data->qr_codes) ?></span></div>
-            </div>
-
-            <div class="bg-gray-200 px-2 d-flex flex-column justify-content-center">
-                <a href="<?= url('admin/qr-codes?user_id=' . $data->user->user_id) ?>" class="stretched-link">
-                    <i class="fa fa-fw fa-angle-right text-gray-500"></i>
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-12 col-sm-6 col-xl-3 mb-4 position-relative">
-        <div class="card d-flex flex-row h-100 overflow-hidden">
-            <div class="card-body">
-                <small class="text-muted"><i class="fa fa-fw fa-sm fa-globe mr-1"></i> <?= language()->admin_user_view->domains ?></small>
-
-                <div class="mt-3"><span class="h4"><?= nr($data->domains) ?></span></div>
-            </div>
-
-            <div class="bg-gray-200 px-2 d-flex flex-column justify-content-center">
-                <a href="<?= url('admin/domains?user_id=' . $data->user->user_id) ?>" class="stretched-link">
+                <a href="<?= url('admin/notifications?user_id=' . $data->user->user_id) ?>" class="stretched-link">
                     <i class="fa fa-fw fa-angle-right text-gray-500"></i>
                 </a>
             </div>
@@ -319,22 +255,6 @@
             </div>
         </div>
     </div>
-
-    <?php if(\Altum\Plugin::is_active('affiliate')): ?>
-    <div class="col-12 col-sm-6 mb-4 position-relative">
-        <div class="card d-flex flex-row h-100 overflow-hidden">
-            <div class="card-body">
-                <span class="text-muted"><i class="fa fa-fw fa-sm fa-wallet mr-1"></i> <?= language()->admin_user_view->referred_by ?></span>
-            </div>
-
-            <div class="bg-gray-200 px-2 d-flex flex-column justify-content-center">
-                <a href="<?= url('admin/users?referred_by=' . $data->user->user_id) ?>" class="stretched-link">
-                    <i class="fa fa-fw fa-angle-right text-gray-500"></i>
-                </a>
-            </div>
-        </div>
-    </div>
-    <?php endif ?>
 </div>
 
 <?php \Altum\Event::add_content(include_view(THEME_PATH . 'views/admin/users/user_delete_modal.php'), 'modals'); ?>

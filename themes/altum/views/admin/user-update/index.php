@@ -91,69 +91,27 @@
 
             <div id="plan_settings" style="display: none">
                 <div class="form-group">
-                    <label for="projects_limit"><?= language()->admin_plans->plan->projects_limit ?></label>
-                    <input type="number" id="projects_limit" name="projects_limit" min="-1" class="form-control form-control-lg" value="<?= $data->user->plan->settings->projects_limit ?>" />
-                    <small class="form-text text-muted"><?= language()->admin_plans->plan->projects_limit_help ?></small>
+                    <label for="campaigns_limit"><?= language()->admin_plans->plan->campaigns_limit ?></label>
+                    <input type="number" id="campaigns_limit" name="campaigns_limit" min="-1" class="form-control form-control-lg" value="<?= $data->user->plan->settings->campaigns_limit ?>" />
+                    <small class="form-text text-muted"><?= language()->admin_plans->plan->campaigns_limit_help ?></small>
                 </div>
 
                 <div class="form-group">
-                    <label for="pixels_limit"><?= language()->admin_plans->plan->pixels_limit ?></label>
-                    <input type="number" id="pixels_limit" name="pixels_limit" min="-1" class="form-control form-control-lg" value="<?= $data->user->plan->settings->pixels_limit ?>" />
-                    <small class="form-text text-muted"><?= language()->admin_plans->plan->pixels_limit_help ?></small>
+                    <label for="notifications_limit"><?= language()->admin_plans->plan->notifications_limit ?></label>
+                    <input type="number" id="notifications_limit" name="notifications_limit" min="-1" class="form-control form-control-lg" value="<?= $data->user->plan->settings->notifications_limit ?>" />
+                    <small class="form-text text-muted"><?= language()->admin_plans->plan->notifications_limit_help ?></small>
                 </div>
 
                 <div class="form-group">
-                    <label for="qr_codes_limit"><?= language()->admin_plans->plan->qr_codes_limit ?></label>
-                    <input type="number" id="qr_codes_limit" name="qr_codes_limit" min="-1" class="form-control form-control-lg" value="<?= $data->user->plan->settings->qr_codes_limit ?>" />
-                    <small class="form-text text-muted"><?= language()->admin_plans->plan->qr_codes_limit_help ?></small>
+                    <label for="notifications_impressions_limit"><?= language()->admin_plans->plan->notifications_impressions_limit ?></label>
+                    <input type="number" id="notifications_impressions_limit" name="notifications_impressions_limit" min="-1" class="form-control form-control-lg" value="<?= $data->user->plan->settings->notifications_impressions_limit ?>" />
+                    <small class="form-text text-muted"><?= language()->admin_plans->plan->notifications_impressions_limit_help ?></small>
                 </div>
 
                 <div class="form-group">
-                    <label for="biolinks_limit"><?= language()->admin_plans->plan->biolinks_limit ?></label>
-                    <input type="number" id="biolinks_limit" name="biolinks_limit" min="-1" class="form-control form-control-lg" value="<?= $data->user->plan->settings->biolinks_limit ?>" />
-                    <small class="form-text text-muted"><?= language()->admin_plans->plan->biolinks_limit_help ?></small>
-                </div>
-
-                <div class="form-group">
-                    <label for="biolink_blocks_limit"><?= language()->admin_plans->plan->biolink_blocks_limit ?></label>
-                    <input type="number" id="biolink_blocks_limit" name="biolink_blocks_limit" min="-1" class="form-control form-control-lg" value="<?= $data->user->plan->settings->biolink_blocks_limit ?>" />
-                    <small class="form-text text-muted"><?= language()->admin_plans->plan->biolink_blocks_limit_help ?></small>
-                </div>
-
-                <div class="form-group" <?= !settings()->links->shortener_is_enabled ? 'style="display: none"' : null ?>>
-                    <label for="links_limit"><?= language()->admin_plans->plan->links_limit ?></label>
-                    <input type="number" id="links_limit" name="links_limit" min="-1" class="form-control form-control-lg" value="<?= $data->user->plan->settings->links_limit ?>" />
-                    <small class="form-text text-muted"><?= language()->admin_plans->plan->links_limit_help ?></small>
-                </div>
-
-                <div class="form-group" <?= !settings()->links->domains_is_enabled ? 'style="display: none"' : null ?>>
-                    <label for="domains_limit"><?= language()->admin_plans->plan->domains_limit ?></label>
-                    <input type="number" id="domains_limit" name="domains_limit" min="-1" class="form-control form-control-lg" value="<?= $data->user->plan->settings->domains_limit ?>" />
-                    <small class="form-text text-muted"><?= language()->admin_plans->plan->domains_limit_help ?></small>
-                </div>
-
-                <div class="form-group">
-                    <label for="track_links_retention"><?= language()->admin_plans->plan->track_links_retention ?></label>
-                    <input type="number" id="track_links_retention" name="track_links_retention" min="-1" class="form-control form-control-lg" value="<?= $data->user->plan->settings->track_links_retention ?>" />
-                    <small class="form-text text-muted"><?= language()->admin_plans->plan->track_links_retention_help ?></small>
-                </div>
-
-                <div class="custom-control custom-switch mb-3">
-                    <input id="additional_global_domains" name="additional_global_domains" type="checkbox" class="custom-control-input" <?= $data->user->plan->settings->additional_global_domains ? 'checked="checked"' : null ?>>
-                    <label class="custom-control-label" for="additional_global_domains"><?= language()->admin_plans->plan->additional_global_domains ?></label>
-                    <div><small class="form-text text-muted"><?= language()->admin_plans->plan->additional_global_domains_help ?></small></div>
-                </div>
-
-                <div class="custom-control custom-switch mb-3">
-                    <input id="custom_url" name="custom_url" type="checkbox" class="custom-control-input" <?= $data->user->plan->settings->custom_url ? 'checked="checked"' : null ?>>
-                    <label class="custom-control-label" for="custom_url"><?= language()->admin_plans->plan->custom_url ?></label>
-                    <div><small class="form-text text-muted"><?= language()->admin_plans->plan->custom_url_help ?></small></div>
-                </div>
-
-                <div class="custom-control custom-switch mb-3">
-                    <input id="deep_links" name="deep_links" type="checkbox" class="custom-control-input" <?= $data->user->plan->settings->deep_links ? 'checked="checked"' : null ?>>
-                    <label class="custom-control-label" for="deep_links"><?= language()->admin_plans->plan->deep_links ?></label>
-                    <div><small class="form-text text-muted"><?= language()->admin_plans->plan->deep_links_help ?></small></div>
+                    <label for="track_notifications_retention"><?= language()->admin_plans->plan->track_notifications_retention ?></label>
+                    <input type="number" id="track_notifications_retention" name="track_notifications_retention" min="-1" class="form-control form-control-lg" value="<?= $data->user->plan->settings->track_notifications_retention ?>" />
+                    <small class="form-text text-muted"><?= language()->admin_plans->plan->track_notifications_retention_help ?></small>
                 </div>
 
                 <div class="custom-control custom-switch mb-3">
@@ -175,78 +133,6 @@
                 </div>
 
                 <div class="custom-control custom-switch mb-3">
-                    <input id="custom_colored_links" name="custom_colored_links" type="checkbox" class="custom-control-input" <?= $data->user->plan->settings->custom_colored_links ? 'checked="checked"' : null ?>>
-                    <label class="custom-control-label" for="custom_colored_links"><?= language()->admin_plans->plan->custom_colored_links ?></label>
-                    <div><small class="form-text text-muted"><?= language()->admin_plans->plan->custom_colored_links_help ?></small></div>
-                </div>
-
-                <div class="custom-control custom-switch mb-3">
-                    <input id="statistics" name="statistics" type="checkbox" class="custom-control-input" <?= $data->user->plan->settings->statistics ? 'checked="checked"' : null ?>>
-                    <label class="custom-control-label" for="statistics"><?= language()->admin_plans->plan->statistics ?></label>
-                    <div><small class="form-text text-muted"><?= language()->admin_plans->plan->statistics_help ?></small></div>
-                </div>
-
-                <div class="custom-control custom-switch mb-3">
-                    <input id="custom_backgrounds" name="custom_backgrounds" type="checkbox" class="custom-control-input" <?= $data->user->plan->settings->custom_backgrounds ? 'checked="checked"' : null ?>>
-                    <label class="custom-control-label" for="custom_backgrounds"><?= language()->admin_plans->plan->custom_backgrounds ?></label>
-                    <div><small class="form-text text-muted"><?= language()->admin_plans->plan->custom_backgrounds_help ?></small></div>
-                </div>
-
-                <div class="custom-control custom-switch mb-3">
-                    <input id="verified" name="verified" type="checkbox" class="custom-control-input" <?= $data->user->plan->settings->verified ? 'checked="checked"' : null ?>>
-                    <label class="custom-control-label" for="verified"><?= language()->admin_plans->plan->verified ?></label>
-                    <div><small class="form-text text-muted"><?= language()->admin_plans->plan->verified_help ?></small></div>
-                </div>
-
-                <div class="custom-control custom-switch mb-3">
-                    <input id="temporary_url_is_enabled" name="temporary_url_is_enabled" type="checkbox" class="custom-control-input" <?= $data->user->plan->settings->temporary_url_is_enabled ? 'checked="checked"' : null ?>>
-                    <label class="custom-control-label" for="temporary_url_is_enabled"><?= language()->admin_plans->plan->temporary_url_is_enabled ?></label>
-                    <div><small class="form-text text-muted"><?= language()->admin_plans->plan->temporary_url_is_enabled_help ?></small></div>
-                </div>
-
-                <div class="custom-control custom-switch mb-3">
-                    <input id="seo" name="seo" type="checkbox" class="custom-control-input" <?= $data->user->plan->settings->seo ? 'checked="checked"' : null ?>>
-                    <label class="custom-control-label" for="seo"><?= language()->admin_plans->plan->seo ?></label>
-                    <div><small class="form-text text-muted"><?= language()->admin_plans->plan->seo_help ?></small></div>
-                </div>
-
-                <div class="custom-control custom-switch mb-3">
-                    <input id="utm" name="utm" type="checkbox" class="custom-control-input" <?= $data->user->plan->settings->utm ? 'checked="checked"' : null ?>>
-                    <label class="custom-control-label" for="utm"><?= language()->admin_plans->plan->utm ?></label>
-                    <div><small class="form-text text-muted"><?= language()->admin_plans->plan->utm_help ?></small></div>
-                </div>
-
-                <div class="custom-control custom-switch mb-3">
-                    <input id="fonts" name="fonts" type="checkbox" class="custom-control-input" <?= $data->user->plan->settings->fonts ? 'checked="checked"' : null ?>>
-                    <label class="custom-control-label" for="fonts"><?= language()->admin_plans->plan->fonts ?></label>
-                    <div><small class="form-text text-muted"><?= language()->admin_plans->plan->fonts_help ?></small></div>
-                </div>
-
-                <div class="custom-control custom-switch mb-3">
-                    <input id="password" name="password" type="checkbox" class="custom-control-input" <?= $data->user->plan->settings->password ? 'checked="checked"' : null ?>>
-                    <label class="custom-control-label" for="password"><?= language()->admin_plans->plan->password ?></label>
-                    <div><small class="form-text text-muted"><?= language()->admin_plans->plan->password_help ?></small></div>
-                </div>
-
-                <div class="custom-control custom-switch mb-3">
-                    <input id="sensitive_content" name="sensitive_content" type="checkbox" class="custom-control-input" <?= $data->user->plan->settings->sensitive_content ? 'checked="checked"' : null ?>>
-                    <label class="custom-control-label" for="sensitive_content"><?= language()->admin_plans->plan->sensitive_content ?></label>
-                    <div><small class="form-text text-muted"><?= language()->admin_plans->plan->sensitive_content_help ?></small></div>
-                </div>
-
-                <div class="custom-control custom-switch mb-3">
-                    <input id="leap_link" name="leap_link" type="checkbox" class="custom-control-input" <?= $data->user->plan->settings->leap_link ? 'checked="checked"' : null ?>>
-                    <label class="custom-control-label" for="leap_link"><?= language()->admin_plans->plan->leap_link ?></label>
-                    <div><small class="form-text text-muted"><?= language()->admin_plans->plan->leap_link_help ?></small></div>
-                </div>
-
-                <div class="custom-control custom-switch mb-3">
-                    <input id="dofollow_is_enabled" name="dofollow_is_enabled" type="checkbox" class="custom-control-input" <?= $data->user->plan->settings->dofollow_is_enabled ? 'checked="checked"' : null ?>>
-                    <label class="custom-control-label" for="dofollow_is_enabled"><?= language()->admin_plans->plan->dofollow_is_enabled ?></label>
-                    <div><small class="form-text text-muted"><?= language()->admin_plans->plan->dofollow_is_enabled_help ?></small></div>
-                </div>
-
-                <div class="custom-control custom-switch mb-3">
                     <input id="api_is_enabled" name="api_is_enabled" type="checkbox" class="custom-control-input" <?= $data->user->plan->settings->api_is_enabled ? 'checked="checked"' : null ?>>
                     <label class="custom-control-label" for="api_is_enabled"><?= language()->admin_plans->plan->api_is_enabled ?></label>
                     <div><small class="form-text text-muted"><?= language()->admin_plans->plan->api_is_enabled_help ?></small></div>
@@ -260,15 +146,15 @@
                     </div>
                 <?php endif ?>
 
-                <h3 class="h5 mt-4"><?= language()->admin_plans->plan->enabled_biolink_blocks ?></h3>
-                <p class="text-muted"><?= language()->admin_plans->plan->enabled_biolink_blocks_help ?></p>
+                <h3 class="h5 mt-3"><?= language()->admin_plans->plan->enabled_notifications ?></h3>
+                <p class="text-muted"><?= language()->admin_plans->plan->enabled_notifications_help ?></p>
 
                 <div class="row">
-                    <?php foreach(require APP_PATH . 'includes/biolink_blocks.php' as $key => $value): ?>
+                    <?php foreach(\Altum\Notification::get_config() as $notification_type => $notification_config): ?>
                         <div class="col-6 mb-3">
                             <div class="custom-control custom-switch">
-                                <input id="enabled_biolink_blocks_<?= $key ?>" name="enabled_biolink_blocks[]" value="<?= $key ?>" type="checkbox" class="custom-control-input" <?= $data->user->plan->settings->enabled_biolink_blocks->{$key} ? 'checked="checked"' : null ?>>
-                                <label class="custom-control-label" for="enabled_biolink_blocks_<?= $key ?>"><?= language()->link->biolink->blocks->{mb_strtolower($key)} ?></label>
+                                <input id="enabled_notifications_<?= $notification_type ?>" name="enabled_notifications[]" value="<?= $notification_type ?>" type="checkbox" class="custom-control-input" <?= $data->user->plan->settings->enabled_notifications->{$notification_type} ? 'checked="checked"' : null ?>>
+                                <label class="custom-control-label" for="enabled_notifications_<?= $notification_type ?>"><?= language()->notification->{mb_strtolower($notification_type)}->name ?></label>
                             </div>
                         </div>
                     <?php endforeach ?>

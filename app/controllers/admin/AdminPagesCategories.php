@@ -16,7 +16,7 @@ class AdminPagesCategories extends Controller {
 
     public function index() {
 
-       redirect('pages');
+        redirect('pages');
 
     }
 

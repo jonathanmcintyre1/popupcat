@@ -11,9 +11,7 @@ namespace Altum\Models;
 
 use Altum\Database\Database;
 use Altum\Logger;
-use Altum\PaymentGateways\Paystack;
 use MaxMind\Db\Reader;
-use Razorpay\Api\Api;
 
 class User extends Model {
 
@@ -123,17 +121,10 @@ class User extends Model {
 
         }
 
-        /* Delete everything related to the domain that the user owns */
-        $result = database()->query("SELECT `link_id` FROM `links` WHERE `user_id` = {$user_id}");
-        while($link = $result->fetch_object()) {
-            (new \Altum\Models\Link())->delete($link->link_id);
-        }
-
         /* Delete the record from the database */
         db()->where('user_id', $user_id)->delete('users');
 
         /* Clear the cache */
-        \Altum\Cache::$adapter->deleteItemsByTag('biolinks_links_user_' . $user_id);
         \Altum\Cache::$adapter->deleteItemsByTag('user_id=' . $user_id);
 
     }
@@ -217,18 +208,13 @@ class User extends Model {
             'total_logins' => $total_logins,
         ]);
 
-        /* Clear out referral cookie if needed */
-        if($referred_by) {
-            setcookie('referred_by', '', time()-30, COOKIE_PATH);
-        }
-
         return $registered_user_id;
     }
 
     /*
     * Function to update a user with more details on a login action
     */
-    public function login_aftermath_update($user_id, $method = 'default') {
+    public function login_aftermath_update($user_id) {
 
         $ip = get_ip();
         $last_user_agent = Database::clean_string($_SERVER['HTTP_USER_AGENT']);
@@ -246,11 +232,10 @@ class User extends Model {
             'ip' => $ip,
             'country' => $country,
             'last_user_agent' => $last_user_agent,
-            'total_logins' => db()->inc(),
-            'user_deletion_reminder' => 0,
+            'total_logins' => db()->inc()
         ]);
 
-        Logger::users($user_id, 'login.' . $method . '.success');
+        Logger::users($user_id, 'login.success');
 
         /* Clear the cache */
         \Altum\Cache::$adapter->deleteItemsByTag('user_id=' . $user_id);
@@ -302,70 +287,13 @@ class User extends Model {
                 }
 
                 break;
-
-            case 'paystack':
-
-                Paystack::$secret_key = settings()->paystack->secret_key;
-
-                $payment_subscription_id = explode('###', $user->payment_subscription_id);
-                $code = $payment_subscription_id[0];
-                $token = $payment_subscription_id[1];
-
-                $response = \Unirest\Request::post(Paystack::$api_url . 'subscription/disable', Paystack::get_headers(), \Unirest\Request\Body::json([
-                    'code' => $code,
-                    'token' => $token,
-                ]));
-
-                if(!$response->body->status) {
-                    if(DEBUG) {
-                        error_log($response->body->message);
-                    }
-                    throw new \Exception($response->body->message);
-                }
-
-                break;
-
-            case 'razorpay':
-
-                $razorpay = new Api(settings()->razorpay->key_id, settings()->razorpay->key_secret);
-
-                try {
-                    $response = $razorpay->subscription->fetch($user->payment_subscription_id)->cancel();
-                } catch (\Exception $exception) {
-                    if(DEBUG) {
-                        error_log($exception->getMessage());
-                    }
-                    throw new \Exception($exception->getMessage());
-                }
-
-                break;
-
-            case 'mollie':
-
-                $mollie = new \Mollie\Api\MollieApiClient();
-                $mollie->setApiKey(settings()->mollie->api_key);
-
-                $payment_subscription_id = explode('###', $user->payment_subscription_id);
-                $customer_id = $payment_subscription_id[0];
-                $subscription_id = $payment_subscription_id[1];
-
-                try {
-                    $mollie->subscriptions->cancelForId($customer_id, $subscription_id);
-                } catch (\Exception $exception) {
-                    if(DEBUG) {
-                        error_log($exception->getMessage());
-                    }
-                    throw new \Exception($exception->getMessage());
-                }
-
-                break;
         }
 
         /* Database query */
         db()->where('user_id', $user->user_id)->update('users', ['payment_subscription_id' => '']);
 
         /* Clear the cache */
-        \Altum\Cache::$adapter->deleteItemsByTag('user_id=' . $user->user_id);
+        \Altum\Cache::$adapter->deleteItemsByTag('user_id=' . $this->user->user_id);
 
     }
 

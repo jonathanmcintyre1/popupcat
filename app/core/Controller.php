@@ -37,10 +37,6 @@ class Controller {
             return;
         }
 
-        if(Router::$path == 'l') {
-            $wrapper = new \Altum\Views\View('l/wrapper', (array) $this);
-        }
-
         if(Router::$path == '') {
             /* Get the top menu custom pages */
             $pages = (new Page())->get_pages('top');
@@ -58,7 +54,6 @@ class Controller {
 
             $wrapper = new \Altum\Views\View(Router::$controller_settings['wrapper'], (array) $this);
         }
-
 
         if(Router::$path == 'admin') {
             /* Establish the side menu view */

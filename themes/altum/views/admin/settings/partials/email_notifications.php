@@ -19,12 +19,6 @@
         <small class="form-text text-muted"><?= language()->admin_settings->email_notifications->new_payment_help ?></small>
     </div>
 
-    <div class="custom-control custom-switch my-3">
-        <input id="new_domain" name="new_domain" type="checkbox" class="custom-control-input" <?= settings()->email_notifications->new_domain ? 'checked="checked"' : null?>>
-        <label class="custom-control-label" for="new_domain"><?= language()->admin_settings->email_notifications->new_domain ?></label>
-        <small class="form-text text-muted"><?= language()->admin_settings->email_notifications->new_domain_help ?></small>
-    </div>
-
     <div <?= \Altum\Plugin::is_active('affiliate') ? null : 'data-toggle="tooltip" title="' . sprintf(language()->admin_plugins->no_access, \Altum\Plugin::get('affiliate')->name ?? 'affiliate') . '"' ?>>
         <div class="custom-control custom-switch my-3 <?= \Altum\Plugin::is_active('affiliate') ? null : 'container-disabled' ?>">
             <input id="new_affiliate_withdrawal" name="new_affiliate_withdrawal" type="checkbox" class="custom-control-input" <?= \Altum\Plugin::is_active('affiliate') && settings()->email_notifications->new_affiliate_withdrawal ? 'checked="checked"' : null ?> <?= \Altum\Plugin::is_active('affiliate') ? null : 'disabled="disabled"' ?>>

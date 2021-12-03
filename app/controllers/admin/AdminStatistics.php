@@ -214,57 +214,18 @@ class AdminStatistics extends Controller {
 
     }
 
-    protected function links() {
+    protected function campaigns() {
 
-        $total = ['shortened_links' => 0, 'biolink_links' => 0];
+        $total = ['campaigns' => 0];
 
-        $shortened_links_chart = [];
-        $result = database()->query("SELECT COUNT(*) AS `total`, DATE_FORMAT(`datetime`, '{$this->datetime['query_date_format']}') AS `formatted_date` FROM `links` WHERE `datetime` BETWEEN '{$this->datetime['query_start_date']}' AND '{$this->datetime['query_end_date']}' AND `type` = 'link' GROUP BY `formatted_date`");
-        while($row = $result->fetch_object()) {
-            $row->formatted_date = $this->datetime['process']($row->formatted_date);
-
-            $shortened_links_chart[$row->formatted_date] = [
-                'shortened_links' => $row->total,
-            ];
-
-            $total['shortened_links'] += $row->total;
-        }
-
-        $shortened_links_chart = get_chart_data($shortened_links_chart);
-
-        $biolink_links_chart = [];
-        $result = database()->query("SELECT COUNT(*) AS `total`, DATE_FORMAT(`datetime`, '{$this->datetime['query_date_format']}') AS `formatted_date` FROM `links` WHERE `datetime` BETWEEN '{$this->datetime['query_start_date']}' AND '{$this->datetime['query_end_date']}' AND `type` = 'biolink' GROUP BY `formatted_date`");
-        while($row = $result->fetch_object()) {
-            $row->formatted_date = $this->datetime['process']($row->formatted_date);
-
-            $biolink_links_chart[$row->formatted_date] = [
-                'biolink_links' => $row->total,
-            ];
-
-            $total['biolink_links'] += $row->total;
-        }
-
-        $biolink_links_chart = get_chart_data($biolink_links_chart);
-
-        return [
-            'total' => $total,
-            'shortened_links_chart' => $shortened_links_chart,
-            'biolink_links_chart' => $biolink_links_chart,
-        ];
-
-    }
-
-    protected function track_links() {
-
-        $total = ['track_links' => 0];
-
-        $track_links_chart = [];
+        /* Monitors */
+        $campaigns_chart = [];
         $result = database()->query("
             SELECT
-                 COUNT(*) AS `total`,
-                 DATE_FORMAT(`datetime`, '{$this->datetime['query_date_format']}') AS `formatted_date`
+                COUNT(*) AS `total`,
+                DATE_FORMAT(`datetime`, '{$this->datetime['query_date_format']}') AS `formatted_date`
             FROM
-                 `track_links`
+                `campaigns`
             WHERE
                 `datetime` BETWEEN '{$this->datetime['query_start_date']}' AND '{$this->datetime['query_end_date']}'
             GROUP BY
@@ -275,152 +236,151 @@ class AdminStatistics extends Controller {
         while($row = $result->fetch_object()) {
             $row->formatted_date = $this->datetime['process']($row->formatted_date);
 
-            $track_links_chart[$row->formatted_date] = [
-                'track_links' => $row->total
+            $campaigns_chart[$row->formatted_date] = [
+                'campaigns' => $row->total
             ];
 
-            $total['track_links'] += $row->total;
+            $total['campaigns'] += $row->total;
         }
 
-        $track_links_chart = get_chart_data($track_links_chart);
+        $campaigns_chart = get_chart_data($campaigns_chart);
 
         return [
             'total' => $total,
-            'track_links_chart'   => $track_links_chart
+            'campaigns_chart' => $campaigns_chart,
         ];
+
     }
 
-    protected function biolinks_blocks() {
+    protected function notifications() {
 
-        $total = [];
+        $total = ['notifications' => 0];
 
-        $biolinks_blocks_chart = [];
-        $result = database()->query("SELECT COUNT(*) AS `total`, DATE_FORMAT(`datetime`, '{$this->datetime['query_date_format']}') AS `formatted_date`, `type` FROM `biolinks_blocks` WHERE `datetime` BETWEEN '{$this->datetime['query_start_date']}' AND '{$this->datetime['query_end_date']}' GROUP BY `formatted_date`, `type`");
+        /* Monitors */
+        $notifications_chart = [];
+        $result = database()->query("
+            SELECT
+                COUNT(*) AS `total`,
+                DATE_FORMAT(`datetime`, '{$this->datetime['query_date_format']}') AS `formatted_date`
+            FROM
+                `notifications`
+            WHERE
+                `datetime` BETWEEN '{$this->datetime['query_start_date']}' AND '{$this->datetime['query_end_date']}'
+            GROUP BY
+                `formatted_date`
+            ORDER BY
+                `formatted_date`
+        ");
         while($row = $result->fetch_object()) {
             $row->formatted_date = $this->datetime['process']($row->formatted_date);
 
-            if(!array_key_exists($row->type, $biolinks_blocks_chart)) {
-                $biolinks_blocks_chart[$row->type] = [];
+            $notifications_chart[$row->formatted_date] = [
+                'notifications' => $row->total
+            ];
+
+            $total['notifications'] += $row->total;
+        }
+
+        $notifications_chart = get_chart_data($notifications_chart);
+
+        return [
+            'total' => $total,
+            'notifications_chart' => $notifications_chart,
+        ];
+
+    }
+
+    protected function track_notifications() {
+
+        $total = ['impression' => 0, 'hover' => 0, 'click' => 0, 'form_submission' => 0];
+
+        /* Track notifications */
+        $track_notifications_chart = [];
+        $result = database()->query("    
+            SELECT
+                 `type`,
+                 COUNT(`id`) AS `total`,
+                 DATE_FORMAT(`datetime`, '{$this->datetime['query_date_format']}') AS `formatted_date`
+            FROM
+                 `track_notifications`
+            WHERE
+                `datetime` BETWEEN '{$this->datetime['query_start_date']}' AND '{$this->datetime['query_end_date']}'
+            GROUP BY
+                `formatted_date`,
+                `type`
+            ORDER BY
+                `formatted_date`
+        ");
+        while($row = $result->fetch_object()) {
+
+            /* Handle if the date key is not already set */
+            if(!array_key_exists($row->formatted_date, $track_notifications_chart)) {
+                $track_notifications_chart[$row->formatted_date] = [
+                    'impression'        => 0,
+                    'hover'             => 0,
+                    'click'             => 0,
+                    'form_submission'   => 0
+                ];
             }
 
-            $biolinks_blocks_chart[$row->type][$row->formatted_date] = ['total' => $row->total];
+            $track_notifications_chart[$row->formatted_date][$row->type] = $row->total;
 
-            if(!array_key_exists($row->type, $total)) {
-                $total[$row->type] = $row->total;
-            } else {
-                $total[$row->type] += $row->total;
+            $total[$row->type] += $row->total;
+        }
+
+        $track_notifications_chart = get_chart_data($track_notifications_chart);
+
+        return [
+            'total' => $total,
+            'track_notifications_chart' => $track_notifications_chart,
+        ];
+    }
+
+    protected function track_conversions() {
+
+        $total = ['webhook' => 0, 'auto_capture' => 0, 'collector' => 0, 'imported' => 0];
+
+        /* Track conversions */
+        $track_conversions_chart = [];
+        $result = database()->query("    
+            SELECT
+                 `type`,
+                 COUNT(`id`) AS `total`,
+                 DATE_FORMAT(`datetime`, '{$this->datetime['query_date_format']}') AS `formatted_date`
+            FROM
+                 `track_conversions`
+            WHERE
+                `datetime` BETWEEN '{$this->datetime['query_start_date']}' AND '{$this->datetime['query_end_date']}'
+            GROUP BY
+                `formatted_date`,
+                `type`
+            ORDER BY
+                `formatted_date`
+        ");
+        while($row = $result->fetch_object()) {
+
+            /* Handle if the date key is not already set */
+            if(!array_key_exists($row->formatted_date, $track_conversions_chart)) {
+                $track_conversions_chart[$row->formatted_date] = [
+                    'webhook'        => 0,
+                    'auto_capture'   => 0,
+                    'collector'      => 0,
+                    'imported'      => 0,
+                ];
             }
+
+            $track_conversions_chart[$row->formatted_date][$row->type] = $row->total;
+
+            $total[$row->type] += $row->total;
         }
 
-        foreach($total as $key => $value) {
-            $biolinks_blocks_chart[$key] = get_chart_data($biolinks_blocks_chart[$key]);
-        }
+        $track_conversions_chart = get_chart_data($track_conversions_chart);
+
 
         return [
             'total' => $total,
-            'biolinks_blocks_chart' => $biolinks_blocks_chart,
-            'biolink_blocks' => require APP_PATH . 'includes/biolink_blocks.php',
+            'track_conversions_chart' => $track_conversions_chart
         ];
-
     }
 
-    protected function projects() {
-
-        $total = ['projects' => 0];
-
-        $projects_chart = [];
-        $result = database()->query("SELECT COUNT(*) AS `total`, DATE_FORMAT(`datetime`, '{$this->datetime['query_date_format']}') AS `formatted_date` FROM `projects` WHERE `datetime` BETWEEN '{$this->datetime['query_start_date']}' AND '{$this->datetime['query_end_date']}' GROUP BY `formatted_date`");
-        while($row = $result->fetch_object()) {
-            $row->formatted_date = $this->datetime['process']($row->formatted_date);
-
-            $projects_chart[$row->formatted_date] = [
-                'projects' => $row->total,
-            ];
-
-            $total['projects'] += $row->total;
-        }
-
-        $projects_chart = get_chart_data($projects_chart);
-
-        return [
-            'total' => $total,
-            'projects_chart' => $projects_chart,
-        ];
-
-    }
-
-    protected function pixels() {
-
-        $total = ['pixels' => 0];
-
-        $pixels_chart = [];
-        $result = database()->query("SELECT COUNT(*) AS `total`, DATE_FORMAT(`datetime`, '{$this->datetime['query_date_format']}') AS `formatted_date` FROM `pixels` WHERE `datetime` BETWEEN '{$this->datetime['query_start_date']}' AND '{$this->datetime['query_end_date']}' GROUP BY `formatted_date`");
-        while($row = $result->fetch_object()) {
-            $row->formatted_date = $this->datetime['process']($row->formatted_date);
-
-            $pixels_chart[$row->formatted_date] = [
-                'pixels' => $row->total,
-            ];
-
-            $total['pixels'] += $row->total;
-        }
-
-        $pixels_chart = get_chart_data($pixels_chart);
-
-        return [
-            'total' => $total,
-            'pixels_chart' => $pixels_chart,
-        ];
-
-    }
-
-    protected function qr_codes() {
-
-        $total = ['qr_codes' => 0];
-
-        $qr_codes_chart = [];
-        $result = database()->query("SELECT COUNT(*) AS `total`, DATE_FORMAT(`datetime`, '{$this->datetime['query_date_format']}') AS `formatted_date` FROM `qr_codes` WHERE `datetime` BETWEEN '{$this->datetime['query_start_date']}' AND '{$this->datetime['query_end_date']}' GROUP BY `formatted_date`");
-        while($row = $result->fetch_object()) {
-            $row->formatted_date = $this->datetime['process']($row->formatted_date);
-
-            $qr_codes_chart[$row->formatted_date] = [
-                'qr_codes' => $row->total,
-            ];
-
-            $total['qr_codes'] += $row->total;
-        }
-
-        $qr_codes_chart = get_chart_data($qr_codes_chart);
-
-        return [
-            'total' => $total,
-            'qr_codes_chart' => $qr_codes_chart,
-        ];
-
-    }
-
-    protected function domains() {
-
-        $total = ['domains' => 0];
-
-        $domains_chart = [];
-        $result = database()->query("SELECT COUNT(*) AS `total`, DATE_FORMAT(`datetime`, '{$this->datetime['query_date_format']}') AS `formatted_date` FROM `domains` WHERE `datetime` BETWEEN '{$this->datetime['query_start_date']}' AND '{$this->datetime['query_end_date']}' GROUP BY `formatted_date`");
-        while($row = $result->fetch_object()) {
-            $row->formatted_date = $this->datetime['process']($row->formatted_date);
-
-            $domains_chart[$row->formatted_date] = [
-                'domains' => $row->total,
-            ];
-
-            $total['domains'] += $row->total;
-        }
-
-        $domains_chart = get_chart_data($domains_chart);
-
-        return [
-            'total' => $total,
-            'domains_chart' => $domains_chart,
-        ];
-
-    }
 }

@@ -1,6 +1,6 @@
 <?php defined('ALTUMCODE') || die() ?>
 
-<nav id="navbar" class="navbar navbar-main navbar-expand-lg navbar-light mb-6">
+<nav class="navbar navbar-main <?= \Altum\Routing\Router::$controller_settings['menu_no_margin'] ? null : 'mb-8'?> navbar-expand-lg navbar-light bg-white">
     <div class="container">
         <a class="navbar-brand" href="<?= url() ?>">
             <?php if(settings()->logo != ''): ?>
@@ -33,32 +33,15 @@
 
                     <li class="dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="false">
-                            <img src="<?= get_gravatar($this->user->email, 80, 'identicon') ?>" class="navbar-avatar mr-1" loading="lazy" />
+                            <img src="<?= get_gravatar($this->user->email) ?>" class="navbar-avatar mr-1" />
                             <?= $this->user->name ?> <span class="caret"></span>
                         </a>
+
                         <div class="dropdown-menu dropdown-menu-right">
                             <?php if(\Altum\Middlewares\Authentication::is_admin()): ?>
                                 <a class="dropdown-item" href="<?= url('admin') ?>"><i class="fa fa-fw fa-sm fa-user-shield mr-1"></i> <?= language()->global->menu->admin ?></a>
                             <?php endif ?>
-
-                            <a class="dropdown-item" href="<?= url('links') ?>"><i class="fa fa-fw fa-sm fa-link mr-1"></i> <?= language()->links->menu ?></a>
-
-                            <?php if(settings()->links->domains_is_enabled): ?>
-                                <a class="dropdown-item" href="<?= url('domains') ?>"><i class="fa fa-fw fa-sm fa-globe mr-1"></i> <?= language()->domains->menu ?></a>
-                            <?php endif ?>
-
-                            <a class="dropdown-item" href="<?= url('data') ?>"><i class="fa fa-fw fa-sm fa-database mr-1"></i> <?= language()->data->menu ?></a>
-
-                            <a class="dropdown-item" href="<?= url('projects') ?>"><i class="fa fa-fw fa-sm fa-project-diagram mr-1"></i> <?= language()->projects->menu ?></a>
-
-                            <a class="dropdown-item" href="<?= url('pixels') ?>"><i class="fa fa-fw fa-sm fa-adjust mr-1"></i> <?= language()->pixels->menu ?></a>
-
-                            <a class="dropdown-item" href="<?= url('qr-codes') ?>"><i class="fa fa-fw fa-sm fa-qrcode mr-1"></i> <?= language()->qr_codes->menu ?></a>
-
-                            <div class="dropdown-divider"></div>
-
                             <a class="dropdown-item" href="<?= url('account') ?>"><i class="fa fa-fw fa-sm fa-wrench mr-1"></i> <?= language()->account->menu ?></a>
-
                             <a class="dropdown-item" href="<?= url('account-plan') ?>"><i class="fa fa-fw fa-sm fa-box-open mr-1"></i> <?= language()->account_plan->menu ?></a>
 
                             <?php if(settings()->payment->is_enabled): ?>
@@ -78,14 +61,10 @@
 
                 <?php else: ?>
 
-                    <li class="nav-item d-flex align-items-center">
-                        <a class="btn btn-sm btn-outline-primary" href="<?= url('login') ?>"><i class="fa fa-fw fa-sm fa-sign-in-alt"></i> <?= language()->login->menu ?></a>
-                    </li>
+                    <li class="nav-item active"><a class="nav-link" href="<?= url('login') ?>"><i class="fa fa-fw fa-sm fa-sign-in-alt"></i> <?= language()->login->menu ?></a></li>
 
                     <?php if(settings()->register_is_enabled): ?>
-                    <li class="nav-item d-flex align-items-center">
-                        <a class="btn btn-sm btn-primary" href="<?= url('register') ?>"><i class="fa fa-fw fa-sm fa-plus"></i> <?= language()->register->menu ?></a>
-                    </li>
+                    <li class="nav-item active"><a class="nav-link" href="<?= url('register') ?>"><i class="fa fa-fw fa-sm fa-plus"></i> <?= language()->register->menu ?></a></li>
                     <?php endif ?>
 
                 <?php endif ?>

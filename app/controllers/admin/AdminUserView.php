@@ -23,12 +23,8 @@ class AdminUserView extends Controller {
         }
 
         /* Get widget stats */
-        $biolink_links = db()->where('user_id', $user_id)->where('type', 'biolink')->getValue('links', 'count(`link_id`)');
-        $shortened_links = db()->where('user_id', $user_id)->where('type', 'link')->getValue('links', 'count(`link_id`)');
-        $projects = db()->where('user_id', $user_id)->getValue('projects', 'count(`project_id`)');
-        $pixels = db()->where('user_id', $user_id)->getValue('pixels', 'count(`pixel_id`)');
-        $qr_codes = db()->where('user_id', $user_id)->getValue('qr_codes', 'count(`qr_code_id`)');
-        $domains = db()->where('user_id', $user_id)->getValue('domains', 'count(`domain_id`)');
+        $campaigns = db()->where('user_id', $user_id)->getValue('campaigns', 'count(`campaign_id`)');
+        $notifications = db()->where('user_id', $user_id)->getValue('notifications', 'count(`notification_id`)');
         $payments = in_array(settings()->license->type, ['Extended License', 'extended']) ? db()->where('user_id', $user_id)->getValue('payments', 'count(`id`)') : 0;
 
         /* Get the current plan details */
@@ -42,13 +38,9 @@ class AdminUserView extends Controller {
         /* Main View */
         $data = [
             'user' => $user,
-            'biolink_links' => $biolink_links,
-            'shortened_links' => $shortened_links,
-            'projects' => $projects,
-            'pixels' => $pixels,
-            'qr_codes' => $qr_codes,
-            'domains' => $domains,
-            'payments' => $payments
+            'campaigns' => $campaigns,
+            'notifications' => $notifications,
+            'payments' => $payments,
         ];
 
         $view = new \Altum\Views\View('admin/user-view/index', (array) $this);

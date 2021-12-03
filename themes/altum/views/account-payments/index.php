@@ -20,7 +20,7 @@
             <div class="col-auto p-0 d-flex">
                 <div class="ml-3">
                     <div class="dropdown">
-                        <button type="button" class="btn btn-outline-secondary dropdown-toggle-simple" data-toggle="dropdown" data-boundary="viewport" title="<?= language()->global->export ?>">
+                        <button type="button" class="btn btn-outline-secondary rounded-pill dropdown-toggle-simple" data-toggle="dropdown" data-boundary="viewport" title="<?= language()->global->export ?>">
                             <i class="fa fa-fw fa-sm fa-download"></i>
                         </button>
 
@@ -37,7 +37,7 @@
 
                 <div class="ml-3">
                     <div class="dropdown">
-                        <button type="button" class="btn <?= count($data->filters->get) ? 'btn-outline-primary' : 'btn-outline-secondary' ?> filters-button dropdown-toggle-simple" data-toggle="dropdown" data-boundary="viewport"><i class="fa fa-fw fa-sm fa-filter"></i></button>
+                        <button type="button" class="btn <?= count($data->filters->get) ? 'btn-outline-primary' : 'btn-outline-secondary' ?> rounded-pill filters-button dropdown-toggle-simple" data-toggle="dropdown" data-boundary="viewport"><i class="fa fa-fw fa-sm fa-filter"></i></button>
 
                         <div class="dropdown-menu dropdown-menu-right filters-dropdown">
                             <div class="dropdown-header d-flex justify-content-between">
@@ -97,6 +97,15 @@
                                     </select>
                                 </div>
 
+                                <div class="form-group px-4">
+                                    <label for="filters_results_per_page" class="small"><?= language()->global->filters->results_per_page ?></label>
+                                    <select name="results_per_page" id="filters_results_per_page" class="form-control form-control-sm">
+                                        <?php foreach($data->filters->allowed_results_per_page as $key): ?>
+                                            <option value="<?= $key ?>" <?= $data->filters->results_per_page == $key ? 'selected="selected"' : null ?>><?= $key ?></option>
+                                        <?php endforeach ?>
+                                    </select>
+                                </div>
+
                                 <div class="form-group px-4 mt-4">
                                     <button type="submit" name="submit" class="btn btn-sm btn-primary btn-block"><?= language()->global->submit ?></button>
                                 </div>
@@ -108,6 +117,7 @@
             </div>
         <?php endif ?>
     </div>
+
 
     <?php if(count($data->payments)): ?>
         <div class="table-responsive table-custom-container">
@@ -180,7 +190,6 @@
         </div>
 
         <div class="mt-3"><?= $data->pagination ?></div>
-
     <?php else: ?>
         <div class="d-flex flex-column align-items-center justify-content-center">
             <img src="<?= ASSETS_FULL_URL . 'images/no_rows.svg' ?>" class="col-10 col-md-6 col-lg-4 mb-3" alt="<?= language()->account_payments->payments->no_data ?>" />

@@ -163,7 +163,7 @@ class AdminPayments extends Controller {
             }
 
             /* Give the plan to the user */
-            $current_plan_expiration_date = $payment->plan_id == $user->plan_id ? $user->plan_expiration_date : '';
+            $current_plan_expiration_date = $payment->plan_id == $user->user_id ? $user->plan_expiration_date : '';
             switch($payment->frequency) {
                 case 'monthly':
                     $plan_expiration_date = (new \DateTime($current_plan_expiration_date))->modify('+30 days')->format('Y-m-d H:i:s');

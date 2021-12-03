@@ -21,7 +21,7 @@ class AdminUsers extends Controller {
     public function index() {
 
         /* Prepare the filtering system */
-        $filters = (new \Altum\Filters(['status', 'plan_id', 'country', 'type', 'referred_by'], ['name', 'email'], ['email', 'datetime', 'last_activity', 'name', 'total_logins']));
+        $filters = (new \Altum\Filters(['status', 'plan_id', 'country', 'type'], ['name', 'email'], ['email', 'datetime', 'last_activity', 'name', 'total_logins']));
         $filters->set_default_order_by('user_id', 'DESC');
 
         /* Prepare the paginator */

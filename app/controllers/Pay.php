@@ -16,10 +16,8 @@ use Altum\Middlewares\Authentication;
 use Altum\Middlewares\Csrf;
 use Altum\Models\User;
 use Altum\PaymentGateways\Coinbase;
-use Altum\PaymentGateways\Paystack;
 use Altum\Response;
 use Altum\Uploads;
-use Razorpay\Api\Api;
 
 class Pay extends Controller {
     public $plan_id;
@@ -39,10 +37,9 @@ class Pay extends Controller {
             redirect();
         }
 
-        $payment_processors = require APP_PATH . 'includes/payment_processors.php';
         $this->plan_id = isset($this->params[0]) ? $this->params[0] : null;
         $this->return_type = isset($_GET['return_type']) && in_array($_GET['return_type'], ['success', 'cancel']) ? $_GET['return_type'] : null;
-        $this->payment_processor = isset($_GET['payment_processor']) && array_key_exists($_GET['payment_processor'], $payment_processors) ? $_GET['payment_processor'] : null;
+        $this->payment_processor = isset($_GET['payment_processor']) && in_array($_GET['payment_processor'], ['paypal', 'stripe', 'offline_payment', 'coinbase']) ? $_GET['payment_processor'] : null;
 
         /* ^_^ */
         switch($this->plan_id) {
@@ -159,7 +156,7 @@ class Pay extends Controller {
                     redirect('pay/' . $this->plan_id);
                 }
 
-                if(!array_key_exists($_POST['payment_processor'], $payment_processors)) {
+                if(!in_array($_POST['payment_processor'], ['paypal', 'stripe', 'offline_payment', 'coinbase'])) {
                     redirect('pay/' . $this->plan_id);
                 } else {
 
@@ -179,8 +176,8 @@ class Pay extends Controller {
                     $_POST['payment_type'] = 'one_time';
                 }
 
-                /* Make sure recurring is available for the payment processor */
-                if(!in_array('recurring', $payment_processors[$_POST['payment_processor']]['payment_type'])) {
+                /* Offline / Coinbase payment */
+                if(in_array($_POST['payment_processor'], ['offline_payment', 'coinbase'])) {
                     $_POST['payment_type'] = 'one_time';
                 }
             }
@@ -255,8 +252,7 @@ class Pay extends Controller {
             'plan_id'           => $this->plan_id,
             'plan'              => $this->plan,
             'plan_taxes'        => $this->plan_taxes,
-            'stripe_session'    => $this->stripe_session,
-            'payment_processors'=> $payment_processors,
+            'stripe_session'    => $this->stripe_session
         ];
 
         $view = new \Altum\Views\View('pay/index', (array) $this);
@@ -267,7 +263,21 @@ class Pay extends Controller {
 
     private function paypal() {
 
-        extract($this->get_price_details());
+        /* Payment details */
+        $price = $base_amount = (float) $this->plan->{$_POST['payment_frequency'] . '_price'};
+        $code = '';
+        $discount_amount = 0;
+
+        /* Check for code usage */
+        if($this->code) {
+            /* Discount amount */
+            $discount_amount = number_format(($price * $this->code->discount / 100), 2, '.', '');
+
+            /* Calculate the new price */
+            $price = $price - $discount_amount;
+
+            $code = $this->code->code;
+        }
 
         /* Taxes */
         $price = $this->calculate_price_with_taxes($price);
@@ -302,11 +312,11 @@ class Pay extends Controller {
                                 ]
                             ]
                         ],
-                        'description' => $_POST['payment_frequency'],
+                        'description' => '',
                         'custom_id' => $custom_id,
                         'items' => [[
                             'name' => settings()->business->brand_name . ' - ' . $this->plan->name,
-                            'description' => $_POST['payment_frequency'],
+                            'description' => '',
                             'quantity' => 1,
                             'unit_amount' => [
                                 'currency_code' => settings()->payment->currency,
@@ -455,7 +465,24 @@ class Pay extends Controller {
         /* Initiate Stripe */
         \Stripe\Stripe::setApiKey(settings()->stripe->secret_key);
 
-        extract($this->get_price_details());
+        /* Payment details */
+        $product = $this->plan->name;
+        $price = $base_amount = $this->plan->{$_POST['payment_frequency'] . '_price'};
+        $code = '';
+        $discount_amount = 0;
+
+        /* Check for code usage */
+        if($this->code) {
+
+            /* Discount amount */
+            $discount_amount = number_format(($price * $this->code->discount / 100), 2, '.', '');
+
+            /* Calculate the new price */
+            $price = $price - $discount_amount;
+
+            $code = $this->code->code;
+
+        }
 
         /* Taxes */
         $price = $this->calculate_price_with_taxes($price);
@@ -471,7 +498,7 @@ class Pay extends Controller {
                 $stripe_session = \Stripe\Checkout\Session::create([
                     'payment_method_types' => ['card'],
                     'line_items' => [[
-                        'name' => settings()->business->brand_name . ' - ' . $this->plan->name,
+                        'name' => settings()->business->brand_name . ' - ' . $product,
                         'description' => $_POST['payment_frequency'],
                         'amount' => $stripe_formatted_price,
                         'currency' => settings()->payment->currency,
@@ -505,7 +532,7 @@ class Pay extends Controller {
                     /* Create the product if not already created */
                     $stripe_product = \Stripe\Product::create([
                         'id'    => $this->plan_id,
-                        'name'  => settings()->business->brand_name . ' - ' . $this->plan->name,
+                        'name'  => settings()->business->brand_name . ' - ' . $product,
                     ]);
                 }
 
@@ -573,7 +600,22 @@ class Pay extends Controller {
 
     private function coinbase() {
 
-        extract($this->get_price_details());
+        /* Payment details */
+        $product = $this->plan->name;
+        $price = $base_amount = $this->plan->{$_POST['payment_frequency'] . '_price'};
+        $code = '';
+        $discount_amount = 0;
+
+        /* Check for code usage */
+        if($this->code) {
+            /* Discount amount */
+            $discount_amount = number_format(($price * $this->code->discount / 100), 2, '.', '');
+
+            /* Calculate the new price */
+            $price = $price - $discount_amount;
+
+            $code = $this->code->code;
+        }
 
         /* Taxes */
         $price = $this->calculate_price_with_taxes($price);
@@ -586,7 +628,7 @@ class Pay extends Controller {
             Coinbase::get_headers(),
             \Unirest\Request\Body::json([
                 'name' => settings()->business->brand_name . ' - ' . $this->plan->name,
-                'description' => $_POST['payment_frequency'],
+                'description' => '',
                 'local_price' => [
                     'amount' => $price,
                     'currency' => settings()->payment->currency
@@ -628,7 +670,23 @@ class Pay extends Controller {
             $this->redirect_pay_thank_you();
         }
 
-        extract($this->get_price_details());
+        /* Payment details */
+        $price = $base_amount = $this->plan->{$_POST['payment_frequency'] . '_price'};
+        $code = '';
+        $discount_amount = 0;
+
+        /* Check for code usage */
+        if($this->code) {
+
+            /* Discount amount */
+            $discount_amount = number_format(($price * $this->code->discount / 100), 2, '.', '');
+
+            /* Calculate the new price */
+            $price = $price - $discount_amount;
+
+            $code = $this->code->code;
+
+        }
 
         /* Taxes */
         $price = number_format($this->calculate_price_with_taxes($price), 2, '.', '');
@@ -739,567 +797,6 @@ class Pay extends Controller {
 
     }
 
-    private function payu() {
-
-        extract($this->get_price_details());
-
-        /* Taxes */
-        $price = $this->calculate_price_with_taxes($price);
-
-        /* Final price */
-        $price =  number_format($price, 2, '.', '');
-
-        \OpenPayU_Configuration::setEnvironment(settings()->payu->mode);
-        \OpenPayU_Configuration::setMerchantPosId(settings()->payu->merchant_pos_id);
-        \OpenPayU_Configuration::setSignatureKey(settings()->payu->signature_key);
-        \OpenPayU_Configuration::setOauthClientId(settings()->payu->oauth_client_id);
-        \OpenPayU_Configuration::setOauthClientSecret(settings()->payu->oauth_client_secret);
-        \OpenPayU_Configuration::setOauthTokenCache(new \OauthCacheFile(UPLOADS_PATH . 'cache'));
-
-        $payment_id = md5($this->user->user_id . $this->plan_id . $_POST['payment_type'] . $_POST['payment_frequency'] . $this->user->email . Date::$date);
-
-        $order = [
-            'notifyUrl' => SITE_URL . 'webhook-payu',
-            'continueUrl' => url('pay/' . $this->plan_id . $this->return_url_parameters('success', $base_amount, $price, $code, $discount_amount)),
-            'customerIp' => get_ip(),
-            'merchantPosId' => \OpenPayU_Configuration::getOauthClientId() ? \OpenPayU_Configuration::getOauthClientId() : \OpenPayU_Configuration::getMerchantPosId(),
-
-            'description' => $_POST['payment_frequency'],
-            'currencyCode' => settings()->payment->currency,
-            'totalAmount' => $price * 100,
-            'extOrderId' => $payment_id,
-
-            'products' => [
-                [
-                    'name' => settings()->business->brand_name . ' - ' . $this->plan->name,
-                    'unitPrice' => $price * 100,
-                    'quantity' => 1
-                ]
-            ],
-
-            'buyer' => [
-                'email' => $this->user->email,
-                'firstName' => $this->user->name,
-            ]
-        ];
-
-        try {
-            $response = \OpenPayU_Order::create($order);
-            $status_description = \OpenPayU_Util::statusDesc($response->getStatus());
-
-            if($response->getStatus() != 'SUCCESS') {
-                if(DEBUG) {
-                    Alerts::add_error($status_description);
-                } else {
-                    Alerts::add_error(language()->pay->error_message->failed_payment);
-                }
-                redirect('pay/' . $this->plan_id);
-            }
-
-            /* Add a log into the database */
-            db()->insert('payments', [
-                'user_id' => $this->user->user_id,
-                'plan_id' => $this->plan_id,
-                'processor' => 'payu',
-                'type' => $_POST['payment_type'],
-                'frequency' => $_POST['payment_frequency'],
-                'code' => $code,
-                'discount_amount' => $discount_amount,
-                'base_amount' => $base_amount,
-                'email' => $this->user->email,
-                'payment_id' => $payment_id,
-                'name' => $this->user->name,
-                'plan' => json_encode(db()->where('plan_id', $this->plan_id)->getOne('plans', ['plan_id', 'name'])),
-                'billing' => settings()->payment->taxes_and_billing_is_enabled && $this->user->billing ? json_encode($this->user->billing) : null,
-                'business' => json_encode(settings()->business),
-                'taxes_ids' => !empty($this->applied_taxes_ids) ? json_encode($this->applied_taxes_ids) : null,
-                'total_amount' => $price,
-                'currency' => settings()->payment->currency,
-                'status' => 0,
-                'datetime' => Date::$date
-            ]);
-
-            /* Redirect to the payment url */
-            header('Location: ' . $response->getResponse()->redirectUri); die();
-        } catch (\OpenPayU_Exception $exception) {
-            if(DEBUG) {
-                Alerts::add_error($exception->getMessage());
-            } else {
-                Alerts::add_error(language()->pay->error_message->failed_payment);
-            }
-            redirect('pay/' . $this->plan_id);
-        }
-
-        $response = \Unirest\Request::post(
-            Coinbase::get_api_url() . 'charges',
-            Coinbase::get_headers(),
-            \Unirest\Request\Body::json([
-                'name' => settings()->business->brand_name . ' - ' . $this->plan->name,
-                'description' => $_POST['payment_frequency'],
-                'local_price' => [
-                    'amount' => $price,
-                    'currency' => settings()->payment->currency
-                ],
-                'pricing_type' => 'fixed_price',
-                'metadata' => [
-                    'user_id' => $this->user->user_id,
-                    'plan_id' => $this->plan_id,
-                    'payment_frequency' => $_POST['payment_frequency'],
-                    'base_amount' => $base_amount,
-                    'code' => $code,
-                    'discount_amount' => $discount_amount,
-                    'taxes_ids' => json_encode($this->applied_taxes_ids)
-                ],
-                'redirect_url' => url('pay/' . $this->plan_id . $this->return_url_parameters('success', $base_amount, $price, $code, $discount_amount)),
-                'cancel_url' => url('pay/' . $this->plan_id . $this->return_url_parameters('cancel', $base_amount, $price, $code, $discount_amount)),
-            ])
-        );
-
-        /* Check against errors */
-        if($response->code >= 400) {
-            if(DEBUG) {
-                Alerts::add_error($response->body->error->type . ':' . $response->body->error->message);
-            } else {
-                Alerts::add_error(language()->pay->error_message->failed_payment);
-            }
-            redirect('pay/' . $this->plan_id);
-        }
-
-        header('Location: ' . $response->body->data->hosted_url); die();
-    }
-
-    private function paystack() {
-
-        Paystack::$secret_key = settings()->paystack->secret_key;
-
-        extract($this->get_price_details());
-
-        /* Taxes */
-        $price = $this->calculate_price_with_taxes($price);
-
-        $price = number_format($price, 2, '.', '');
-
-        switch($_POST['payment_type']) {
-            case 'one_time':
-
-                /* Generate the payment link */
-                $response = \Unirest\Request::post(Paystack::$api_url . 'transaction/initialize', Paystack::get_headers(), \Unirest\Request\Body::json([
-                    'key' => settings()->paystack->public_key,
-                    'email' => $this->user->email,
-                    'first_name' => $this->user->name,
-                    'amount' => (int) ($price * 100),
-                    'currency' => settings()->payment->currency,
-                    'metadata' => [
-                        'user_id' => $this->user->user_id,
-                        'plan_id' => $this->plan_id,
-                        'payment_frequency' => $_POST['payment_frequency'],
-                        'base_amount' => $base_amount,
-                        'code' => $code,
-                        'discount_amount' => $discount_amount,
-                        'taxes_ids' => json_encode($this->applied_taxes_ids)
-                    ],
-                    'callback_url' => url('pay/' . $this->plan_id . $this->return_url_parameters('success', $base_amount, $price, $code, $discount_amount)),
-                ]));
-
-                if(!$response->body->status) {
-                    if(DEBUG) {
-                        Alerts::add_error($response->body->message);
-                    } else {
-                        Alerts::add_error(language()->pay->error_message->failed_payment);
-                    }
-                    redirect('pay/' . $this->plan_id);
-                }
-
-                /* Redirect to payment */
-                header('Location: ' . $response->body->data->authorization_url); die();
-
-                break;
-
-            case 'recurring':
-
-                $response = \Unirest\Request::post(Paystack::$api_url . 'plan', Paystack::get_headers(), \Unirest\Request\Body::json([
-                    'name' => $this->plan->name,
-                    'interval' => $_POST['payment_frequency'] == 'monthly' ? 'monthly' : 'annually',
-                    'amount' => (int) ($price * 100),
-                    'currency' => settings()->payment->currency,
-                ]));
-
-                if(!$response->body->status) {
-                    if(DEBUG) {
-                        Alerts::add_error($response->body->message);
-                    } else {
-                        Alerts::add_error(language()->pay->error_message->failed_payment);
-                    }
-                    redirect('pay/' . $this->plan_id);
-                }
-
-                $paystack_plan_code = $response->body->data->plan_code;
-
-                /* Generate the payment link */
-                $response = \Unirest\Request::post(Paystack::$api_url . 'transaction/initialize', Paystack::get_headers(), \Unirest\Request\Body::json([
-                    'key' => settings()->paystack->public_key,
-                    'email' => $this->user->email,
-                    'first_name' => $this->user->name,
-                    'currency' => settings()->payment->currency,
-                    'amount' => (int) ($price * 100),
-                    'metadata' => [
-                        'user_id' => $this->user->user_id,
-                        'plan_id' => $this->plan_id,
-                        'payment_frequency' => $_POST['payment_frequency'],
-                        'base_amount' => $base_amount,
-                        'code' => $code,
-                        'discount_amount' => $discount_amount,
-                        'taxes_ids' => json_encode($this->applied_taxes_ids)
-                    ],
-                    'callback_url' => url('pay/' . $this->plan_id . $this->return_url_parameters('success', $base_amount, $price, $code, $discount_amount)),
-                    'plan' => $paystack_plan_code
-                ]));
-
-                if(!$response->body->status) {
-                    if(DEBUG) {
-                        Alerts::add_error($response->body->message);
-                    } else {
-                        Alerts::add_error(language()->pay->error_message->failed_payment);
-                    }
-                    redirect('pay/' . $this->plan_id);
-                }
-
-                /* Redirect to payment */
-                header('Location: ' . $response->body->data->authorization_url); die();
-
-                break;
-        }
-
-        die();
-    }
-
-    private function razorpay() {
-
-        $razorpay = new Api(settings()->razorpay->key_id, settings()->razorpay->key_secret);
-
-        extract($this->get_price_details());
-
-        /* Taxes */
-        $price = $this->calculate_price_with_taxes($price);
-
-        $price = number_format($price, 2, '.', '');
-
-        switch($_POST['payment_type']) {
-            case 'one_time':
-
-                /* Generate the payment link */
-                try {
-                    $response = $razorpay->paymentLink->create([
-                        'amount' => $price * 100,
-                        'currency' => settings()->payment->currency,
-                        'accept_partial' => false,
-                        'description' => $_POST['payment_frequency'],
-                        'customer' => [
-                            'name' => $this->user->name,
-                            'email' => $this->user->email,
-                        ],
-                        'notify' => [
-                            'sms' => false,
-                            'email' => false,
-                        ],
-                        'reminder_enable' => false,
-                        'notes' => [
-                            'user_id' => $this->user->user_id,
-                            'plan_id' => $this->plan_id,
-                            'payment_frequency' => $_POST['payment_frequency'],
-                            'base_amount' => $base_amount,
-                            'code' => $code,
-                            'discount_amount' => $discount_amount,
-                            'taxes_ids' => json_encode($this->applied_taxes_ids)
-                        ],
-                        'callback_url' => url('pay/' . $this->plan_id . $this->return_url_parameters('success', $base_amount, $price, $code, $discount_amount)),
-                        'callback_method' => 'get'
-                    ]);
-                } catch (\Exception $exception) {
-                    if(DEBUG) {
-                        Alerts::add_error($exception->getMessage());
-                    } else {
-                        Alerts::add_error(language()->pay->error_message->failed_payment);
-                    }
-                    redirect('pay/' . $this->plan_id);
-                }
-
-                /* Redirect to payment */
-                header('Location: ' . $response['short_url']); die();
-
-                break;
-
-            case 'recurring':
-
-                try {
-                    $plan = $razorpay->plan->create([
-                        'period' => $_POST['payment_frequency'] == 'monthly' ? 'monthly' : 'yearly',
-                        'interval' => 1,
-                        'item' => [
-                            'name' => $this->plan->name,
-                            'description' => $_POST['payment_frequency'],
-                            'amount' => $price * 100,
-                            'currency' => settings()->payment->currency,
-                        ],
-                    ]);
-                }  catch (\Exception $exception) {
-                    if(DEBUG) {
-                        Alerts::add_error($exception->getMessage());
-                    } else {
-                        Alerts::add_error(language()->pay->error_message->failed_payment);
-                    }
-                    redirect('pay/' . $this->plan_id);
-                }
-
-                /* Generate the payment link */
-                try {
-                    $response = $razorpay->subscription->create([
-                        'plan_id' => $plan['id'],
-                        'total_count' => $_POST['payment_frequency'] == 'monthly' ? 60 : 5,
-                        'quantity' => 1,
-                        'notes' => [
-                            'user_id' => $this->user->user_id,
-                            'plan_id' => $this->plan_id,
-                            'payment_frequency' => $_POST['payment_frequency'],
-                            'base_amount' => $base_amount,
-                            'code' => $code,
-                            'discount_amount' => $discount_amount,
-                            'taxes_ids' => json_encode($this->applied_taxes_ids)
-                        ]
-                    ]);
-                } catch (\Exception $exception) {
-                    if(DEBUG) {
-                        Alerts::add_error($exception->getMessage());
-                    } else {
-                        Alerts::add_error(language()->pay->error_message->failed_payment);
-                    }
-                    redirect('pay/' . $this->plan_id);
-                }
-
-                /* Redirect to payment */
-                header('Location: ' . $response['short_url']); die();
-
-                break;
-        }
-
-        die();
-    }
-
-    private function mollie() {
-
-        $mollie = new \Mollie\Api\MollieApiClient();
-        $mollie->setApiKey(settings()->mollie->api_key);
-
-       extract($this->get_price_details());
-
-        /* Taxes */
-        $price = $this->calculate_price_with_taxes($price);
-
-        $price = number_format($price, 2, '.', '');
-
-        switch($_POST['payment_type']) {
-            case 'one_time':
-
-                /* Generate the payment link */
-                try {
-                    $payment = $mollie->payments->create([
-                        'amount' => [
-                            'currency' => settings()->payment->currency,
-                            'value' => $price,
-                        ],
-                        'description' => $_POST['payment_frequency'],
-                        'metadata' => [
-                            'user_id' => $this->user->user_id,
-                            'plan_id' => $this->plan_id,
-                            'payment_frequency' => $_POST['payment_frequency'],
-                            'base_amount' => $base_amount,
-                            'code' => $code,
-                            'discount_amount' => $discount_amount,
-                            'taxes_ids' => json_encode($this->applied_taxes_ids)
-                        ],
-                        'redirectUrl' => url('pay/' . $this->plan_id . $this->return_url_parameters('success', $base_amount, $price, $code, $discount_amount)),
-                        'webhookUrl'  => SITE_URL . 'webhook-mollie',
-                    ]);
-
-                } catch (\Exception $exception) {
-                    if(DEBUG) {
-                        Alerts::add_error($exception->getMessage());
-                    } else {
-                        Alerts::add_error(language()->pay->error_message->failed_payment);
-                    }
-                    redirect('pay/' . $this->plan_id);
-                }
-
-                /* Redirect to payment */
-                header('Location: ' . $payment->getCheckoutUrl()); die();
-
-                break;
-
-            case 'recurring':
-
-                /* Generate the customer */
-                try {
-                    $customer = $mollie->customers->create([
-                        'name' => $this->user->name,
-                        'email' => $this->user->email,
-                    ]);
-                } catch (\Exception $exception) {
-                    if(DEBUG) {
-                        Alerts::add_error($exception->getMessage());
-                    } else {
-                        Alerts::add_error(language()->pay->error_message->failed_payment);
-                    }
-                    redirect('pay/' . $this->plan_id);
-                }
-
-                /* Generate the payment link */
-                try {
-                    $payment = $customer->createPayment([
-                        'sequenceType' => 'first',
-                        'amount' => [
-                            'currency' => settings()->payment->currency,
-                            'value' => $price,
-                        ],
-                        'description' => $_POST['payment_frequency'],
-                        'metadata' => [
-                            'user_id' => $this->user->user_id,
-                            'plan_id' => $this->plan_id,
-                            'payment_frequency' => $_POST['payment_frequency'],
-                            'base_amount' => $base_amount,
-                            'code' => $code,
-                            'discount_amount' => $discount_amount,
-                            'taxes_ids' => json_encode($this->applied_taxes_ids)
-                        ],
-                        'redirectUrl' => url('pay/' . $this->plan_id . $this->return_url_parameters('success', $base_amount, $price, $code, $discount_amount)),
-                        'webhookUrl'  => SITE_URL . 'webhook-mollie',
-                    ]);
-                } catch (\Exception $exception) {
-                    if(DEBUG) {
-                        Alerts::add_error($exception->getMessage());
-                    } else {
-                        Alerts::add_error(language()->pay->error_message->failed_payment);
-                    }
-                    redirect('pay/' . $this->plan_id);
-                }
-
-                /* Redirect to payment */
-                header('Location: ' . $payment->getCheckoutUrl()); die();
-
-                break;
-        }
-
-        die();
-    }
-
-    private function yookassa() {
-
-        $yookassa = new \YooKassa\Client();
-        $yookassa->setAuth(settings()->yookassa->shop_id, settings()->yookassa->secret_key);
-
-        extract($this->get_price_details());
-
-        /* Taxes */
-        $price = $this->calculate_price_with_taxes($price);
-
-        $price = number_format($price, 2, '.', '');
-
-        switch($_POST['payment_type']) {
-            case 'one_time':
-
-                /* Generate the payment link */
-                try {
-                    $payment = $yookassa->createPayment([
-                        'amount' => [
-                            'currency' => settings()->payment->currency,
-                            'value' => $price,
-                        ],
-                        'description' => $_POST['payment_frequency'],
-                        'metadata' => [
-                            'user_id' => $this->user->user_id,
-                            'plan_id' => $this->plan_id,
-                            'payment_frequency' => $_POST['payment_frequency'],
-                            'base_amount' => $base_amount,
-                            'code' => $code,
-                            'discount_amount' => $discount_amount,
-                            'taxes_ids' => json_encode($this->applied_taxes_ids)
-                        ],
-                        'confirmation' => [
-                            'type' => 'redirect',
-                            'return_url' => url('pay/' . $this->plan_id . $this->return_url_parameters('success', $base_amount, $price, $code, $discount_amount)),
-                        ],
-                        'capture' => true,
-                    ], uniqid('', true));
-
-                } catch (\Exception $exception) {
-                    if(DEBUG) {
-                        Alerts::add_error($exception->getMessage());
-                    } else {
-                        Alerts::add_error(language()->pay->error_message->failed_payment);
-                    }
-                    redirect('pay/' . $this->plan_id);
-                }
-
-                /* Redirect to payment */
-                header('Location: ' . $payment->getConfirmation()->getConfirmationUrl()); die();
-
-                break;
-
-            case 'recurring':
-
-                /* Generate the customer */
-                try {
-                    $customer = $mollie->customers->create([
-                        'name' => $this->user->name,
-                        'email' => $this->user->email,
-                    ]);
-                } catch (\Exception $exception) {
-                    if(DEBUG) {
-                        Alerts::add_error($exception->getMessage());
-                    } else {
-                        Alerts::add_error(language()->pay->error_message->failed_payment);
-                    }
-                    redirect('pay/' . $this->plan_id);
-                }
-
-                /* Generate the payment link */
-                try {
-                    $payment = $customer->createPayment([
-                        'sequenceType' => 'first',
-                        'amount' => [
-                            'currency' => settings()->payment->currency,
-                            'value' => $price,
-                        ],
-                        'description' => $_POST['payment_frequency'],
-                        'metadata' => [
-                            'user_id' => $this->user->user_id,
-                            'plan_id' => $this->plan_id,
-                            'payment_frequency' => $_POST['payment_frequency'],
-                            'base_amount' => $base_amount,
-                            'code' => $code,
-                            'discount_amount' => $discount_amount,
-                            'taxes_ids' => json_encode($this->applied_taxes_ids)
-                        ],
-                        'redirectUrl' => url('pay/' . $this->plan_id . $this->return_url_parameters('success', $base_amount, $price, $code, $discount_amount)),
-                        'webhookUrl'  => SITE_URL . 'webhook-mollie',
-                    ]);
-                } catch (\Exception $exception) {
-                    if(DEBUG) {
-                        Alerts::add_error($exception->getMessage());
-                    } else {
-                        Alerts::add_error(language()->pay->error_message->failed_payment);
-                    }
-                    redirect('pay/' . $this->plan_id);
-                }
-
-                /* Redirect to payment */
-                header('Location: ' . $payment->getCheckoutUrl()); die();
-
-                break;
-        }
-
-        die();
-    }
-
     private function payment_return_process() {
 
         /* Return confirmation processing if successfully */
@@ -1407,31 +904,6 @@ class Pay extends Controller {
         $thank_you_url_parameters .= '&unique_transaction_identifier=' . md5(\Altum\Date::get('', 4) . $thank_you_url_parameters);
 
         redirect('pay-thank-you?' . $thank_you_url_parameters);
-    }
-
-    private function get_price_details() {
-        /* Payment details */
-        $price = $base_amount = (float) $this->plan->{$_POST['payment_frequency'] . '_price'};
-        $code = '';
-        $discount_amount = 0;
-
-        /* Check for code usage */
-        if($this->code) {
-            /* Discount amount */
-            $discount_amount = number_format(($price * $this->code->discount / 100), 2, '.', '');
-
-            /* Calculate the new price */
-            $price = $price - $discount_amount;
-
-            $code = $this->code->code;
-        }
-
-        return [
-            'base_amount' => $base_amount,
-            'price' => $price,
-            'code' => $code,
-            'discount_amount' => $discount_amount,
-        ];
     }
 
     private function calculate_price_with_taxes($discounted_price) {

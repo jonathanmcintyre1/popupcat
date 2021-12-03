@@ -19,6 +19,8 @@ namespace Stripe\BillingPortal;
  * billing details.
  *
  * Learn more in the <a
+ * href="https://stripe.com/docs/billing/subscriptions/customer-portal">product
+ * overview</a> and <a
  * href="https://stripe.com/docs/billing/subscriptions/integrating-customer-portal">integration
  * guide</a>.
  *

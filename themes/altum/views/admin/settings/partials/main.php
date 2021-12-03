@@ -122,18 +122,6 @@
         <input id="privacy_policy_url" type="text" name="privacy_policy_url" class="form-control form-control-lg" value="<?= settings()->privacy_policy_url ?>" />
         <small class="form-text text-muted"><?= language()->admin_settings->main->privacy_policy_url_help ?></small>
     </div>
-
-    <div class="form-group">
-        <label for="auto_delete_inactive_users"><i class="fa fa-fw fa-sm fa-users-slash text-muted mr-1"></i> <?= language()->admin_settings->main->auto_delete_inactive_users ?></label>
-        <input id="auto_delete_inactive_users" type="number" min="0" name="auto_delete_inactive_users" class="form-control form-control-lg" value="<?= settings()->main->auto_delete_inactive_users ?>" />
-        <small class="form-text text-muted"><?= language()->admin_settings->main->auto_delete_inactive_users_help ?></small>
-    </div>
-
-    <div class="form-group">
-        <label for="user_deletion_reminder"><i class="fa fa-fw fa-sm fa-calendar-minus text-muted mr-1"></i> <?= language()->admin_settings->main->user_deletion_reminder ?></label>
-        <input id="user_deletion_reminder" type="text" max="<?= settings()->main->auto_delete_inactive_users - 1 ?>" name="user_deletion_reminder" class="form-control form-control-lg" value="<?= settings()->main->user_deletion_reminder ?>" />
-        <small class="form-text text-muted"><?= language()->admin_settings->main->user_deletion_reminder_help ?></small>
-    </div>
 </div>
 
 <button type="submit" name="submit" class="btn btn-lg btn-block btn-primary mt-4"><?= language()->global->update ?></button>

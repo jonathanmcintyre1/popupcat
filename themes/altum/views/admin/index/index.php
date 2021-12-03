@@ -4,13 +4,13 @@
     <div class="col-12 col-sm-6 col-xl-3 mb-4 position-relative">
         <div class="card d-flex flex-row h-100 overflow-hidden">
             <div class="card-body">
-                <small class="text-muted"><i class="fa fa-fw fa-sm fa-hashtag mr-1"></i> <?= language()->admin_index->display->biolink_links ?></small>
+                <small class="text-muted"><i class="fa fa-fw fa-sm fa-server mr-1"></i> <?= language()->admin_index->display->campaigns ?></small>
 
-                <div class="mt-3"><span class="h4"><?= nr($data->biolink_links) ?></span></div>
+                <div class="mt-3"><span class="h4"><?= nr($data->campaigns) ?></span></div>
             </div>
 
             <div class="bg-gray-200 px-2 d-flex flex-column justify-content-center">
-                <a href="<?= url('admin/links?type=biolink') ?>" class="stretched-link">
+                <a href="<?= url('admin/campaigns') ?>" class="stretched-link">
                     <i class="fa fa-fw fa-angle-right text-gray-500"></i>
                 </a>
             </div>
@@ -20,13 +20,13 @@
     <div class="col-12 col-sm-6 col-xl-3 mb-4 position-relative">
         <div class="card d-flex flex-row h-100 overflow-hidden">
             <div class="card-body">
-                <small class="text-muted"><i class="fa fa-fw fa-sm fa-link mr-1"></i> <?= language()->admin_index->display->shortened_links ?></small>
+                <small class="text-muted"><i class="fa fa-fw fa-sm fa-bell mr-1"></i> <?= language()->admin_index->display->notifications ?></small>
 
-                <div class="mt-3"><span class="h4"><?= nr($data->shortened_links) ?></span></div>
+                <div class="mt-3"><span class="h4"><?= nr($data->notifications) ?></span></div>
             </div>
 
             <div class="bg-gray-200 px-2 d-flex flex-column justify-content-center">
-                <a href="<?= url('admin/links?type=link') ?>" class="stretched-link">
+                <a href="<?= url('admin/notifications') ?>" class="stretched-link">
                     <i class="fa fa-fw fa-angle-right text-gray-500"></i>
                 </a>
             </div>
@@ -36,9 +36,9 @@
     <div class="col-12 col-sm-6 col-xl-3 mb-4 position-relative">
         <div class="card d-flex flex-row h-100 overflow-hidden">
             <div class="card-body">
-                <small class="text-muted"><i class="fa fa-fw fa-sm fa-chart-bar mr-1"></i> <?= language()->admin_index->display->track_links ?></small>
+                <small class="text-muted"><i class="fa fa-fw fa-sm fa-wifi mr-1"></i> <?= language()->admin_index->display->track_notifications ?></small>
 
-                <div class="mt-3"><span class="h4"><?= nr($data->track_links) ?></span></div>
+                <div class="mt-3"><span class="h4"><?= nr($data->track_notifications) ?></span></div>
             </div>
         </div>
     </div>
@@ -46,15 +46,9 @@
     <div class="col-12 col-sm-6 col-xl-3 mb-4 position-relative">
         <div class="card d-flex flex-row h-100 overflow-hidden">
             <div class="card-body">
-                <small class="text-muted"><i class="fa fa-fw fa-sm fa-project-diagram mr-1"></i> <?= language()->admin_index->display->projects ?></small>
+                <small class="text-muted"><i class="fa fa-fw fa-sm fa-project-diagram mr-1"></i> <?= language()->admin_index->display->track_logs ?></small>
 
-                <div class="mt-3"><span class="h4"><?= nr($data->projects) ?></span></div>
-            </div>
-
-            <div class="bg-gray-200 px-2 d-flex flex-column justify-content-center">
-                <a href="<?= url('admin/projects') ?>" class="stretched-link">
-                    <i class="fa fa-fw fa-angle-right text-gray-500"></i>
-                </a>
+                <div class="mt-3"><span class="h4"><?= nr($data->track_logs) ?></span></div>
             </div>
         </div>
     </div>
@@ -62,15 +56,9 @@
     <div class="col-12 col-sm-6 col-xl-3 mb-4 position-relative">
         <div class="card d-flex flex-row h-100 overflow-hidden">
             <div class="card-body">
-                <small class="text-muted"><i class="fa fa-fw fa-sm fa-globe mr-1"></i> <?= language()->admin_index->display->domains ?></small>
+                <small class="text-muted"><i class="fa fa-fw fa-sm fa-globe mr-1"></i> <?= language()->admin_index->display->track_conversions ?></small>
 
-                <div class="mt-3"><span class="h4"><?= nr($data->domains) ?></span></div>
-            </div>
-
-            <div class="bg-gray-200 px-2 d-flex flex-column justify-content-center">
-                <a href="<?= url('admin/domains') ?>" class="stretched-link">
-                    <i class="fa fa-fw fa-angle-right text-gray-500"></i>
-                </a>
+                <div class="mt-3"><span class="h4"><?= nr($data->track_conversions) ?></span></div>
             </div>
         </div>
     </div>
@@ -159,9 +147,9 @@
                     <td>
                         <?php if($row->status == 0): ?>
                         <span class="badge badge-pill badge-warning"><i class="fa fa-fw fa-eye-slash"></i> <?= language()->admin_users->main->status_unconfirmed ?>
-                        <?php elseif($row->status == 1): ?>
+                            <?php elseif($row->status == 1): ?>
                         <span class="badge badge-pill badge-success"><i class="fa fa-fw fa-check"></i> <?= language()->admin_users->main->status_active ?>
-                        <?php elseif($row->status == 2): ?>
+                            <?php elseif($row->status == 2): ?>
                         <span class="badge badge-pill badge-light"><i class="fa fa-fw fa-times"></i> <?= language()->admin_users->main->status_disabled ?>
                         <?php endif ?>
                     </td>

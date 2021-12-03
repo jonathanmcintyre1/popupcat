@@ -4,44 +4,61 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit23c61473cc1a5b087f51696e0de110f7
+class ComposerStaticInit718082320f31bff4bbc0e7e56937561c
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
+        'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
         'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
-        '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
+        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
+        '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         'decc78cc4436b1292c6c0d151b19445c' => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib/bootstrap.php',
+        '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
+        'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
+        '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
+        'def43f6c87e4f8dfd0c9e1b1bab14fe8' => __DIR__ . '/..' . '/symfony/polyfill-iconv/bootstrap.php',
+        'b46ad4fe52f4d1899a2951c7e6ea56b0' => __DIR__ . '/..' . '/voku/portable-utf8/bootstrap.php',
+        '65380ab4d81167209b0a4fac46641984' => __DIR__ . '/..' . '/voku/arrayy/src/Create.php',
         '1f87db08236948d07391152dccb70f04' => __DIR__ . '/..' . '/google/apiclient-services/autoload.php',
         'c65d09b6820da036953a371c8c73a9b1' => __DIR__ . '/..' . '/facebook/graph-sdk/src/Facebook/polyfills.php',
         'a8d3953fd9959404dd22d3dfcd0a79f0' => __DIR__ . '/..' . '/google/apiclient/src/aliases.php',
+        '7931120c047024f030ea46f8c9f79508' => __DIR__ . '/..' . '/voku/php-domain-parser/src/pdp-parse-url.php',
     );
 
     public static $prefixLengthsPsr4 = array (
+        'v' => 
+        array (
+            'voku\\' => 5,
+        ),
         'p' => 
         array (
             'phpseclib3\\' => 11,
-        ),
-        'Y' => 
-        array (
-            'YooKassa\\' => 9,
+            'phpDocumentor\\Reflection\\' => 25,
         ),
         'W' => 
         array (
             'WhichBrowser\\' => 13,
+            'Webmozart\\Assert\\' => 17,
+        ),
+        'T' => 
+        array (
+            'TrueBV\\' => 7,
         ),
         'S' => 
         array (
+            'Symfony\\Polyfill\\Php72\\' => 23,
+            'Symfony\\Polyfill\\Mbstring\\' => 26,
+            'Symfony\\Polyfill\\Intl\\Normalizer\\' => 33,
+            'Symfony\\Polyfill\\Intl\\Grapheme\\' => 31,
+            'Symfony\\Polyfill\\Iconv\\' => 23,
+            'Symfony\\Polyfill\\Ctype\\' => 23,
             'Stripe\\' => 7,
-            'SimpleSoftwareIO\\QrCode\\' => 24,
-            'SVG\\' => 4,
         ),
         'R' => 
         array (
             'RobThree\\Auth\\' => 14,
             'ReCaptcha\\' => 10,
-            'Razorpay\\Tests\\' => 15,
-            'Razorpay\\Api\\' => 13,
         ),
         'P' => 
         array (
@@ -52,18 +69,23 @@ class ComposerStaticInit23c61473cc1a5b087f51696e0de110f7
             'Psr\\Cache\\' => 10,
             'Phpfastcache\\Tests\\' => 19,
             'Phpfastcache\\' => 13,
+            'Pdp\\' => 4,
             'ParagonIE\\ConstantTime\\' => 23,
             'PHPMailer\\PHPMailer\\' => 20,
+        ),
+        'O' => 
+        array (
+            'OzdemirBurak\\Iris\\' => 18,
         ),
         'M' => 
         array (
             'Monolog\\' => 8,
-            'Mollie\\Api\\' => 11,
             'MaxMind\\Db\\' => 11,
         ),
         'J' => 
         array (
-            'JeroenDesloovere\\VCard\\' => 23,
+            'Jdenticon\\' => 10,
+            'Jaybizzle\\CrawlerDetect\\' => 24,
         ),
         'G' => 
         array (
@@ -79,50 +101,73 @@ class ComposerStaticInit23c61473cc1a5b087f51696e0de110f7
             'Firebase\\JWT\\' => 13,
             'Facebook\\' => 9,
         ),
-        'D' => 
-        array (
-            'DASPRiD\\Enum\\' => 13,
-        ),
         'C' => 
         array (
             'Composer\\CaBundle\\' => 18,
         ),
-        'B' => 
-        array (
-            'Behat\\Transliterator\\' => 21,
-            'BaconQrCode\\' => 12,
-        ),
         'A' => 
         array (
+            'Arrayy\\' => 7,
             'Abraham\\TwitterOAuth\\' => 21,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
+        'voku\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/voku/portable-ascii/src/voku',
+            1 => __DIR__ . '/..' . '/voku/portable-utf8/src/voku',
+        ),
         'phpseclib3\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib',
         ),
-        'YooKassa\\' => 
+        'phpDocumentor\\Reflection\\' => 
         array (
-            0 => __DIR__ . '/..' . '/yoomoney/yookassa-sdk-php/lib',
+            0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
+            1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+            2 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
         ),
         'WhichBrowser\\' => 
         array (
             0 => __DIR__ . '/..' . '/whichbrowser/parser/src',
             1 => __DIR__ . '/..' . '/whichbrowser/parser/tests/src',
         ),
+        'Webmozart\\Assert\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/webmozart/assert/src',
+        ),
+        'TrueBV\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/true/punycode/src',
+        ),
+        'Symfony\\Polyfill\\Php72\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-php72',
+        ),
+        'Symfony\\Polyfill\\Mbstring\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
+        ),
+        'Symfony\\Polyfill\\Intl\\Normalizer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer',
+        ),
+        'Symfony\\Polyfill\\Intl\\Grapheme\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme',
+        ),
+        'Symfony\\Polyfill\\Iconv\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-iconv',
+        ),
+        'Symfony\\Polyfill\\Ctype\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
+        ),
         'Stripe\\' => 
         array (
             0 => __DIR__ . '/..' . '/stripe/stripe-php/lib',
-        ),
-        'SimpleSoftwareIO\\QrCode\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/simplesoftwareio/simple-qrcode/src',
-        ),
-        'SVG\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/meyfa/php-svg/src',
         ),
         'RobThree\\Auth\\' => 
         array (
@@ -131,14 +176,6 @@ class ComposerStaticInit23c61473cc1a5b087f51696e0de110f7
         'ReCaptcha\\' => 
         array (
             0 => __DIR__ . '/..' . '/google/recaptcha/src/ReCaptcha',
-        ),
-        'Razorpay\\Tests\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/razorpay/razorpay/tests',
-        ),
-        'Razorpay\\Api\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/razorpay/razorpay/src',
         ),
         'Psr\\SimpleCache\\' => 
         array (
@@ -151,7 +188,6 @@ class ComposerStaticInit23c61473cc1a5b087f51696e0de110f7
         'Psr\\Http\\Message\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -169,6 +205,10 @@ class ComposerStaticInit23c61473cc1a5b087f51696e0de110f7
         array (
             0 => __DIR__ . '/..' . '/phpfastcache/phpfastcache/lib/Phpfastcache',
         ),
+        'Pdp\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/voku/php-domain-parser/src/Pdp',
+        ),
         'ParagonIE\\ConstantTime\\' => 
         array (
             0 => __DIR__ . '/..' . '/paragonie/constant_time_encoding/src',
@@ -177,21 +217,25 @@ class ComposerStaticInit23c61473cc1a5b087f51696e0de110f7
         array (
             0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
         ),
+        'OzdemirBurak\\Iris\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/ozdemirburak/iris/src',
+        ),
         'Monolog\\' => 
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
-        ),
-        'Mollie\\Api\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/mollie/mollie-api-php/src',
         ),
         'MaxMind\\Db\\' => 
         array (
             0 => __DIR__ . '/..' . '/maxmind-db/reader/src/MaxMind/Db',
         ),
-        'JeroenDesloovere\\VCard\\' => 
+        'Jdenticon\\' => 
         array (
-            0 => __DIR__ . '/..' . '/jeroendesloovere/vcard/src',
+            0 => __DIR__ . '/..' . '/jdenticon/jdenticon/src',
+        ),
+        'Jaybizzle\\CrawlerDetect\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/jaybizzle/crawler-detect/src',
         ),
         'GuzzleHttp\\Psr7\\' => 
         array (
@@ -225,21 +269,13 @@ class ComposerStaticInit23c61473cc1a5b087f51696e0de110f7
         array (
             0 => __DIR__ . '/..' . '/facebook/graph-sdk/src/Facebook',
         ),
-        'DASPRiD\\Enum\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/dasprid/enum/src',
-        ),
         'Composer\\CaBundle\\' => 
         array (
             0 => __DIR__ . '/..' . '/composer/ca-bundle/src',
         ),
-        'Behat\\Transliterator\\' => 
+        'Arrayy\\' => 
         array (
-            0 => __DIR__ . '/..' . '/behat/transliterator/src/Behat/Transliterator',
-        ),
-        'BaconQrCode\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/bacon/bacon-qr-code/src',
+            0 => __DIR__ . '/..' . '/voku/arrayy/src',
         ),
         'Abraham\\TwitterOAuth\\' => 
         array (
@@ -255,20 +291,9 @@ class ComposerStaticInit23c61473cc1a5b087f51696e0de110f7
                 0 => __DIR__ . '/..' . '/mashape/unirest-php/src',
             ),
         ),
-        'R' => 
-        array (
-            'Requests' => 
-            array (
-                0 => __DIR__ . '/..' . '/rmccue/requests/library',
-            ),
-        ),
     );
 
     public static $classMap = array (
-        'AuthType' => __DIR__ . '/..' . '/openpayu/openpayu/lib/OpenPayU/AuthType/AuthType.php',
-        'AuthType_Basic' => __DIR__ . '/..' . '/openpayu/openpayu/lib/OpenPayU/AuthType/Basic.php',
-        'AuthType_Oauth' => __DIR__ . '/..' . '/openpayu/openpayu/lib/OpenPayU/AuthType/Oauth.php',
-        'AuthType_TokenRequest' => __DIR__ . '/..' . '/openpayu/openpayu/lib/OpenPayU/AuthType/TokenRequest.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Google_AccessToken_Revoke' => __DIR__ . '/..' . '/google/apiclient/src/aliases.php',
         'Google_AccessToken_Verify' => __DIR__ . '/..' . '/google/apiclient/src/aliases.php',
@@ -291,43 +316,16 @@ class ComposerStaticInit23c61473cc1a5b087f51696e0de110f7
         'Google_Task_Retryable' => __DIR__ . '/..' . '/google/apiclient/src/aliases.php',
         'Google_Task_Runner' => __DIR__ . '/..' . '/google/apiclient/src/aliases.php',
         'Google_Utils_UriTemplate' => __DIR__ . '/..' . '/google/apiclient/src/aliases.php',
-        'OauthCacheFile' => __DIR__ . '/..' . '/openpayu/openpayu/lib/OpenPayU/Oauth/Cache/OauthCacheFile.php',
-        'OauthCacheInterface' => __DIR__ . '/..' . '/openpayu/openpayu/lib/OpenPayU/Oauth/Cache/OauthCacheInterface.php',
-        'OauthCacheMemcached' => __DIR__ . '/..' . '/openpayu/openpayu/lib/OpenPayU/Oauth/Cache/OauthCacheMemcached.php',
-        'OauthGrantType' => __DIR__ . '/..' . '/openpayu/openpayu/lib/OpenPayU/Oauth/OauthGrantType.php',
-        'OauthResultClientCredentials' => __DIR__ . '/..' . '/openpayu/openpayu/lib/OpenPayU/Oauth/OauthResultClientCredentials.php',
-        'OpenPayU' => __DIR__ . '/..' . '/openpayu/openpayu/lib/OpenPayU/OpenPayU.php',
-        'OpenPayU_Configuration' => __DIR__ . '/..' . '/openpayu/openpayu/lib/OpenPayU/Configuration.php',
-        'OpenPayU_Exception' => __DIR__ . '/..' . '/openpayu/openpayu/lib/OpenPayU/OpenPayUException.php',
-        'OpenPayU_Exception_Authorization' => __DIR__ . '/..' . '/openpayu/openpayu/lib/OpenPayU/OpenPayUException.php',
-        'OpenPayU_Exception_Configuration' => __DIR__ . '/..' . '/openpayu/openpayu/lib/OpenPayU/OpenPayUException.php',
-        'OpenPayU_Exception_Network' => __DIR__ . '/..' . '/openpayu/openpayu/lib/OpenPayU/OpenPayUException.php',
-        'OpenPayU_Exception_Request' => __DIR__ . '/..' . '/openpayu/openpayu/lib/OpenPayU/OpenPayUException.php',
-        'OpenPayU_Exception_ServerError' => __DIR__ . '/..' . '/openpayu/openpayu/lib/OpenPayU/OpenPayUException.php',
-        'OpenPayU_Exception_ServerMaintenance' => __DIR__ . '/..' . '/openpayu/openpayu/lib/OpenPayU/OpenPayUException.php',
-        'OpenPayU_Http' => __DIR__ . '/..' . '/openpayu/openpayu/lib/OpenPayU/Http.php',
-        'OpenPayU_HttpCurl' => __DIR__ . '/..' . '/openpayu/openpayu/lib/OpenPayU/HttpCurl.php',
-        'OpenPayU_Oauth' => __DIR__ . '/..' . '/openpayu/openpayu/lib/OpenPayU/Oauth/Oauth.php',
-        'OpenPayU_Order' => __DIR__ . '/..' . '/openpayu/openpayu/lib/OpenPayU/v2/Order.php',
-        'OpenPayU_Refund' => __DIR__ . '/..' . '/openpayu/openpayu/lib/OpenPayU/v2/Refund.php',
-        'OpenPayU_Result' => __DIR__ . '/..' . '/openpayu/openpayu/lib/OpenPayU/Result.php',
-        'OpenPayU_Retrieve' => __DIR__ . '/..' . '/openpayu/openpayu/lib/OpenPayU/v2/Retrieve.php',
-        'OpenPayU_Shop' => __DIR__ . '/..' . '/openpayu/openpayu/lib/OpenPayU/v2/Shop.php',
-        'OpenPayU_Token' => __DIR__ . '/..' . '/openpayu/openpayu/lib/OpenPayU/v2/Token.php',
-        'OpenPayU_Util' => __DIR__ . '/..' . '/openpayu/openpayu/lib/OpenPayU/Util.php',
-        'OpenPayuOrderStatus' => __DIR__ . '/..' . '/openpayu/openpayu/lib/OpenPayU/OpenPayuOrderStatus.php',
-        'PayuShop' => __DIR__ . '/..' . '/openpayu/openpayu/lib/OpenPayU/Model/PayuShop.php',
-        'PayuShopBalance' => __DIR__ . '/..' . '/openpayu/openpayu/lib/OpenPayU/Model/PayuShop/PayuShopBalance.php',
-        'ResultError' => __DIR__ . '/..' . '/openpayu/openpayu/lib/OpenPayU/ResultError.php',
+        'Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit23c61473cc1a5b087f51696e0de110f7::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit23c61473cc1a5b087f51696e0de110f7::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit23c61473cc1a5b087f51696e0de110f7::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit23c61473cc1a5b087f51696e0de110f7::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit718082320f31bff4bbc0e7e56937561c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit718082320f31bff4bbc0e7e56937561c::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit718082320f31bff4bbc0e7e56937561c::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit718082320f31bff4bbc0e7e56937561c::$classMap;
 
         }, null, ClassLoader::class);
     }

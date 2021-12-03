@@ -12,7 +12,7 @@
 
         <?php if(isset($_GET['code_days'])): ?>
             <p class="text-muted"><?= sprintf(language()->pay_thank_you->plan_redeemed, (int) $_GET['code_days']) ?></p>
-        <?php elseif(isset($_GET['payment_processor']) && in_array($_GET['payment_processor'], ['paypal', 'stripe', 'coinbase', 'payu', 'paystack', 'razorpay', 'mollie'])): ?>
+        <?php elseif(isset($_GET['payment_processor']) && in_array($_GET['payment_processor'], ['paypal', 'stripe', 'coinbase'])): ?>
             <p class="text-muted"><?= language()->pay_thank_you->plan_custom_will_start ?></p>
         <?php elseif(isset($_GET['payment_processor']) && $_GET['payment_processor'] == 'offline_payment'): ?>
             <p class="text-muted"><?= language()->pay_thank_you->plan_custom_pending ?></p>

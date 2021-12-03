@@ -15,7 +15,7 @@
 
         <div class="row mb-5">
             <div class="col-12 col-md-4">
-                <h2 class="h4"><?= language()->account->settings->header ?></h2>
+                <h2 class="h3"><?= language()->account->settings->header ?></h2>
                 <p class="text-muted"><?= language()->account->settings->subheader ?></p>
             </div>
 
@@ -44,7 +44,7 @@
 
         <div class="row mb-5" id="billing" style="<?= !settings()->payment->is_enabled || !settings()->payment->taxes_and_billing_is_enabled ? 'display: none;' : null ?>">
             <div class="col-12 col-xl-4">
-                <h2 class="h4"><?= language()->account->billing->header ?></h2>
+                <h2 class="h3"><?= language()->account->billing->header ?></h2>
                 <p class="text-muted"><?= language()->account->billing->subheader ?></p>
             </div>
 
@@ -159,7 +159,7 @@
 
         <div class="row">
             <div class="col-12 col-md-4">
-                <h2 class="h4"><?= language()->account->twofa->header ?></h2>
+                <h2 class="h3"><?= language()->account->twofa->header ?></h2>
                 <p class="text-muted"><?= language()->account->twofa->subheader ?></p>
             </div>
 
@@ -174,30 +174,30 @@
 
                 <div id="twofa_container">
                     <?php if(!$this->user->twofa_secret): ?>
-                    <div class="form-group">
-                        <label><?= language()->account->twofa->qr ?></label>
-                        <p class="text-muted"><?= language()->account->twofa->qr_help ?></p>
+                        <div class="form-group">
+                            <label><?= language()->account->twofa->qr ?></label>
+                            <p class="text-muted"><?= language()->account->twofa->qr_help ?></p>
 
-                        <div class="d-flex flex-column flex-md-row align-items-center">
-                            <div class="mb-3 mb-md-0 mr-md-5">
-                                <img src="<?= $data->twofa_image ?>" alt="<?= language()->account->twofa->qr ?>" />
-                            </div>
+                            <div class="d-flex flex-column flex-md-row align-items-center">
+                                <div class="mb-3 mb-md-0 mr-md-5">
+                                    <img src="<?= $data->twofa_image ?>" alt="<?= language()->account->twofa->qr ?>" />
+                                </div>
 
-                            <div>
-                                <label><?= language()->account->twofa->secret ?></label>
-                                <p class="text-muted"><?= language()->account->twofa->secret_help ?></p>
+                                <div>
+                                    <label><?= language()->account->twofa->secret ?></label>
+                                    <p class="text-muted"><?= language()->account->twofa->secret_help ?></p>
 
-                                <p class="h5"><?= $data->twofa_secret ?></p>
+                                    <p class="h5"><?= $data->twofa_secret ?></p>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="twofa_token"><?= language()->account->twofa->verify ?></label>
-                        <p class="text-muted"><?= language()->account->twofa->verify_help ?></p>
-                        <input type="text" id="twofa_token" name="twofa_token" class="form-control <?= \Altum\Alerts::has_field_errors('twofa_token') ? 'is-invalid' : null ?>" value="" autocomplete="off" />
-                        <?= \Altum\Alerts::output_field_error('twofa_token') ?>
-                    </div>
+                        <div class="form-group">
+                            <label for="twofa_token"><?= language()->account->twofa->verify ?></label>
+                            <p class="text-muted"><?= language()->account->twofa->verify_help ?></p>
+                            <input type="text" id="twofa_token" name="twofa_token" class="form-control <?= \Altum\Alerts::has_field_errors('twofa_token') ? 'is-invalid' : null ?>" value="" autocomplete="off" />
+                            <?= \Altum\Alerts::output_field_error('twofa_token') ?>
+                        </div>
                     <?php endif ?>
                 </div>
             </div>
@@ -207,7 +207,7 @@
 
         <div class="row">
             <div class="col-12 col-md-4">
-                <h2 class="h4"><?= language()->account->change_password->header ?></h2>
+                <h2 class="h3"><?= language()->account->change_password->header ?></h2>
                 <p class="text-muted"><?= language()->account->change_password->subheader ?></p>
             </div>
 
@@ -232,11 +232,11 @@
             </div>
         </div>
 
-        <div class="row">
+        <div class="row mt-4">
             <div class="col-12 col-md-4"></div>
 
             <div class="col">
-                <button type="submit" name="submit" class="btn btn-lg btn-block btn-primary mt-4"><?= language()->global->update ?></button>
+                <button type="submit" name="submit" class="btn btn-primary"><?= language()->global->update ?></button>
             </div>
         </div>
     </form>

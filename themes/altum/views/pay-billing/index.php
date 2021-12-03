@@ -5,13 +5,11 @@
     <?= \Altum\Alerts::output_alerts() ?>
 
     <nav aria-label="breadcrumb">
-        <small>
-            <ol class="custom-breadcrumbs small">
-                <li><a href="<?= url() ?>"><?= language()->index->breadcrumb ?></a> <i class="fa fa-fw fa-angle-right"></i></li>
-                <li><a href="<?= url('plan') ?>"><?= language()->plan->breadcrumb ?></a> <i class="fa fa-fw fa-angle-right"></i></li>
-                <li class="active" aria-current="page"><?= language()->pay_billing->breadcrumb ?></li>
-            </ol>
-        </small>
+        <ol class="custom-breadcrumbs small">
+            <li><a href="<?= url() ?>"><?= language()->index->breadcrumb ?></a> <i class="fa fa-fw fa-angle-right"></i></li>
+            <li><a href="<?= url('plan') ?>"><?= language()->plan->breadcrumb ?></a> <i class="fa fa-fw fa-angle-right"></i></li>
+            <li class="active" aria-current="page"><?= language()->pay_billing->breadcrumb ?></li>
+        </ol>
     </nav>
 
     <h1 class="h3"><?= language()->pay_billing->header ?></h1>

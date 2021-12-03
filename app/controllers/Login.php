@@ -296,10 +296,13 @@ class Login extends Controller {
             }
         }
 
+        $total_track_notifications = database()->query("SELECT MAX(`id`) AS `total` FROM `track_notifications`")->fetch_object()->total ?? 0;
+
         /* Prepare the View */
         $data = [
             'captcha' => $captcha,
             'values' => $values,
+            'total_track_notifications' => $total_track_notifications,
             'user' => $user ?? null
         ];
 

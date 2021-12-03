@@ -27,7 +27,7 @@ function string_filter_alphanumeric($string) {
 }
 
 function string_generate($length) {
-    $characters = str_split('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz');
+    $characters = str_split('abcdefghijklmnopqrstuvwxyz0123456789');
     $content = '';
 
     for($i = 1; $i <= $length; $i++) {

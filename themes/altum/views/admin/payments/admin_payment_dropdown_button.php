@@ -2,7 +2,7 @@
 
 <div class="dropdown">
     <button type="button" class="btn btn-link text-secondary dropdown-toggle dropdown-toggle-simple" data-toggle="dropdown" data-boundary="viewport">
-        <i class="fa fa-fw fa-ellipsis-v <?= $data->processor == 'offline_payment' && !$data->status ? 'text-danger' : null ?>"></i>
+        <i class="fa fa-fw fa-ellipsis-v mr-1 <?= $data->processor == 'offline_payment' && !$data->status ? 'text-danger' : null ?>"></i>
     </button>
 
     <div class="dropdown-menu dropdown-menu-right">

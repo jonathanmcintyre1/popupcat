@@ -69,11 +69,6 @@ typedef zend_object free_obj_t;
 #define IS_MIXED IS_UNDEF
 #endif
 
-/* ZEND_THIS was added in 7.4 */
-#ifndef ZEND_THIS
-#define ZEND_THIS (&EX(This))
-#endif
-
 typedef struct _maxminddb_obj {
     MMDB_s *mmdb;
     zend_object std;
@@ -156,7 +151,7 @@ PHP_METHOD(MaxMind_Db_Reader, __construct) {
         return;
     }
 
-    maxminddb_obj *mmdb_obj = Z_MAXMINDDB_P(ZEND_THIS);
+    maxminddb_obj *mmdb_obj = Z_MAXMINDDB_P(getThis());
     mmdb_obj->mmdb = mmdb;
 }
 
@@ -207,7 +202,7 @@ get_record(INTERNAL_FUNCTION_PARAMETERS, zval *record, int *prefix_len) {
         return FAILURE;
     }
 
-    const maxminddb_obj *mmdb_obj = (maxminddb_obj *)Z_MAXMINDDB_P(ZEND_THIS);
+    const maxminddb_obj *mmdb_obj = (maxminddb_obj *)Z_MAXMINDDB_P(getThis());
 
     MMDB_s *mmdb = mmdb_obj->mmdb;
 

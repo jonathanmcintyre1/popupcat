@@ -72,5 +72,5 @@ function get_domain_from_url($url) {
     $host = explode('.', $host);
 
     /* Return only the last 2 array values combined */
-    return mb_strtolower(implode('.', array_slice($host, -2, 2)));
+    return implode('.', array_slice($host, -2, 2));
 }

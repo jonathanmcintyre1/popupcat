@@ -20,7 +20,7 @@
             <div class="col-auto p-0 d-flex">
                 <div class="ml-3">
                     <div class="dropdown">
-                        <button type="button" class="btn btn-outline-secondary dropdown-toggle-simple" data-toggle="dropdown" data-boundary="viewport" title="<?= language()->global->export ?>">
+                        <button type="button" class="btn rounded-pill btn-outline-secondary dropdown-toggle-simple" data-toggle="dropdown" data-boundary="viewport" title="<?= language()->global->export ?>">
                             <i class="fa fa-fw fa-sm fa-download"></i>
                         </button>
 
@@ -37,7 +37,7 @@
 
                 <div class="ml-3">
                     <div class="dropdown">
-                        <button type="button" class="btn <?= count($data->filters->get) ? 'btn-outline-primary' : 'btn-outline-secondary' ?> filters-button dropdown-toggle-simple" data-toggle="dropdown" data-boundary="viewport"><i class="fa fa-fw fa-sm fa-filter"></i></button>
+                        <button type="button" class="btn rounded-pill <?= count($data->filters->get) ? 'btn-outline-primary' : 'btn-outline-secondary' ?> filters-button dropdown-toggle-simple" data-toggle="dropdown" data-boundary="viewport"><i class="fa fa-fw fa-sm fa-filter"></i></button>
 
                         <div class="dropdown-menu dropdown-menu-right filters-dropdown">
                             <div class="dropdown-header d-flex justify-content-between">

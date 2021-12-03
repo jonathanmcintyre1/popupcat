@@ -9,7 +9,6 @@
 
 namespace Altum\Controllers;
 
-use Abraham\TwitterOAuth\TwitterOAuth;
 use Altum\Alerts;
 use Altum\Captcha;
 use Altum\Database\Database;
@@ -166,10 +165,13 @@ class Register extends Controller {
             }
         }
 
+        $total_notifications = database()->query("SELECT MAX(`notification_id`) AS `total` FROM `notifications`")->fetch_object()->total ?? 0;
+
         /* Main View */
         $data = [
             'values' => $values,
             'captcha' => $captcha,
+            'total_notifications' => $total_notifications,
         ];
 
         $view = new \Altum\Views\View('register/index', (array) $this);

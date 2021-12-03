@@ -23,7 +23,7 @@
     </div>
     <p class="text-muted mb-4">
         <?php if($data->page->description): ?>
-        <span class="mr-3"><?= $data->page->description ?></span>
+            <span class="mr-3"><?= $data->page->description ?></span>
         <?php endif ?>
 
         <?php $estimated_reading_time = string_estimate_reading_time($data->page->content) ?>
@@ -39,6 +39,6 @@
     <?= $data->page->content ?>
 
     <div class="mt-4">
-        <small class="text-muted"><i class="fa fa-fw fa-sm fa-calendar"></i> <?= sprintf(language()->page->last_datetime, \Altum\Date::get($data->page->last_datetime, 2)) ?></small>
+        <small class="text-muted"><i class="fa fa-fw fa-sm fa-calendar"></i> <?= sprintf(language()->page->last_date, \Altum\Date::get($data->page->last_date, 2)) ?></small>
     </div>
 </div>

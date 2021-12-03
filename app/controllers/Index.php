@@ -9,8 +9,8 @@
 
 namespace Altum\Controllers;
 
+
 use Altum\Meta;
-use Altum\Models\Page;
 
 class Index extends Controller {
 
@@ -22,9 +22,15 @@ class Index extends Controller {
             die();
         }
 
+        $total_track_notifications = database()->query("SELECT MAX(`id`) AS `total` FROM `track_notifications`")->fetch_object()->total ?? 0;
+        $total_notifications = database()->query("SELECT MAX(`notification_id`) AS `total` FROM `notifications`")->fetch_object()->total ?? 0;
+
         /* Plans View */
+        $data = [];
+
         $view = new \Altum\Views\View('partials/plans', (array) $this);
-        $this->add_view_content('plans', $view->run());
+
+        $this->add_view_content('plans', $view->run($data));
 
         /* Opengraph image */
         if(settings()->opengraph) {
@@ -33,21 +39,16 @@ class Index extends Controller {
             Meta::set_social_image(UPLOADS_FULL_URL . 'opengraph/' .settings()->opengraph);
         }
 
-        $total_links = database()->query("SELECT MAX(`link_id`) AS `total` FROM `links`")->fetch_object()->total ?? 0;
-        $total_qr_codes = database()->query("SELECT MAX(`qr_code_id`) AS `total` FROM `qr_codes`")->fetch_object()->total ?? 0;
-        $total_track_links = database()->query("SELECT MAX(`id`) AS `total` FROM `track_links`")->fetch_object()->total ?? 0;
-
-        /* Establish the menu view */
-        $menu = new \Altum\Views\View('partials/index_menu', (array) $this);
-        $this->add_view_content('index_menu', $menu->run([ 'pages' => (new Page())->get_pages('top') ]));
-
         /* Main View */
+        $data = [
+            'notifications' => \Altum\Notification::get_config(),
+            'total_track_notifications' => $total_track_notifications,
+            'total_notifications' => $total_notifications
+        ];
+
         $view = new \Altum\Views\View('index/index', (array) $this);
-        $this->add_view_content('content', $view->run([
-            'total_links' => $total_links,
-            'total_qr_codes' => $total_qr_codes,
-            'total_track_links' => $total_track_links,
-        ]));
+
+        $this->add_view_content('content', $view->run($data));
 
     }
 

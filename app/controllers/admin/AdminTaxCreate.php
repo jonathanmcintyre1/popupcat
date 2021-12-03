@@ -19,6 +19,7 @@ class AdminTaxCreate extends Controller {
 
         if(!empty($_POST)) {
             /* Filter some the variables */
+            $_POST['internal_name'] = Database::clean_string($_POST['internal_name']);
             $_POST['name'] = Database::clean_string($_POST['name']);
             $_POST['description'] = Database::clean_string($_POST['description']);
             $_POST['value'] = (int) $_POST['value'];
@@ -37,6 +38,7 @@ class AdminTaxCreate extends Controller {
 
                 /* Database query */
                 db()->insert('taxes', [
+                    'internal_name' => $_POST['internal_name'],
                     'name' => $_POST['name'],
                     'description' => $_POST['description'],
                     'value' => $_POST['value'],

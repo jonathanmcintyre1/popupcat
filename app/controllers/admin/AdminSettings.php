@@ -22,7 +22,6 @@ class AdminSettings extends Controller {
 
     private function process() {
         $method	= (isset(Router::$method) && file_exists(THEME_PATH . 'views/admin/settings/partials/' . Router::$method . '.php')) ? Router::$method : 'main';
-        $payment_processors = require APP_PATH . 'includes/payment_processors.php';
 
         /* Method View */
         $view = new \Altum\Views\View('admin/settings/partials/' . $method, (array) $this);
@@ -30,10 +29,7 @@ class AdminSettings extends Controller {
 
         /* Main View */
         $view = new \Altum\Views\View('admin/settings/index', (array) $this);
-        $this->add_view_content('content', $view->run([
-            'method' => $method,
-            'payment_processors' => $payment_processors,
-        ]));
+        $this->add_view_content('content', $view->run(['method' => $method]));
     }
 
     private function update_settings($key, $value) {
@@ -76,8 +72,6 @@ class AdminSettings extends Controller {
 
             $value = json_encode([
                 'se_indexing' => $_POST['se_indexing'],
-                'auto_delete_inactive_users' => (int) $_POST['auto_delete_inactive_users'],
-                'user_deletion_reminder' => (int) $_POST['user_deletion_reminder'],
             ]);
 
             db()->where('`key`', 'main')->update('settings', ['value' => $value]);
@@ -163,6 +157,7 @@ class AdminSettings extends Controller {
 
                 /* Check for the removal of the already uploaded file */
                 if(isset($_POST[$image_key . '_remove'])) {
+
                     /* Offload deleting */
                     if(\Altum\Plugin::is_active('offload') && settings()->offload->uploads_url) {
                         $s3 = new \Aws\S3\S3Client(get_aws_s3_config());
@@ -250,7 +245,7 @@ class AdminSettings extends Controller {
             //ALTUMCODE:DEMO if(DEMO) Alerts::add_error('This command is blocked on the demo.');
 
             /* :) */
-            $_POST['is_enabled'] = (bool) $_POST['is_enabled'];
+            $_POST['is_enabled'] = (bool)$_POST['is_enabled'];
             $_POST['mode'] = in_array($_POST['mode'], ['live', 'sandbox']) ? filter_var($_POST['mode'], FILTER_SANITIZE_STRING) : 'live';
 
             $value = json_encode([
@@ -309,7 +304,7 @@ class AdminSettings extends Controller {
             //ALTUMCODE:DEMO if(DEMO) Alerts::add_error('This command is blocked on the demo.');
 
             /* :) */
-            $_POST['is_enabled'] = (bool) $_POST['is_enabled'];
+            $_POST['is_enabled'] = (bool)$_POST['is_enabled'];
 
             $value = json_encode([
                 'is_enabled' => $_POST['is_enabled'],
@@ -318,105 +313,6 @@ class AdminSettings extends Controller {
             ]);
 
             $this->update_settings('coinbase', $value);
-        }
-    }
-
-    public function payu() {
-        $this->process();
-
-        if(!empty($_POST)) {
-            //ALTUMCODE:DEMO if(DEMO) Alerts::add_error('This command is blocked on the demo.');
-
-            /* :) */
-            $_POST['is_enabled'] = (bool) $_POST['is_enabled'];
-            $_POST['mode'] = in_array($_POST['mode'], ['secure', 'sandbox']) ? filter_var($_POST['mode'], FILTER_SANITIZE_STRING) : 'secure';
-
-            $value = json_encode([
-                'is_enabled' => $_POST['is_enabled'],
-                'mode' => $_POST['mode'],
-                'merchant_pos_id' => $_POST['merchant_pos_id'],
-                'signature_key' => $_POST['signature_key'],
-                'oauth_client_id' => $_POST['oauth_client_id'],
-                'oauth_client_secret' => $_POST['oauth_client_secret'],
-            ]);
-
-            $this->update_settings('payu', $value);
-        }
-    }
-
-    public function paystack() {
-        $this->process();
-
-        if(!empty($_POST)) {
-            //ALTUMCODE:DEMO if(DEMO) Alerts::add_error('This command is blocked on the demo.');
-
-            /* :) */
-            $_POST['is_enabled'] = (bool) $_POST['is_enabled'];
-
-            $value = json_encode([
-                'is_enabled' => $_POST['is_enabled'],
-                'public_key' => $_POST['public_key'],
-                'secret_key' => $_POST['secret_key'],
-            ]);
-
-            $this->update_settings('paystack', $value);
-        }
-    }
-
-    public function razorpay() {
-        $this->process();
-
-        if(!empty($_POST)) {
-            //ALTUMCODE:DEMO if(DEMO) Alerts::add_error('This command is blocked on the demo.');
-
-            /* :) */
-            $_POST['is_enabled'] = (bool) $_POST['is_enabled'];
-
-            $value = json_encode([
-                'is_enabled' => $_POST['is_enabled'],
-                'key_id' => $_POST['key_id'],
-                'key_secret' => $_POST['key_secret'],
-                'webhook_secret' => $_POST['webhook_secret'],
-            ]);
-
-            $this->update_settings('razorpay', $value);
-        }
-    }
-
-    public function mollie() {
-        $this->process();
-
-        if(!empty($_POST)) {
-            //ALTUMCODE:DEMO if(DEMO) Alerts::add_error('This command is blocked on the demo.');
-
-            /* :) */
-            $_POST['is_enabled'] = (bool) $_POST['is_enabled'];
-
-            $value = json_encode([
-                'is_enabled' => $_POST['is_enabled'],
-                'api_key' => $_POST['api_key'],
-            ]);
-
-            $this->update_settings('mollie', $value);
-        }
-    }
-
-    public function yookassa() {
-        $this->process();
-
-        if(!empty($_POST)) {
-            //ALTUMCODE:DEMO if(DEMO) Alerts::add_error('This command is blocked on the demo.');
-
-            /* :) */
-            $_POST['is_enabled'] = (bool) $_POST['is_enabled'];
-
-            $value = json_encode([
-                'is_enabled' => $_POST['is_enabled'],
-                'shop_id' => $_POST['shop_id'],
-                'secret_key' => $_POST['secret_key'],
-            ]);
-
-            $this->update_settings('yookassa', $value);
         }
     }
 
@@ -576,8 +472,6 @@ class AdminSettings extends Controller {
             $value = json_encode([
                 'header' => $_POST['header'],
                 'footer' => $_POST['footer'],
-                'header_biolink' => $_POST['header_biolink'],
-                'footer_biolink' => $_POST['footer_biolink'],
             ]);
 
             $this->update_settings('ads', $value);
@@ -637,8 +531,6 @@ class AdminSettings extends Controller {
             $value = json_encode([
                 'head_js' => $_POST['head_js'],
                 'head_css' => $_POST['head_css'],
-                'head_js_biolink' => $_POST['head_js_biolink'],
-                'head_css_biolink' => $_POST['head_css_biolink'],
             ]);
 
             $this->update_settings('custom', $value);
@@ -652,22 +544,19 @@ class AdminSettings extends Controller {
             //ALTUMCODE:DEMO if(DEMO) Alerts::add_error('This command is blocked on the demo.');
 
             /* :) */
-            $_POST['guests_id'] = md5($_POST['content'] . time());
-            $_POST['guests_text_color'] = !preg_match('/#([A-Fa-f0-9]{3,4}){1,2}\b/i', $_POST['guests_text_color']) ? '#000' : $_POST['guests_text_color'];
-            $_POST['guests_background_color'] = !preg_match('/#([A-Fa-f0-9]{3,4}){1,2}\b/i', $_POST['guests_background_color']) ? '#fff' : $_POST['guests_background_color'];
-            $_POST['users_id'] = md5($_POST['content'] . time());
-            $_POST['users_text_color'] = !preg_match('/#([A-Fa-f0-9]{3,4}){1,2}\b/i', $_POST['users_text_color']) ? '#000' : $_POST['users_text_color'];
-            $_POST['users_background_color'] = !preg_match('/#([A-Fa-f0-9]{3,4}){1,2}\b/i', $_POST['users_background_color']) ? '#fff' : $_POST['users_background_color'];
+            $_POST['id'] = md5($_POST['content']);
+            $_POST['text_color'] = !preg_match('/#([A-Fa-f0-9]{3,4}){1,2}\b/i', $_POST['text_color']) ? '#000' : $_POST['text_color'];
+            $_POST['background_color'] = !preg_match('/#([A-Fa-f0-9]{3,4}){1,2}\b/i', $_POST['background_color']) ? '#fff' : $_POST['background_color'];
+            $_POST['show_logged_in'] = (bool) isset($_POST['show_logged_in']);
+            $_POST['show_logged_out'] = (bool) isset($_POST['show_logged_out']);
 
             $value = json_encode([
-                'guests_id' => $_POST['guests_id'],
-                'guests_content' => $_POST['guests_content'],
-                'guests_text_color' => $_POST['guests_text_color'],
-                'guests_background_color' => $_POST['guests_background_color'],
-                'users_id' => $_POST['users_id'],
-                'users_content' => $_POST['users_content'],
-                'users_text_color' => $_POST['users_text_color'],
-                'users_background_color' => $_POST['users_background_color'],
+                'id' => $_POST['id'],
+                'content' => $_POST['content'],
+                'text_color' => $_POST['text_color'],
+                'background_color' => $_POST['background_color'],
+                'show_logged_in' => $_POST['show_logged_in'],
+                'show_logged_out' => $_POST['show_logged_out'],
             ]);
 
             $this->update_settings('announcements', $value);
@@ -684,14 +573,12 @@ class AdminSettings extends Controller {
             $_POST['emails'] = str_replace(' ', '', $_POST['emails']);
             $_POST['new_user'] = (bool) isset($_POST['new_user']);
             $_POST['new_payment'] = (bool) isset($_POST['new_payment']);
-            $_POST['new_domain'] = (bool) isset($_POST['new_domain']);
             $_POST['new_affiliate_withdrawal'] = (bool) isset($_POST['new_affiliate_withdrawal']);
 
             $value = json_encode([
                 'emails' => $_POST['emails'],
                 'new_user' => $_POST['new_user'],
                 'new_payment' => $_POST['new_payment'],
-                'new_domain' => $_POST['new_domain'],
                 'new_affiliate_withdrawal' => $_POST['new_affiliate_withdrawal'],
             ]);
 
@@ -797,7 +684,7 @@ class AdminSettings extends Controller {
         }
     }
 
-    public function links() {
+    public function socialproofo() {
         $this->process();
 
         if(!empty($_POST)) {
@@ -805,44 +692,16 @@ class AdminSettings extends Controller {
 
             /* :) */
             $_POST['branding'] = trim($_POST['branding']);
-            $_POST['shortener_is_enabled'] = (bool) $_POST['shortener_is_enabled'];
-            $_POST['domains_is_enabled'] = (bool) $_POST['domains_is_enabled'];
-            $_POST['main_domain_is_enabled'] = (bool) $_POST['main_domain_is_enabled'];
-            $_POST['blacklisted_domains'] = implode(',', array_map('trim', explode(',', $_POST['blacklisted_domains'])));
-            $_POST['blacklisted_keywords'] = implode(',', array_map('trim', explode(',', $_POST['blacklisted_keywords'])));
-            $_POST['google_safe_browsing_is_enabled'] = (bool) $_POST['google_safe_browsing_is_enabled'];
-            $_POST['avatar_size_limit'] = $_POST['avatar_size_limit'] > get_max_upload() || $_POST['avatar_size_limit'] < 0 ? get_max_upload() : (float) $_POST['avatar_size_limit'];
-            $_POST['background_size_limit'] = $_POST['background_size_limit'] > get_max_upload() || $_POST['background_size_limit'] < 0 ? get_max_upload() : (float) $_POST['background_size_limit'];
-            $_POST['favicon_size_limit'] = $_POST['favicon_size_limit'] > get_max_upload() || $_POST['favicon_size_limit'] < 0 ? get_max_upload() : (float) $_POST['favicon_size_limit'];
-            $_POST['seo_image_size_limit'] = $_POST['seo_image_size_limit'] > get_max_upload() || $_POST['seo_image_size_limit'] < 0 ? get_max_upload() : (float) $_POST['seo_image_size_limit'];
-            $_POST['thumbnail_image_size_limit'] = $_POST['thumbnail_image_size_limit'] > get_max_upload() || $_POST['thumbnail_image_size_limit'] < 0 ? get_max_upload() : (float) $_POST['thumbnail_image_size_limit'];
-            $_POST['image_size_limit'] = $_POST['image_size_limit'] > get_max_upload() || $_POST['image_size_limit'] < 0 ? get_max_upload() : (float) $_POST['image_size_limit'];
-            $_POST['audio_size_limit'] = $_POST['audio_size_limit'] > get_max_upload() || $_POST['audio_size_limit'] < 0 ? get_max_upload() : (float) $_POST['audio_size_limit'];
-            $_POST['video_size_limit'] = $_POST['video_size_limit'] > get_max_upload() || $_POST['video_size_limit'] < 0 ? get_max_upload() : (float) $_POST['video_size_limit'];
-            $_POST['file_size_limit'] = $_POST['file_size_limit'] > get_max_upload() || $_POST['file_size_limit'] < 0 ? get_max_upload() : (float) $_POST['file_size_limit'];
-
+            $_POST['analytics_is_enabled'] = (bool) $_POST['analytics_is_enabled'];
+            $_POST['pixel_cache'] = (int) $_POST['pixel_cache'];
 
             $value = json_encode([
                 'branding' => $_POST['branding'],
-                'shortener_is_enabled' => $_POST['shortener_is_enabled'],
-                'domains_is_enabled' => $_POST['domains_is_enabled'],
-                'main_domain_is_enabled' => $_POST['main_domain_is_enabled'],
-                'blacklisted_domains' => $_POST['blacklisted_domains'],
-                'blacklisted_keywords' => $_POST['blacklisted_keywords'],
-                'google_safe_browsing_is_enabled' => $_POST['google_safe_browsing_is_enabled'],
-                'google_safe_browsing_api_key' => $_POST['google_safe_browsing_api_key'],
-                'avatar_size_limit' => $_POST['avatar_size_limit'],
-                'background_size_limit' => $_POST['background_size_limit'],
-                'favicon_size_limit' => $_POST['favicon_size_limit'],
-                'seo_image_size_limit' => $_POST['seo_image_size_limit'],
-                'thumbnail_image_size_limit' => $_POST['thumbnail_image_size_limit'],
-                'image_size_limit' => $_POST['image_size_limit'],
-                'audio_size_limit' => $_POST['audio_size_limit'],
-                'video_size_limit' => $_POST['video_size_limit'],
-                'file_size_limit' => $_POST['file_size_limit'],
+                'analytics_is_enabled' => $_POST['analytics_is_enabled'],
+                'pixel_cache' => $_POST['pixel_cache'],
             ]);
 
-            $this->update_settings('links', $value);
+            $this->update_settings('socialproofo', $value);
         }
     }
 

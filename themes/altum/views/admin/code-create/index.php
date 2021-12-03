@@ -70,13 +70,20 @@
 
         switch(type) {
             case 'discount':
+
                 document.querySelector('#discount_container').style.display = 'block';
                 document.querySelector('#days_container').style.display = 'none';
+                document.querySelector('select[name="plan_id"] option[value=""]').style.display = 'block';
+                document.querySelector('select[name="plan_id"] option[value=""]').removeAttribute('disabled');
                 break;
 
             case 'redeemable':
+
                 document.querySelector('#discount_container').style.display = 'none';
                 document.querySelector('#days_container').style.display = 'block';
+                document.querySelector('select[name="plan_id"] option[value=""]').style.display = 'none';
+                document.querySelector('select[name="plan_id"] option[value=""]').setAttribute('disabled', 'disabled');
+
                 break;
         }
     };

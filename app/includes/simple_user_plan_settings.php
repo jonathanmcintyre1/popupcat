@@ -8,25 +8,10 @@
  */
 
 $features = [
-    'additional_global_domains',
-    'custom_url',
-    'deep_links',
+    'no_ads',
     'removable_branding',
     'custom_branding',
-    'custom_colored_links',
-    'statistics',
-    'custom_backgrounds',
-    'verified',
-    'temporary_url_is_enabled',
-    'seo',
-    'utm',
-    'fonts',
-    'password',
-    'sensitive_content',
-    'leap_link',
-    'dofollow_is_enabled',
-    'no_ads',
-    'api_is_enabled'
+    'api_is_enabled',
 ];
 
 if(\Altum\Plugin::is_active('affiliate') && settings()->affiliate->is_enabled) {

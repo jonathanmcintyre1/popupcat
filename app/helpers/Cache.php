@@ -21,11 +21,8 @@ class Cache {
         /* Cache adapter for phpFastCache */
         if($driver == 'Files') {
             $config = new \Phpfastcache\Drivers\Files\Config([
-                'securityKey' => 'biolinks',
+                'securityKey' => 'socialproofo',
                 'path' => UPLOADS_PATH . 'cache',
-                'preventCacheSlams' => true,
-                'cacheSlamsTimeout' => 20,
-                'secureFileManipulation' => true
             ]);
         } else {
             $config = new \Phpfastcache\Config\Config([

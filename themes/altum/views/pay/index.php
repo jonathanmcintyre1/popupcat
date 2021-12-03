@@ -39,6 +39,7 @@
 
             <div class="row">
                 <div class="col-12 col-xl-8 order-1 order-xl-0">
+
                     <button type="submit" name="submit" class="btn btn-lg btn-block btn-primary"><?= sprintf(language()->pay->trial->trial_start, $data->plan->trial_days) ?></button>
 
                     <div class="mt-3 text-muted text-center">
@@ -66,7 +67,6 @@
 
             <div class="row"><div class="col-12 col-xl-8"></div></div>
         </form>
-
 
     <?php elseif(is_numeric($data->plan_id)): ?>
 
@@ -165,7 +165,7 @@
 
                     <h2 class="h5 mt-5 mb-4 text-muted"><i class="fa fa-fw fa-sm fa-money-check-alt mr-1"></i> <?= language()->pay->custom_plan->payment_processor ?></h2>
 
-                    <?php if(!settings()->paypal->is_enabled && !settings()->stripe->is_enabled && !settings()->offline_payment->is_enabled && !settings()->coinbase->is_enabled && !settings()->payu->is_enabled && !settings()->paystack->is_enabled && !settings()->razorpay->is_enabled && !settings()->mollie->is_enabled): ?>
+                    <?php if(!settings()->paypal->is_enabled && !settings()->stripe->is_enabled && !settings()->offline_payment->is_enabled && !settings()->coinbase->is_enabled): ?>
                         <div class="alert alert-info" role="alert">
                             <?= language()->pay->custom_plan->no_processor ?>
                         </div>
@@ -173,24 +173,86 @@
 
                         <div>
                             <div class="row d-flex align-items-stretch">
-                                <?php foreach($data->payment_processors as $key => $value): ?>
-                                    <?php if(settings()->{$key}->is_enabled): ?>
-                                        <label class="col-12 my-2 custom-radio-box">
-                                            <input type="radio" name="payment_processor" value="<?= $key ?>" class="custom-control-input" required="required">
 
-                                            <div class="card">
-                                                <div class="card-body d-flex align-items-center justify-content-between">
-                                                    <div class="card-title mb-0"><?= language()->pay->custom_plan->{$key} ?></div>
+                                <?php if(settings()->paypal->is_enabled): ?>
+                                    <label class="col-12 my-2 custom-radio-box">
 
-                                                    <div class="">
-                                                        <span class="custom-radio-box-main-icon"><i class="<?= $value['icon'] ?> fa-fw"></i></span>
-                                                    </div>
+                                        <input type="radio" name="payment_processor" value="paypal" class="custom-control-input" required="required">
 
+                                        <div class="card">
+                                            <div class="card-body d-flex align-items-center justify-content-between">
+
+                                                <div class="card-title mb-0"><?= language()->pay->custom_plan->paypal ?></div>
+
+                                                <div class="">
+                                                    <span class="custom-radio-box-main-icon"><i class="fab fa-fw fa-paypal"></i></span>
                                                 </div>
+
                                             </div>
-                                        </label>
-                                    <?php endif ?>
-                                <?php endforeach ?>
+                                        </div>
+
+                                    </label>
+                                <?php endif ?>
+
+                                <?php if(settings()->stripe->is_enabled): ?>
+                                    <label class="col-12 my-2 custom-radio-box">
+
+                                        <input type="radio" name="payment_processor" value="stripe" class="custom-control-input" required="required">
+
+                                        <div class="card">
+                                            <div class="card-body d-flex align-items-center justify-content-between">
+
+                                                <div class="card-title mb-0"><?= language()->pay->custom_plan->stripe ?></div>
+
+                                                <div class="">
+                                                    <span class="custom-radio-box-main-icon"><i class="fab fa-fw fa-stripe"></i></span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </label>
+                                <?php endif ?>
+
+                                <?php if(settings()->offline_payment->is_enabled): ?>
+                                    <label class="col-12 my-2 custom-radio-box">
+
+                                        <input type="radio" name="payment_processor" value="offline_payment" class="custom-control-input" required="required">
+
+                                        <div class="card">
+                                            <div class="card-body d-flex align-items-center justify-content-between">
+
+                                                <div class="card-title mb-0"><?= language()->pay->custom_plan->offline_payment ?></div>
+
+                                                <div class="">
+                                                    <span class="custom-radio-box-main-icon"><i class="fa fa-fw fa-university"></i></span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </label>
+                                <?php endif ?>
+
+                                <?php if(settings()->coinbase->is_enabled): ?>
+                                    <label class="col-12 my-2 custom-radio-box">
+
+                                        <input type="radio" name="payment_processor" value="coinbase" class="custom-control-input" required="required">
+
+                                        <div class="card">
+                                            <div class="card-body d-flex align-items-center justify-content-between">
+
+                                                <div class="card-title mb-0"><?= language()->pay->custom_plan->coinbase ?></div>
+
+                                                <div class="">
+                                                    <span class="custom-radio-box-main-icon"><i class="fab fa-fw fa-bitcoin"></i></span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </label>
+                                <?php endif ?>
                             </div>
 
                             <div id="offline_payment_processor_wrapper" style="display: none;">
@@ -348,13 +410,21 @@
                                             <?= language()->pay->custom_plan->summary->payment_processor ?>
                                         </span>
 
-                                        <?php foreach($data->payment_processors as $key => $value): ?>
-                                            <?php if(settings()->{$key}->is_enabled): ?>
-                                                <span data-summary-payment-processor="<?= $key ?>" class="d-none">
-                                                    <?= language()->pay->custom_plan->{$key} ?>
-                                                </span>
-                                            <?php endif ?>
-                                        <?php endforeach ?>
+                                        <span id="summary_payment_processor_paypal" style="display: none;">
+                                            <?= language()->pay->custom_plan->paypal ?>
+                                        </span>
+
+                                        <span id="summary_payment_processor_stripe" style="display: none;">
+                                            <?= language()->pay->custom_plan->stripe ?>
+                                        </span>
+
+                                        <span id="summary_payment_processor_offline_payment" style="display: none;">
+                                            <?= language()->pay->custom_plan->offline_payment ?>
+                                        </span>
+
+                                        <span id="summary_payment_processor_coinbase" style="display: none;">
+                                            <?= language()->pay->custom_plan->coinbase ?>
+                                        </span>
                                     </div>
 
                                     <div class="d-flex justify-content-between mb-3">
@@ -604,7 +674,9 @@
     <?php endif ?>
 
     <?php endif ?>
+
 </div>
+
 
 
 <?php ob_start() ?>
@@ -613,7 +685,7 @@
 
     /* Handlers */
     let check_payment_frequency = () => {
-        let payment_frequency = document.querySelector('[name="payment_frequency"]:checked')?.value;
+        let payment_frequency = $('[name="payment_frequency"]:checked').val();
 
         switch(payment_frequency) {
             case 'monthly':
@@ -674,46 +746,83 @@
     }
 
     $('[name="payment_frequency"]').on('change', event => {
+
         check_payment_frequency();
+
         check_payment_processor();
+
         calculate_prices();
+
     });
 
     let check_payment_processor = () => {
-        let payment_processor = document.querySelector('[name="payment_processor"]:checked')?.value;
+        let payment_processor = $('[name="payment_processor"]:checked').val();
 
-        if(!payment_processor) {
-            return;
-        }
+        switch(payment_processor) {
+            case 'paypal':
 
-        document.querySelectorAll(`[data-summary-payment-processor]:not([data-summary-payment-processor="${payment_processor}"])`).forEach(element => {
-           element.classList.add('d-none');
-        });
+                $('#summary_payment_processor_paypal').show();
+                $('#summary_payment_processor_stripe').hide();
+                $('#summary_payment_processor_offline_payment').hide();
+                $('#offline_payment_processor_wrapper').hide();
+                $('#summary_payment_processor_coinbase').hide();
 
-        document.querySelector(`[data-summary-payment-processor="${payment_processor}"]`).classList.remove('d-none');
+                break;
 
-        if(['offline_payment', 'coinbase', 'payu'].includes(payment_processor)) {
-            $('#recurring_type_label').hide();
-            $('#one_time_type_label').show();
-        }
+            case 'stripe':
 
-        if(payment_processor == 'offline_payment') {
-            $('#offline_payment_processor_wrapper').show();
-        } else {
-            $('#offline_payment_processor_wrapper').hide();
+                $('#summary_payment_processor_paypal').hide();
+                $('#summary_payment_processor_stripe').show();
+                $('#summary_payment_processor_offline_payment').hide();
+                $('#offline_payment_processor_wrapper').hide();
+                $('#summary_payment_processor_coinbase').hide();
+
+                break;
+
+            case 'offline_payment':
+
+                $('#summary_payment_processor_paypal').hide();
+                $('#summary_payment_processor_stripe').hide();
+                $('#summary_payment_processor_offline_payment').show();
+                $('#offline_payment_processor_wrapper').show();
+                $('#summary_payment_processor_coinbase').hide();
+
+                /* Show only the one time payment option */
+                $('#recurring_type_label').hide();
+                $('#one_time_type_label').show();
+
+                break;
+
+            case 'coinbase':
+
+                $('#summary_payment_processor_paypal').hide();
+                $('#summary_payment_processor_stripe').hide();
+                $('#summary_payment_processor_offline_payment').hide();
+                $('#offline_payment_processor_wrapper').hide();
+                $('#summary_payment_processor_coinbase').show();
+
+                /* Show only the one time payment option */
+                $('#recurring_type_label').hide();
+                $('#one_time_type_label').show();
+
+                break;
         }
 
         $('[name="payment_type"]').filter(':visible:first').click();
+
     };
 
     $('[name="payment_processor"]').on('change', event => {
+
         check_payment_frequency();
+
         check_payment_processor();
+
     });
 
 
     $('[name="payment_type"]').on('change', event => {
-        let payment_type = document.querySelector('[name="payment_type"]:checked')?.value;
+        let payment_type = $('[name="payment_type"]:checked').val();
 
         switch(payment_type) {
             case 'one_time':
@@ -733,14 +842,27 @@
     });
 
     let calculate_prices = () => {
-        let payment_frequency = document.querySelector('[name="payment_frequency"]:checked')?.value;
+
+        let payment_frequency = $('[name="payment_frequency"]:checked').val();
 
         let full_price = 0;
         let exclusive_taxes = 0;
         let price_without_inclusive_taxes = 0;
         let price_with_taxes = 0;
 
-        full_price = altum[`${payment_frequency}_price`];
+        switch(payment_frequency) {
+            case 'monthly':
+                full_price = altum.monthly_price;
+                break;
+
+            case 'annual':
+                full_price = altum.annual_price;
+                break;
+
+            case 'lifetime':
+                full_price = altum.lifetime_price;
+                break;
+        }
 
         let price = parseFloat(full_price);
 

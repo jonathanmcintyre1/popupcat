@@ -17,15 +17,11 @@ class Sitemap extends Controller {
         header('Content-Type: text/xml');
 
         /* Get all custom pages from the database */
-        $links_result = database()->query("SELECT `url` FROM `links` WHERE `type` = 'biolink' AND `is_enabled` = 1 AND `domain_id` = 0");
-
-        /* Get all custom pages from the database */
-        $pages_result = database()->query("SELECT `url` FROM `pages` WHERE `type` = 'INTERNAL'");
+        $pages_result = database()->query("SELECT `url` FROM `pages` WHERE `type` = 'internal'");
 
         /* Main View */
         $data = [
-            'pages_result' => $pages_result,
-            'links_result' => $links_result
+            'pages_result' => $pages_result
         ];
 
         $view = new \Altum\Views\View('sitemap/index', (array) $this);

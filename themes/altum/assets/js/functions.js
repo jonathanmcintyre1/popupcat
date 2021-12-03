@@ -17,24 +17,6 @@ const display_notifications = (messages, type, selector) => {
     selector.innerHTML = html;
 };
 
-const fade_out_redirect = ({ url = false, selector = 'body', wait_time = 70, full = false }) => {
-
-    /* Get the base url */
-    let base_url = $('#url').val();
-
-    /* Redirect link */
-    let redirect_url = full ? url : `${base_url}${url}`;
-
-    setTimeout(() => {
-        $(selector).fadeOut(() => {
-            $(selector).html('<div class="vw-100 vh-100 d-flex align-items-center"><div class="col-2 text-center mx-auto" style="width: 3rem; height: 3rem;"><div class="spinner-grow"></div></div></div>').show();
-        });
-
-        setTimeout(() => window.location.href = redirect_url, 100)
-    }, wait_time)
-
-};
-
 const redirect = (path, is_full_url = false) => {
     window.location.href = is_full_url ? path : `${url}${path}`;
 };
@@ -48,16 +30,12 @@ const ajax_call_helper = (event, controller, request_type, success_callback = ()
     };
 
     switch(controller) {
-        case 'project-ajax':
-            data.project_id = row_id;
+        case 'campaigns-ajax':
+            data.campaign_id = row_id;
             break;
 
-        case 'link-ajax':
-            data.link_id = row_id;
-            break;
-
-        case 'biolink-block-ajax':
-            data.biolink_block_id = row_id;
+        case 'notifications-ajax':
+            data.notification_id = row_id;
             break;
 
         default:
@@ -69,13 +47,13 @@ const ajax_call_helper = (event, controller, request_type, success_callback = ()
         url: controller,
         data: data,
         success: (data) => {
-            if(data.status == 'error') {
+            if (data.status == 'error') {
                 alert(data.message[0]);
             }
 
             else if(data.status == 'success') {
 
-                success_callback(event, data);
+                success_callback(data)
 
             }
         },
@@ -124,6 +102,6 @@ const set_cookie = (name, value, days, path) => {
     document.cookie = `${name}=${value};path=${path};expires=${d.toGMTString()}`;
 };
 
-const delete_cookie = (name, path) => {
+let delete_cookie = (name, path) => {
     set_cookie(name, '', -1, path);
 };

@@ -45,14 +45,4 @@ class Csrf extends Middleware {
         );
     }
 
-//    public static function csrf_page_protection_check($name = 'default', $response = true) {
-//        global $language;
-//
-//
-//        if(!self::csrf_check_session_token($name)) {
-//            if($response) Response::json(language()->global->error_message->command_denied, 'error');
-//            die();
-//        }
-//    }
-
 }

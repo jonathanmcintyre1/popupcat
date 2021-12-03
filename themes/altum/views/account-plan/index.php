@@ -12,15 +12,15 @@
 
     <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
         <div>
-            <h2 class="h4"><?= language()->account_plan->header ?></h2>
+            <h2 class="h3"><?= language()->account_plan->header ?></h2>
         </div>
 
         <?php if(settings()->payment->is_enabled): ?>
             <div class="col-auto p-0">
                 <?php if($this->user->plan_id == 'free'): ?>
-                    <a href="<?= url('plan/upgrade') ?>" class="btn btn-primary"><i class="fa fa-fw fa-arrow-up"></i> <?= language()->account->plan->upgrade_plan ?></a>
+                    <a href="<?= url('plan/upgrade') ?>" class="btn btn-primary rounded-pill"><i class="fa fa-fw fa-arrow-up"></i> <?= language()->account->plan->upgrade_plan ?></a>
                 <?php else: ?>
-                    <a href="<?= url('plan/renew') ?>" class="btn btn-primary"><i class="fa fa-fw fa-sync-alt"></i> <?= language()->account->plan->renew_plan ?></a>
+                    <a href="<?= url('plan/renew') ?>" class="btn btn-primary rounded-pill"><i class="fa fa-fw fa-sync-alt"></i> <?= language()->account->plan->renew_plan ?></a>
                 <?php endif ?>
             </div>
         <?php endif ?>
@@ -28,7 +28,7 @@
 
     <div class="row">
         <div class="col-12 col-md-4">
-            <h2 class="h4"><?= $this->user->plan->name ?></h2>
+            <h2 class="h3"><?= $this->user->plan->name ?></h2>
 
             <?php if($this->user->plan_id != 'free' && (new \DateTime($this->user->plan_expiration_date)) < (new \DateTime())->modify('+5 years')): ?>
                 <p class="text-muted">
@@ -49,7 +49,7 @@
     <?php if($this->user->plan_id != 'free' && $this->user->payment_subscription_id): ?>
         <div class="mt-8 d-flex justify-content-between">
             <div>
-                <h2 class="h4"><?= language()->account_plan->cancel->header ?></h2>
+                <h2 class="h3"><?= language()->account_plan->cancel->header ?></h2>
                 <p class="text-muted"><?= language()->account_plan->cancel->subheader ?></p>
             </div>
 

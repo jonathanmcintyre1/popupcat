@@ -275,7 +275,7 @@
                         <tr>
                             <td class="d-flex flex-column">
                                 <span class="font-weight-bold"><?= language()->invoice->table->total ?></span>
-                                <small><?= sprintf(language()->invoice->table->paid_via, language()->pay->custom_plan->{$data->payment->processor}) ?></small>
+                                <small><?= sprintf(language()->invoice->table->paid_via, $data->payment->processor) ?></small>
                             </td>
                             <td class="text-right font-weight-bold"><?= $data->payment->total_amount . ' ' . $data->payment->currency ?></td>
                         </tr>

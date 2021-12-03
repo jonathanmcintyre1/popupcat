@@ -69,7 +69,6 @@ class AdminPageCreate extends Controller {
                     'position' => $_POST['position'],
                     'order' => $_POST['order'],
                     'datetime' => \Altum\Date::$date,
-                    'last_datetime' => \Altum\Date::$date,
                 ]);
 
                 /* Clear cache */

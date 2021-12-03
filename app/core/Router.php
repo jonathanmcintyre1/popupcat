@@ -9,7 +9,6 @@
 
 namespace Altum\Routing;
 
-use Altum\Database\Database;
 use Altum\Language;
 
 class Router {
@@ -20,6 +19,7 @@ class Router {
     public static $controller_key = 'index';
     public static $controller = 'Index';
     public static $controller_settings = [
+        'menu_no_margin' => false,
         'body_white' => true,
         'wrapper' => 'wrapper',
         'no_authentication_check' => false,
@@ -40,19 +40,12 @@ class Router {
     public static $data = [];
 
     public static $routes = [
-        'l' => [
-            'link' => [
-                'controller' => 'Link',
-                'settings' => [
-                    'no_authentication_check' => true,
-                    'no_browser_language_detection' => true
-                ]
-            ],
-        ],
-
         '' => [
             'index' => [
                 'controller' => 'Index',
+                'settings' => [
+                    'menu_no_margin' => true
+                ]
             ],
 
             'login' => [
@@ -120,91 +113,38 @@ class Router {
             ],
 
             'notfound' => [
-                'controller' => 'NotFound',
+                'controller' => 'NotFound'
             ],
 
             /* Logged in */
             'dashboard' => [
                 'controller' => 'Dashboard',
                 'settings' => [
+                    'menu_no_margin' => true,
                     'body_white' => false
                 ]
             ],
 
-            'links' => [
-                'controller' => 'Links',
+            'campaign' => [
+                'controller' => 'Campaign',
                 'settings' => [
+                    'menu_no_margin' => true,
                     'body_white' => false
                 ]
             ],
 
-            'projects' => [
-                'controller' => 'Projects',
+            'notification-create' => [
+                'controller' => 'NotificationCreate',
                 'settings' => [
-                    'menu_no_margin' => false,
+                    'menu_no_margin' => true,
                     'body_white' => false
                 ]
             ],
 
-            'data' => [
-                'controller' => 'Data',
+            'notification' => [
+                'controller' => 'Notification',
                 'settings' => [
-                    'menu_no_margin' => false,
-                    'body_white' => false
-                ]
-            ],
-
-            'pixels' => [
-                'controller' => 'Pixels',
-                'settings' => [
-                    'menu_no_margin' => false,
-                    'body_white' => false
-                ]
-            ],
-
-            'qr-codes' => [
-                'controller' => 'QrCodes',
-                'settings' => [
-                    'menu_no_margin' => false,
-                    'body_white' => false
-                ]
-            ],
-
-            'qr-code-create' => [
-                'controller' => 'QrCodeCreate',
-                'settings' => [
-                    'menu_no_margin' => false,
-                    'body_white' => false
-                ]
-            ],
-
-            'qr-code-update' => [
-                'controller' => 'QrCodeUpdate',
-                'settings' => [
-                    'menu_no_margin' => false,
-                    'body_white' => false
-                ]
-            ],
-
-            'qr-code-generator' => [
-                'controller' => 'QrCodeGenerator',
-                'settings' => [
-                    'no_authentication_check' => true,
-                    'has_view' => false,
-                    'no_browser_language_detection' => true,
-                ]
-            ],
-
-            'link' => [
-                'controller' => 'Link',
-                'settings' => [
-                    'body_white' => false
-                ]
-            ],
-
-            'biolink-block' => [
-                'controller' => 'BiolinkBlock',
-                'settings' => [
+                    'menu_no_margin' => true,
                     'body_white' => false
                 ]
             ],
@@ -212,20 +152,16 @@ class Router {
             'account' => [
                 'controller' => 'Account',
                 'settings' => [
-                    'body_white' => false
-                ]
-            ],
-
-            'domains' => [
-                'controller' => 'Domains',
-                'settings' => [
-                    'body_white' => false
+                    'menu_no_margin' => true,
+                    'body_white' => false,
+                    'no_ads'    => true
                 ]
             ],
 
             'account-plan' => [
                 'controller' => 'AccountPlan',
                 'settings' => [
+                    'menu_no_margin' => true,
                     'body_white' => false,
                     'no_ads'    => true
                 ]
@@ -234,6 +170,7 @@ class Router {
             'account-payments' => [
                 'controller' => 'AccountPayments',
                 'settings' => [
+                    'menu_no_margin' => true,
                     'body_white' => false,
                     'no_ads'    => true
                 ]
@@ -242,6 +179,7 @@ class Router {
             'account-logs' => [
                 'controller' => 'AccountLogs',
                 'settings' => [
+                    'menu_no_margin' => true,
                     'body_white' => false,
                     'no_ads'    => true
                 ]
@@ -250,6 +188,7 @@ class Router {
             'account-api' => [
                 'controller' => 'AccountApi',
                 'settings' => [
+                    'menu_no_margin' => true,
                     'body_white' => false,
                     'no_ads'    => true
                 ]
@@ -258,6 +197,7 @@ class Router {
             'account-delete' => [
                 'controller' => 'AccountDelete',
                 'settings' => [
+                    'menu_no_margin' => true,
                     'body_white' => false,
                     'no_ads'    => true
                 ]
@@ -266,6 +206,8 @@ class Router {
             'referrals' => [
                 'controller' => 'Referrals',
                 'settings' => [
+                    'menu_no_margin' => true,
+                    'body_white' => false,
                     'no_ads'    => true
                 ]
             ],
@@ -296,8 +238,7 @@ class Router {
             'pay' => [
                 'controller' => 'Pay',
                 'settings' => [
-                    'no_ads' => true,
-                    'body_white' => false,
+                    'no_ads' => true
                 ]
             ],
 
@@ -312,6 +253,33 @@ class Router {
                 'controller' => 'PayThankYou',
                 'settings' => [
                     'no_ads' => true
+                ]
+            ],
+
+            'pixel' => [
+                'controller' => 'Pixel',
+                'settings' => [
+                    'no_authentication_check' => true,
+                    'has_view' => false,
+                    'no_browser_language_detection' => true,
+                ]
+            ],
+
+            'pixel-track' => [
+                'controller' => 'PixelTrack',
+                'settings' => [
+                    'no_authentication_check' => true,
+                    'has_view' => false,
+                    'no_browser_language_detection' => true,
+                ]
+            ],
+
+            'pixel-webhook' => [
+                'controller' => 'PixelWebhook',
+                'settings' => [
+                    'no_authentication_check' => true,
+                    'has_view' => false,
+                    'no_browser_language_detection' => true,
                 ]
             ],
 
@@ -343,66 +311,17 @@ class Router {
                 ]
             ],
 
-            'webhook-payu' => [
-                'controller' => 'WebhookPayu',
-                'settings' => [
-                    'no_authentication_check' => true,
-                    'has_view' => false,
-                    'no_browser_language_detection' => true,
-                ]
-            ],
-
-            'webhook-paystack' => [
-                'controller' => 'WebhookPaystack',
-                'settings' => [
-                    'no_authentication_check' => true,
-                    'has_view' => false,
-                    'no_browser_language_detection' => true,
-                ]
-            ],
-
-            'webhook-razorpay' => [
-                'controller' => 'WebhookRazorpay',
-                'settings' => [
-                    'no_authentication_check' => true,
-                    'has_view' => false,
-                    'no_browser_language_detection' => true,
-                ]
-            ],
-
-            'webhook-mollie' => [
-                'controller' => 'WebhookMollie',
-                'settings' => [
-                    'no_authentication_check' => true,
-                    'has_view' => false,
-                    'no_browser_language_detection' => true,
-                ]
-            ],
-
-            'webhook-yookassa' => [
-                'controller' => 'WebhookYookassa',
-                'settings' => [
-                    'no_authentication_check' => true,
-                    'has_view' => false,
-                    'no_browser_language_detection' => true,
-                ]
-            ],
-
             /* Ajax */
-            'project-ajax' => [
-                'controller' => 'ProjectAjax'
+            'campaigns-ajax' => [
+                'controller' => 'CampaignsAjax'
             ],
 
-            'pixel-ajax' => [
-                'controller' => 'PixelAjax'
+            'notification-data-ajax' => [
+                'controller' => 'NotificationDataAjax'
             ],
 
-            'biolink-block-ajax' => [
-                'controller' => 'BiolinkBlockAjax'
-            ],
-
-            'link-ajax' => [
-                'controller' => 'LinkAjax'
+            'notifications-ajax' => [
+                'controller' => 'NotificationsAjax'
             ],
 
             /* Others */
@@ -425,50 +344,15 @@ class Router {
         ],
 
         'api' => [
-            'links' => [
-                'controller' => 'ApiLinks',
+            'campaigns' => [
+                'controller' => 'ApiCampaigns',
                 'settings' => [
                     'no_authentication_check' => true,
                     'has_view' => false,
                 ]
             ],
-            'statistics' => [
-                'controller' => 'ApiStatistics',
-                'settings' => [
-                    'no_authentication_check' => true,
-                    'has_view' => false,
-                ]
-            ],
-            'projects' => [
-                'controller' => 'ApiProjects',
-                'settings' => [
-                    'no_authentication_check' => true,
-                    'has_view' => false,
-                ]
-            ],
-            'pixels' => [
-                'controller' => 'ApiPixels',
-                'settings' => [
-                    'no_authentication_check' => true,
-                    'has_view' => false
-                ]
-            ],
-            'qr-codes' => [
-                'controller' => 'ApiQrCodes',
-                'settings' => [
-                    'no_authentication_check' => true,
-                    'has_view' => false
-                ]
-            ],
-            'data' => [
-                'controller' => 'ApiData',
-                'settings' => [
-                    'no_authentication_check' => true,
-                    'has_view' => false
-                ]
-            ],
-            'domains' => [
-                'controller' => 'ApiDomains',
+            'notifications' => [
+                'controller' => 'ApiNotifications',
                 'settings' => [
                     'no_authentication_check' => true,
                     'has_view' => false,
@@ -503,6 +387,14 @@ class Router {
                 'controller' => 'AdminIndex'
             ],
 
+            'campaigns' => [
+                'controller' => 'AdminCampaigns'
+            ],
+
+            'notifications' => [
+                'controller' => 'AdminNotifications'
+            ],
+
             'users' => [
                 'controller' => 'AdminUsers'
             ],
@@ -525,34 +417,6 @@ class Router {
 
             'redeemed-codes' => [
                 'controller' => 'AdminRedeemedCodes',
-            ],
-
-            'links' => [
-                'controller' => 'AdminLinks'
-            ],
-
-            'projects' => [
-                'controller' => 'AdminProjects'
-            ],
-
-            'pixels' => [
-                'controller' => 'AdminPixels'
-            ],
-
-            'qr-codes' => [
-                'controller' => 'AdminQrCodes'
-            ],
-
-            'domains' => [
-                'controller' => 'AdminDomains'
-            ],
-
-            'domain-create' => [
-                'controller' => 'AdminDomainCreate'
-            ],
-
-            'domain-update' => [
-                'controller' => 'AdminDomainUpdate'
             ],
 
             'pages-categories' => [
@@ -579,6 +443,7 @@ class Router {
                 'controller' => 'AdminPageUpdate'
             ],
 
+
             'plans' => [
                 'controller' => 'AdminPlans'
             ],
@@ -590,6 +455,7 @@ class Router {
             'plan-update' => [
                 'controller' => 'AdminPlanUpdate'
             ],
+
 
             'codes' => [
                 'controller' => 'AdminCodes'
@@ -603,6 +469,7 @@ class Router {
                 'controller' => 'AdminCodeUpdate'
             ],
 
+
             'taxes' => [
                 'controller' => 'AdminTaxes'
             ],
@@ -615,12 +482,12 @@ class Router {
                 'controller' => 'AdminTaxUpdate'
             ],
 
-            'affiliates-withdrawals' => [
-                'controller' => 'AdminAffiliatesWithdrawals',
-            ],
-
             'payments' => [
                 'controller' => 'AdminPayments'
+            ],
+
+            'affiliates-withdrawals' => [
+                'controller' => 'AdminAffiliatesWithdrawals',
             ],
 
             'statistics' => [
@@ -701,30 +568,10 @@ class Router {
 
         self::$original_request = filter_var(implode('/', self::$params), FILTER_SANITIZE_STRING);
 
-        /* Check if the current link accessed is actually the original url or not (multi domain use) */
-        $original_url_host = parse_url(url())['host'];
-        $request_url_host = Database::clean_string($_SERVER['HTTP_HOST']);
-
-        if($original_url_host != $request_url_host) {
-
-            /* Make sure the custom domain is attached */
-            $domain = (new \Altum\Models\Domain())->get_domain_by_host($request_url_host);;
-
-            if($domain && $domain->is_enabled) {
-                self::$controller_key = 'link';
-                self::$controller = 'Link';
-                self::$path = 'l';
-
-                /* Set some route data */
-                self::$data['domain'] = $domain;
-            }
-
-        }
-
         /* Check for potential other paths than the default one (admin panel) */
         if(!empty(self::$params[0])) {
 
-            if(in_array(self::$params[0], ['admin', 'admin-api', 'l', 'api']) && $original_url_host == $request_url_host) {
+            if (in_array(self::$params[0], ['admin', 'admin-api', 'api'])) {
                 self::$path = self::$params[0];
 
                 unset(self::$params[0]);
@@ -744,68 +591,12 @@ class Router {
 
             } else {
 
-                /* Try to check if the link exists via the cache */
-                $cache_instance = \Altum\Cache::$adapter->getItem('link?url=' . md5(self::$params[0]) . (isset(self::$data['domain']) ? '&domain_id=' . self::$data['domain']->domain_id : null));
-
-                /* Set cache if not existing */
-                if(!$cache_instance->get()) {
-
-                    /* Get data from the database */
-                    if(isset(self::$data['domain'])) {
-                        $link = db()->where('url', self::$params[0])->where('domain_id', self::$data['domain']->domain_id)->getOne('links');
-                    } else {
-                        $link = db()->where('url', self::$params[0])->where('domain_id', 0)->getOne('links');
-                    }
-
-                    if($link) {
-                        \Altum\Cache::$adapter->save($cache_instance->set($link)->expiresAfter(CACHE_DEFAULT_SECONDS)->addTag('link_id=' . $link->link_id));
-
-                        /* Set some route data */
-                        self::$data['link'] = $link;
-                    }
-
-                } else {
-
-                    /* Get cache */
-                    $link = $cache_instance->get();
-
-                    /* Set some route data */
-                    self::$data['link'] = $link;
-
-                }
-
-
-                /* Check if there is any link available in the database */
-                if($link) {
-
-                    self::$controller_key = 'link';
-                    self::$controller = 'Link';
-                    self::$path = 'l';
-
-                } else {
-
-                    /* Check for a custom domain 404 redirect */
-                    if(isset(self::$data['domain']) && self::$data['domain']->custom_not_found_url) {
-                        header('Location: ' . self::$data['domain']->custom_not_found_url);
-                        die();
-                    }
-
-                    else {
-                        /* Not found controller */
-                        self::$path = '';
-                        self::$controller_key = 'notfound';
-                    }
-
-                }
+                /* Not found controller */
+                self::$path = '';
+                self::$controller_key = 'notfound';
 
             }
 
-        }
-
-        /* Check for a custom index url redirect in case there is no link requested  */
-        if(!isset(self::$params[0]) && !isset(self::$params[1]) && self::$path == 'l' && $original_url_host != $request_url_host && isset(self::$data['domain']) && self::$data['domain']->custom_index_url) {
-            header('Location: ' . self::$data['domain']->custom_index_url);
-            die();
         }
 
         /* Save the current controller */
@@ -816,7 +607,7 @@ class Router {
             self::$routes[self::$path][self::$controller_key]['settings'] = ['authentication' => 'admin'];
         }
 
-        /* Make sure we also save the co ntroller specific settings */
+        /* Make sure we also save the controller specific settings */
         if(isset(self::$routes[self::$path][self::$controller_key]['settings'])) {
             self::$controller_settings = array_merge(self::$controller_settings, self::$routes[self::$path][self::$controller_key]['settings']);
         }

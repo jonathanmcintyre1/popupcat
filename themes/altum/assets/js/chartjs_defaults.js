@@ -72,3 +72,4 @@ let chart_options = {
     responsive: true,
     maintainAspectRatio: false
 };
+

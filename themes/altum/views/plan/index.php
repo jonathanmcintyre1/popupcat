@@ -22,17 +22,17 @@
 
         <?php if($data->type == 'new'): ?>
 
-            <h1 class="h3"><?= language()->plan->header_new ?></h1>
+            <h1 class="h2"><?= language()->plan->header_new ?></h1>
             <span class="text-muted"><?= language()->plan->subheader_new ?></span>
 
         <?php elseif($data->type == 'upgrade'): ?>
 
-            <h1 class="h3"><?= language()->plan->header_upgrade ?></h1>
+            <h1 class="h2"><?= language()->plan->header_upgrade ?></h1>
             <span class="text-muted"><?= language()->plan->subheader_upgrade ?></span>
 
         <?php elseif($data->type == 'renew'): ?>
 
-            <h1 class="h3"><?= language()->plan->header_renew ?></h1>
+            <h1 class="h2"><?= language()->plan->header_renew ?></h1>
             <span class="text-muted"><?= language()->plan->subheader_renew ?></span>
 
         <?php endif ?>

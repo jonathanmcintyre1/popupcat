@@ -55,7 +55,7 @@
 </div>
 
 <?php if(\Altum\Plugin::is_active('offload')): ?>
-<button type="submit" name="submit" class="btn btn-lg btn-block btn-primary mt-4"><?= language()->global->update ?></button>
+    <button type="submit" name="submit" class="btn btn-lg btn-block btn-primary mt-4"><?= language()->global->update ?></button>
 <?php endif ?>
 
 <?php ob_start() ?>

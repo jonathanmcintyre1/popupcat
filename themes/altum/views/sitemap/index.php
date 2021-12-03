@@ -27,10 +27,4 @@
             <loc><?= SITE_URL . 'page/' . $row->url ?></loc>
         </url>
     <?php endwhile ?>
-
-    <?php while($row = $data->links_result->fetch_object()): ?>
-        <url>
-            <loc><?= SITE_URL . $row->url ?></loc>
-        </url>
-    <?php endwhile ?>
 </urlset>
